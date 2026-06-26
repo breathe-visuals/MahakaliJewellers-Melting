@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>Jewellery Calculator</title>
+  <meta name="description"
+    content="Professional jewellery cost calculator — track metal, labour, GST and generate records.">
+
+  <!-- PWA / Installable Web App -->
+  <link rel="manifest" href="/Media/site.webmanifest">
+  <meta name="theme-color" content="#033C3C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Jewellery Calc">
+  <link rel="apple-touch-icon" href="/Media/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Media/favicon-16x16.png">
+  <link rel="shortcut icon" href="/Media/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── Reset & Variables (Light Teal Theme) ──────────────────────── */
+    :root {
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --bg: #F4F5EC;
+      --surface: #FFFFFF;
+      --elevated: #FFFFFF;
+      --border: #EAEAEA;
+      --text-main: #033C3C;
+      --text-secondary: #556B72;
+      --text-muted: #8E9BA4;
+      --primary: #033C3C;
+      --primary-hover: #022a2a;
+      --primary-bg: #E6EFEF;
+      --gold: #D4AF37;
+      --danger: #EF4B4B;
+      --danger-hover: #D83A3A;
+      --danger-bg: #FEE5E5;
+      --success: #3FB568;
+      --success-bg: #DDF4E4;
+
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+      /* Spacing System */
+      --sp-xs: 4px;
+      --sp-sm: 8px;
+      --sp-md: 16px;
+      --sp-lg: 24px;
+      --sp-xl: 32px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-main);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 120px;
+    }
+
+    /* ── Typography ─────────────────────────────────────────────── */
+    h1,
+    h2 {
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Topbar (Navbar — Logo Only, Centered) ──────────────── */
+    #topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--primary);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .tb-inner {
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 90px;
+      padding: 10px 20px;
+    }
+
+    #navbar-logo {
+      height: 70px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* ── Layout & Containers ────────────────────────────────────── */
+    .wrap {
+      margin: var(--sp-lg) auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-xl);
+    }
+
+    .card-container {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .slabel {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: var(--sp-lg);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slabel-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+
+    #mode-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: var(--primary-bg);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    #mode-pill.edit {
+      background: var(--gold);
+      color: #FFF;
+      border-color: var(--gold);
+    }
+
+    /* ── Forms ──────────────────────────────────────────────────── */
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-md);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-sm);
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+
+    .field input,
+    select {
+      height: 48px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #F9FAFC;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--text-main);
+      transition: all 0.2s;
+      outline: none;
+      width: 100%;
+      font-weight: 600;
+    }
+
+    .field input:focus,
+    select:focus {
+      border-color: var(--primary);
+      background: #FFF;
+      box-shadow: 0 0 0 2px var(--primary-bg);
+    }
+
+    .field input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* iOS Safari date input fix — prevent overflow */
+    input[type="date"] {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--sp-lg) 0;
+    }
+
+    .toggle-group {
+      display: flex;
+      background: #F3F4F6;
+      border-radius: var(--radius-md);
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .t-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.2s;
+      height: 100%;
+    }
+
+    .t-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ── Summary ────────────────────────────────────────────────── */
+    .srow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .srow:last-of-type {
+      border-bottom: none;
+    }
+
+    .sk {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .sv {
+      font-size: 16px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-main);
+    }
+
+    .srow.big {
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 2px solid var(--border);
+      border-bottom: none;
+    }
+
+    .srow.big .sk {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .srow.big .sv {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--success);
+      background: var(--success-bg);
+      padding: 4px 12px;
+      border-radius: 6px;
+    }
+
+    .prow {
+      display: flex;
+      gap: var(--sp-md);
+      margin-top: var(--sp-lg);
+    }
+
+    .pbox {
+      flex: 1;
+      text-align: center;
+      background: #F9FAFC;
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+      border: 1px solid var(--border);
+    }
+
+    .plbl {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pval {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      margin-top: 6px;
+      color: var(--primary);
+    }
+
+    /* ── Error & Loader ─────────────────────────────────────────── */
+    #err-banner {
+      display: none;
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 75, 75, 0.3);
+      color: var(--danger);
+      font-size: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--sp-lg);
+      font-weight: 600;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(244, 245, 236, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: grid;
+      place-items: center;
+    }
+
+    .spin {
+      width: 44px;
+      height: 44px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: rot 0.8s linear infinite;
+    }
+
+    @keyframes rot {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── Records Toolbar ────────────────────────────────────────── */
+    #srch-wrap {
+      margin-top: 0;
+    }
+
+    .rbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-md);
+      margin-bottom: var(--sp-lg);
+    }
+
+    .sbox {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+
+    .sbox svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    #q {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px 0 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #F9FAFC;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--text-main);
+      outline: none;
+      transition: 0.2s;
+      font-weight: 600;
+    }
+
+    #q:focus {
+      border-color: var(--primary);
+      background: #FFF;
+      box-shadow: 0 0 0 2px var(--primary-bg);
+    }
+
+    #q::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .sgrp {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+
+    .sgrp-lbl {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    #sf,
+    #sd {
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #F9FAFC;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      padding: 0 14px;
+      color: var(--primary);
+    }
+
+    #sf:focus,
+    #sd:focus {
+      border-color: var(--primary);
+      background: #FFF;
+    }
+
+    #sd {
+      width: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    #rmeta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: var(--sp-md);
+      font-weight: 600;
+    }
+
+    /* ── Table (Desktop) ────────────────────────────────────────── */
+    .tbl-outer {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 650px;
+    }
+
+    thead th {
+      background: var(--primary);
+      padding: 0 16px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+      border-bottom: none;
+    }
+
+    thead th:hover {
+      background: var(--primary-hover);
+    }
+
+    .thi {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .arr {
+      opacity: 0.5;
+      font-size: 14px;
+    }
+
+    th.on .arr {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      height: 52px;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #F9FAFC;
+    }
+
+    td {
+      padding: 0 14px;
+      font-size: 14px;
+      font-weight: 700;
+      vertical-align: middle;
+      color: var(--text-main);
+    }
+
+    /* ID pill is a SPAN inside the td, not the td itself */
+    .cid-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      background: #E6EFEF;
+      color: var(--primary);
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      line-height: 1.5;
+    }
+
+    .camt {
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .acts {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* Action Buttons (Table & Card) */
+    .ab {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font);
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ab:hover {
+      background: #F3F4F6;
+    }
+
+    .ab.del {
+      color: var(--danger);
+      border-color: var(--danger-bg);
+    }
+
+    .ab.del:hover {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+    }
+
+    /* ── Cards (Tablet & Mobile) ──────────────────────────────── */
+    .card-list {
+      display: none;
+    }
+
+    .record-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: var(--surface);
+      transition: transform 0.15s;
+    }
+
+    .record-card:active {
+      transform: scale(0.99);
+    }
+
+    .rc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rc-id {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 11px;
+      background: #E6EFEF;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .rc-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .rc-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      margin-bottom: 8px;
+    }
+
+    .rc-val {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .rc-lbl {
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .rc-txt {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .rc-acts {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .rc-acts .ab {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 12px;
+    }
+
+    /* ── Action Bar ─────────────────────────────────────────────── */
+    #abar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      padding: var(--sp-md) var(--sp-lg);
+      padding-bottom: max(var(--sp-md), env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: center;
+    }
+
+    .abar-inner {
+      max-width: 1280px;
+      width: 100%;
+      display: flex;
+      gap: var(--sp-md);
+    }
+
+    .btn {
+      flex: 1;
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none !important;
+      border-color: var(--border);
+      background: #F3F4F6;
+      color: var(--text-muted);
+    }
+
+    /* Primary Button (Dark Teal) */
+    .bp {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .bp:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    /* Secondary Button */
+    .bs {
+      background: #FFFFFF;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .bs:hover:not(:disabled) {
+      background: var(--primary-bg);
+    }
+
+    /* Ghost Button */
+    .bg {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .bg:hover:not(:disabled) {
+      background: #F9FAFC;
+      color: var(--text-main);
+    }
+
+    /* ── Refresh / btn-icon ─────────────────────────────────────── */
+    .btn-icon {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      padding: 8px 14px;
+      border-radius: 8px;
+    }
+
+    .btn-icon svg {
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .btn-icon:hover {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+    }
+
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
+
+    .btn-icon.spinning svg {
+      animation: rot 1s linear infinite;
+    }
+
+    /* Records section tint */
+    #rec-section {
+      background: #F0F4F4;
+      /* very subtle teal tint to distinguish from form */
+    }
+
+    /* ── Toast ──────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translate(-50%, 20px);
+      z-index: 70;
+      background: var(--text-main);
+      color: #FFFFFF;
+      padding: 14px 24px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    #toast.ok {
+      background: var(--success);
+    }
+
+    #toast.err {
+      background: var(--danger);
+    }
+
+    /* ── Print (One-Page Compact) ───────────────────────────────── */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
+      }
+
+      /* Hide everything except the calculator card */
+      #topbar,
+      #abar,
+      #srch-wrap,
+      .acts,
+      .rc-acts,
+      .card-container:nth-child(2),
+      .prow,
+      .divider,
+      #err-banner {
+        display: none !important;
+      }
+
+      html,
+      body {
+        background: #FFF !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 11px !important;
+      }
+
+      body {
+        padding-bottom: 0 !important;
+      }
+
+      .wrap {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+      }
+
+      .card-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 8px 0 !important;
+        background: transparent !important;
+      }
+
+      /* Print header */
+      #ph {
+        display: block !important;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #000;
+      }
+
+      #ph h2 {
+        font-size: 16px !important;
+        font-family: 'Cinzel', Georgia, serif;
+      }
+
+      #ph p {
+        font-size: 10px !important;
+        color: #555;
+      }
+
+      /* Section label */
+      .slabel {
+        font-size: 11px !important;
+        margin-bottom: 8px !important;
+        letter-spacing: 0.05em;
+        color: #000;
+      }
+
+      /* Compact 2-col grid */
+      .grid2 {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+      }
+
+      .full {
+        grid-column: 1 / -1 !important;
+      }
+
+      .field {
+        gap: 2px !important;
+      }
+
+      .field label {
+        font-size: 9px !important;
+        color: #555;
+      }
+
+      .field input {
+        height: 26px !important;
+        font-size: 11px !important;
+        background: transparent !important;
+        border: 1px solid #CCC !important;
+        color: #000 !important;
+        padding: 0 6px !important;
+      }
+
+      /* Labour inline toggle hidden */
+      .toggle-group {
+        display: none !important;
+      }
+
+      /* Summary rows */
+      .srow {
+        padding: 4px 0 !important;
+        border-bottom: 1px solid #DDD !important;
+      }
+
+      .sk {
+        font-size: 10px !important;
+        color: #555;
+      }
+
+      .sv {
+        font-size: 11px !important;
+        color: #000 !important;
+        font-weight: 600;
+      }
+
+      .srow.big {
+        border-top: 2px solid #000 !important;
+        padding-top: 6px !important;
+      }
+
+      .srow.big .sk {
+        font-size: 12px !important;
+        font-weight: 700;
+        color: #000;
+      }
+
+      .srow.big .sv {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        color: #000 !important;
+        background: none !important;
+        padding: 0 !important;
+      }
+    }
+
+    #ph {
+      display: none;
+    }
+
+    #ph h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    #ph p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ── Responsive Breakpoints ─────────────────────────────────── */
+
+    /* Desktop (>= 901px) */
+    @media (min-width: 901px) {
+      .tb-inner {
+        height: 100px;
+        max-width: 1280px;
+      }
+
+      #navbar-logo {
+        height: 80px;
+      }
+
+      .wrap {
+        max-width: 1280px;
+        padding: 0 32px;
+        gap: var(--sp-lg);
+        margin-top: var(--sp-xl);
+      }
+
+      .card-container {
+        padding: 32px;
+      }
+    }
+
+    /* Tablets (769px - 900px) */
+    @media (min-width: 769px) and (max-width: 900px) {
+      .tb-inner {
+        height: 84px;
+      }
+
+      #navbar-logo {
+        height: 64px;
+      }
+
+      .wrap {
+        max-width: 100%;
+        padding: 0 24px;
+        gap: var(--sp-lg);
+      }
+
+      .card-container {
+        padding: 24px;
+      }
+
+      .tbl-outer {
+        display: none;
+      }
+
+      .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-md);
+      }
+    }
+
+    /* Mobile Portrait (<= 768px) */
+    @media (max-width: 768px) {
+      .tb-inner {
+        height: 72px;
+        padding: 8px 16px;
+      }
+
+      #navbar-logo {
+        height: 56px;
+      }
+
+      /* Keep 2-column grid on mobile for tabular feel */
+      .grid2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--sp-sm);
+      }
+
+      .wrap {
+        max-width: 100%;
+        padding: 0 16px;
+        margin: var(--sp-md) auto;
+        gap: var(--sp-md);
+      }
+
+      .card-container {
+        padding: 16px;
+      }
+
+      .tbl-outer {
+        display: none;
+      }
+
+      .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      /* Even more compact cards at mobile */
+      .record-card {
+        padding: 8px 10px;
+        border-radius: 8px;
+      }
+
+      .rc-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+      }
+
+      .rc-body {
+        gap: 4px 8px;
+        margin-bottom: 6px;
+      }
+
+      .rc-lbl {
+        font-size: 9px;
+      }
+
+      .rc-txt {
+        font-size: 12px;
+      }
+
+      .rc-acts {
+        padding-top: 6px;
+        gap: 6px;
+      }
+
+      .rc-acts .ab {
+        height: 30px;
+        padding: 0 10px;
+        font-size: 11px;
+      }
+
+      .slabel {
+        margin-bottom: var(--sp-md);
+        font-size: 15px;
+      }
+
+      .srow.big .sk {
+        font-size: 16px;
+      }
+
+      .srow.big .sv {
+        font-size: 20px;
+      }
+
+      /* Stack Search & Sort */
+      .sgrp-lbl {
+        display: none;
+      }
+
+      .rbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--sp-sm);
+      }
+
+      .sbox {
+        min-width: 100%;
+      }
+
+      .sgrp {
+        justify-content: space-between;
+      }
+
+      #sf {
+        flex: 1;
+      }
+
+      /* Card internals - keep 2-col */
+      .rc-body {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      /* Action Bar */
+      #abar {
+        padding: 12px 16px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+      }
+
+      .abar-inner {
+        gap: 8px;
+      }
+
+      .btn {
+        height: 44px;
+        font-size: 13px;
+        padding: 0 6px;
+      }
+
+      /* Compact form fields on mobile — fit on screen */
+      .field input {
+        height: 40px;
+        font-size: 14px;
+        padding: 0 10px;
+      }
+
+      .field label {
+        font-size: 10px;
+        margin-bottom: 0;
+      }
+
+      .field {
+        gap: 3px;
+      }
+
+      .grid2 {
+        gap: 8px;
+      }
+
+      .slabel {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+
+      .divider {
+        margin: 10px 0;
+      }
+
+      .srow {
+        padding: 7px 0;
+      }
+
+      .srow.big .sv {
+        font-size: 18px;
+      }
+
+      .prow {
+        margin-top: 10px;
+        gap: 8px;
+      }
+
+      .pbox {
+        padding: 10px 6px;
+      }
+
+      .pval {
+        font-size: 14px;
+      }
+
+      .card-container {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loader">
+    <div class="spin"></div>
+  </div>
+  <div id="toast"></div>
+
+  <!-- Print header -->
+  <div id="ph">
+    <h2 id="ph-name"></h2>
+    <p id="ph-dt"></p>
+  </div>
+
+  <!-- Top bar: Logo centered only -->
+  <div id="topbar">
+    <div class="tb-inner">
+      <img id="navbar-logo" src="/Media/Main.png" alt="Jewellery Calculator">
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Form Container -->
+    <div class="card-container">
+      <div class="slabel">
+        <span>Calculator Details</span>
+        <div class="slabel-actions">
+          <span id="mode-pill">New Record</span>
+        </div>
+      </div>
+      <div id="err-banner"></div>
+
+      <div class="grid2">
+        <div class="field full">
+          <label>Customer Name</label>
+          <input id="f-name" type="text" placeholder="Enter full name" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field full">
+          <label>Date</label>
+          <input id="f-date" type="date">
+        </div>
+        <div class="field">
+          <label>Weight (g)</label>
+          <input id="f-w" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>Rate / g (₹)</label>
+          <input id="f-r" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>Labour</label>
+          <div style="display: flex; gap: var(--sp-sm); align-items: center;">
+            <input id="f-l" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal" style="flex: 1;">
+            <div class="toggle-group" id="f-l-type" style="height: 48px; flex-shrink: 0;">
+              <button type="button" class="t-btn active" data-val="perG">Per g</button>
+              <button type="button" class="t-btn" data-val="percent">%</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Other (₹)</label>
+          <input id="f-o" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+        </div>
+        <div class="field full">
+          <label>GST (%)</label>
+          <input id="f-g" type="number" placeholder="3" step="0.01" min="0" max="100" inputmode="decimal">
+        </div>
+      </div>
+
+      <!-- Calculated summary -->
+      <div class="divider"></div>
+      <div class="srow"><span class="sk">Metal Amount</span> <span class="sv" id="s-m">₹0.00</span></div>
+      <div class="srow"><span class="sk">Labour Amount</span><span class="sv" id="s-l">₹0.00</span></div>
+      <div class="srow"><span class="sk">Other Charges</span><span class="sv" id="s-o">₹0.00</span></div>
+      <div class="srow"><span class="sk">GST Amount</span> <span class="sv" id="s-g">₹0.00</span></div>
+      <div class="srow big"><span class="sk">Total Amount</span><span class="sv" id="s-t">₹0.00</span></div>
+
+      <div class="prow">
+        <div class="pbox">
+          <div class="plbl">Metal</div> <span class="pval" id="p-m">—</span>
+        </div>
+        <div class="pbox">
+          <div class="plbl">Labour</div><span class="pval" id="p-l">—</span>
+        </div>
+        <div class="pbox">
+          <div class="plbl">Other</div> <span class="pval" id="p-o">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records Container -->
+    <div class="card-container" id="rec-section">
+      <div id="srch-wrap">
+        <div class="slabel" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Recent Records</span>
+          <div style="display:flex; gap:8px;">
+            <button id="b-del-sel" class="btn-icon" style="display:none; color:var(--danger);" title="Delete Selected">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Delete (<span id="del-cnt">0</span>)
+            </button>
+            <button id="b-refresh" class="btn-icon" title="Refresh Records">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 2v6h-6"></path>
+                <path d="M3 12a9 9 0 1 0 2.63-6.37L21 8"></path>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+        <div class="rbar">
+          <div class="sbox">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input id="q" type="search" placeholder="Search name, ID, date…" autocomplete="off">
+          </div>
+          <div class="sgrp">
+            <span class="sgrp-lbl">Sort by</span>
+            <select id="sf">
+              <option value="date">Date</option>
+              <option value="customerName">Name</option>
+              <option value="totalAmount">Total</option>
+              <option value="weight">Weight</option>
+              <option value="calcId">ID</option>
+            </select>
+            <button id="sd">↓</button>
+          </div>
+        </div>
+        <div id="rmeta"></div>
+      </div>
+
+      <div class="tbl-outer" id="tbl-wrap"></div>
+      <div class="card-list" id="card-wrap"></div>
+    </div>
+  </div>
+
+  <!-- Bottom action bar -->
+  <div id="abar">
+    <div class="abar-inner">
+      <button id="b-save" class="btn bp">Save Record</button>
+      <button id="b-update" class="btn bs" disabled>Update</button>
+      <button id="b-reset" class="btn bg">Reset</button>
+      <button id="b-print" class="btn bg">Print</button>
+    </div>
+  </div>
+
+  <script>
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║  CONFIG — paste your Apps Script /exec URL here             ║
+    // ╚══════════════════════════════════════════════════════════════╝
+    var GAS_URL = 'https://script.google.com/macros/s/AKfycbxJ1owMb1RpzFQ7aW7PdtmQDKngoqP_WuwRt8OHdzQQ0t6M45SZZ9lIrypCaHTCP7o/exec';
+
+    // ── GAS API Helper ────────────────────────────────────────────
+    var GAS_TIMEOUT_MS = 15000; // 15 second timeout — never hang forever
+
+    function gasCall(action, data) {
+      var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      var timer = controller ? setTimeout(function () { controller.abort(); }, GAS_TIMEOUT_MS) : null;
+
+      return fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: action, data: data || null }),
+        signal: controller ? controller.signal : undefined
+      })
+        .then(function (res) {
+          if (timer) clearTimeout(timer);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .catch(function (e) {
+          if (timer) clearTimeout(timer);
+          if (e.name === 'AbortError') throw new Error('Request timed out. Check your connection.');
+          throw e;
+        });
+    }
+
+    // ── State ────────────────────────────────────────────────────
+    var S = {
+      records: [],
+      config: {},
+      editId: null,
+      sortField: 'date',
+      sortAsc: false,
+      selectedIds: [],
+      labourType: 'perG'
+    };
+
+    function $id(id) { return document.getElementById(id); }
+
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function fmtINR(n) {
+      return '₹' + (+(n) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtWt(n) {
+      return (+(+(n) || 0).toFixed(3)).toLocaleString('en-IN');
+    }
+    function fmtPct(n) {
+      return (+(+(n) || 0).toFixed(1)) + '%';
+    }
+    function todayISO() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function toast(msg, type) {
+      var t = $id('toast');
+      t.textContent = msg;
+      t.className = 'show ' + (type || '');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.className = ''; }, 2800);
+    }
+
+    function showErr(msg) {
+      var b = $id('err-banner');
+      b.textContent = msg || '';
+      b.style.display = msg ? 'block' : 'none';
+      if (msg) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function hideLoader() { $id('loader').style.display = 'none'; }
+
+    var SKIP_IDS = ['calc id', 'id', 'calculation id', 'calcid'];
+    function isValidId(val) {
+      if (val == null) return false;
+      var s = String(val).trim();
+      return s !== '' && SKIP_IDS.indexOf(s.toLowerCase()) === -1 && /\d/.test(s);
+    }
+
+    function calcAmounts(w, r, lVal, lType, o, g) {
+      w = +w || 0; r = +r || 0; lVal = +lVal || 0; o = +o || 0; g = +g || 0;
+      var metal = w * r;
+      var labourAmount = (lType === 'percent') ? (metal * lVal / 100) : (w * lVal);
+      var labourPerG = (w > 0) ? (labourAmount / w) : 0;
+      var other = o;
+      var sub = metal + labourAmount + other;
+      var gstAmt = sub * g / 100;
+      var total = sub + gstAmt;
+      return {
+        metal: metal,
+        labour: labourAmount,
+        labourPerG: labourPerG,
+        other: other,
+        gstAmt: gstAmt,
+        total: total,
+        mPct: sub > 0 ? metal / sub * 100 : 0,
+        lPct: sub > 0 ? labourAmount / sub * 100 : 0,
+        oPct: sub > 0 ? other / sub * 100 : 0
+      };
+    }
+
+    function updateSummary() {
+      var c = calcAmounts(
+        $id('f-w').value, $id('f-r').value,
+        $id('f-l').value, S.labourType, $id('f-o').value, $id('f-g').value
+      );
+      $id('s-m').textContent = fmtINR(c.metal);
+      $id('s-l').textContent = fmtINR(c.labour);
+      $id('s-o').textContent = fmtINR(c.other);
+      $id('s-g').textContent = fmtINR(c.gstAmt);
+      $id('s-t').textContent = fmtINR(c.total);
+      $id('p-m').textContent = fmtPct(c.mPct);
+
+      if (S.labourType === 'perG') {
+        $id('p-l').textContent = fmtPct(c.lPct);
+      } else {
+        $id('p-l').textContent = '₹' + c.labourPerG.toFixed(2) + '/g';
+      }
+
+      $id('p-o').textContent = fmtPct(c.oPct);
+    }
+
+    function dmyToNum(s) {
+      if (!s) return 0;
+      var p = s.split('/');
+      return p.length === 3 ? +(p[2] + p[1] + p[0]) : 0;
+    }
+
+    function getFilteredSorted() {
+      var q = ($id('q').value || '').trim().toLowerCase();
+      var list = S.records.filter(function (r) { return isValidId(r.calcId); });
+
+      if (q) {
+        list = list.filter(function (r) {
+          return (r.calcId + '').toLowerCase().includes(q)
+            || (r.customerName + '').toLowerCase().includes(q)
+            || (r.date + '').toLowerCase().includes(q);
+        });
+      }
+
+      var f = S.sortField, asc = S.sortAsc;
+      list.sort(function (a, b) {
+        var va = a[f], vb = b[f];
+        if (f === 'date') { va = dmyToNum(va); vb = dmyToNum(vb); }
+        else if (f === 'totalAmount' || f === 'weight') { va = +va || 0; vb = +vb || 0; }
+        else { va = (va + '').toLowerCase(); vb = (vb + '').toLowerCase(); }
+        if (va < vb) return asc ? -1 : 1;
+        if (va > vb) return asc ? 1 : -1;
+        return 0;
+      });
+      return list;
+    }
+
+    var TABLE_COLS = [
+      { k: 'calcId', l: 'ID' },
+      { k: 'date', l: 'Date' },
+      { k: 'customerName', l: 'Customer' },
+      { k: 'weight', l: 'Weight' },
+      { k: 'totalAmount', l: 'Total' }
+    ];
+
+    function actionBtns(id) {
+      var eid = esc(id);
+      return '<button class="ab edit" data-id="' + eid + '">Edit</button>'
+        + '<button class="ab del"  data-id="' + eid + '">Delete</button>';
+    }
+
+    function renderTable(list) {
+      var box = $id('tbl-wrap');
+      if (!list.length) {
+        var isSearching = ($id('q').value || '').trim() !== '';
+        var msg = isSearching ? 'No records match your search.' : 'No records found';
+        box.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">' + msg + '</div>';
+        return;
+      }
+      var ths = '<th style="width:40px; padding-right:0;"><input type="checkbox" id="cb-all" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);"></th>' + TABLE_COLS.map(function (c) {
+        var on = S.sortField === c.k;
+        var arr = on ? (S.sortAsc ? '↑' : '↓') : '↕';
+        return '<th' + (on ? ' class="on"' : '') + ' data-col="' + c.k + '">'
+          + '<div class="thi">' + c.l + '<span class="arr">' + arr + '</span></div></th>';
+      }).join('') + '<th></th>';
+
+      var trs = list.map(function (r) {
+        var checked = S.selectedIds.indexOf(r.calcId) > -1 ? 'checked' : '';
+        return '<tr data-id="' + esc(r.calcId) + '">'
+          + '<td style="width:40px; padding-right:0;"><input type="checkbox" class="cb-row" value="' + esc(r.calcId) + '" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);" ' + checked + '></td>'
+          + '<td><span class="cid-pill">' + esc(r.calcId) + '</span></td>'
+          + '<td>' + esc(r.date) + '</td>'
+          + '<td style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">' + esc(r.customerName) + '</td>'
+          + '<td>' + fmtWt(r.weight) + 'g</td>'
+          + '<td class="camt">' + fmtINR(r.totalAmount) + '</td>'
+          + '<td class="acts">' + actionBtns(r.calcId) + '</td>'
+          + '</tr>';
+      }).join('');
+
+      box.innerHTML = '<table><thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table>';
+    }
+
+    function renderCards(list) {
+      var box = $id('card-wrap');
+      if (!list.length) {
+        var isSearching = ($id('q').value || '').trim() !== '';
+        var msg = isSearching ? 'No records match your search.' : 'No records found';
+        box.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">' + msg + '</div>';
+        return;
+      }
+      box.innerHTML = list.map(function (r) {
+        var checked = S.selectedIds.indexOf(r.calcId) > -1 ? 'checked' : '';
+        return '<div class="record-card" data-id="' + esc(r.calcId) + '">'
+          + '<div class="rc-header">'
+          + '<div style="display:flex; align-items:center; gap:12px;">'
+          + '<input type="checkbox" class="cb-row" value="' + esc(r.calcId) + '" style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);" ' + checked + '>'
+          + '<span class="rc-id">' + esc(r.calcId) + '</span>'
+          + '</div>'
+          + '<span class="rc-date">' + esc(r.date) + '</span>'
+          + '</div>'
+          + '<div class="rc-body">'
+          + '<div class="rc-val" style="grid-column: 1 / -1;"><span class="rc-lbl">Customer Name</span><span class="rc-txt" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + esc(r.customerName) + '</span></div>'
+          + '<div class="rc-val"><span class="rc-lbl">Weight</span><span class="rc-txt">' + fmtWt(r.weight) + 'g</span></div>'
+          + '<div class="rc-val"><span class="rc-lbl">Total Amount</span><span class="rc-txt" style="color: var(--primary); font-size: 16px;">' + fmtINR(r.totalAmount) + '</span></div>'
+          + '</div>'
+          + '<div class="rc-acts">' + actionBtns(r.calcId) + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    function updateSelectionUI() {
+      var bDel = $id('b-del-sel');
+      var cbAll = $id('cb-all');
+      if (bDel) {
+        bDel.style.display = S.selectedIds.length > 0 ? 'flex' : 'none';
+        $id('del-cnt').textContent = S.selectedIds.length;
+      }
+      if (cbAll) {
+        var totalVisible = getFilteredSorted().length;
+        cbAll.checked = (totalVisible > 0 && S.selectedIds.length === totalVisible);
+      }
+    }
+
+    function renderAll() {
+      var list = getFilteredSorted();
+      $id('rmeta').textContent = list.length + ' record' + (list.length !== 1 ? 's' : '');
+      renderTable(list);
+      renderCards(list);
+      updateSelectionUI();
+    }
+
+    function resetForm() {
+      $id('f-name').value = '';
+      $id('f-w').value = '';
+      $id('f-r').value = '';
+      S.labourType = 'perG';
+      var tgroup = $id('f-l-type');
+      if (tgroup && tgroup.children) {
+        Array.prototype.forEach.call(tgroup.children, function (b) {
+          b.className = (b.dataset.val === 'perG') ? 't-btn active' : 't-btn';
+        });
+      }
+      $id('f-l').value = '';
+      $id('f-o').value = '';
+      $id('f-g').value = S.config.defaultGST || 3;
+      $id('f-date').value = todayISO();
+      S.editId = null;
+      $id('b-update').disabled = true;
+      $id('b-save').disabled = false;
+      $id('mode-pill').textContent = 'New Record';
+      $id('mode-pill').className = '';
+      showErr(null);
+      updateSummary();
+    }
+
+    function fillForm(rec) {
+      $id('f-name').value = rec.customerName;
+      $id('f-date').value = rec.date ? rec.date.split('/').reverse().join('-') : todayISO();
+      $id('f-w').value = rec.weight;
+      $id('f-r').value = rec.ratePerG;
+      S.labourType = 'perG';
+      var tgroup = $id('f-l-type');
+      if (tgroup && tgroup.children) {
+        Array.prototype.forEach.call(tgroup.children, function (b) {
+          b.className = (b.dataset.val === 'perG') ? 't-btn active' : 't-btn';
+        });
+      }
+      $id('f-l').value = rec.labourPerG;
+      $id('f-o').value = rec.otherCharge;
+      $id('f-g').value = rec.gstPercent;
+      S.editId = rec.calcId;
+      $id('b-update').disabled = false;
+      $id('b-save').disabled = true;
+      $id('mode-pill').textContent = 'Editing ' + rec.calcId;
+      $id('mode-pill').className = 'edit';
+      showErr(null);
+      updateSummary();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function collectFormData() {
+      var w = +$id('f-w').value || 0;
+      var r = +$id('f-r').value || 0;
+      var lVal = +$id('f-l').value || 0;
+      var lType = S.labourType;
+      var o = +$id('f-o').value || 0;
+      var g = +$id('f-g').value || 0;
+      var c = calcAmounts(w, r, lVal, lType, o, g);
+      return {
+        date: $id('f-date').value || todayISO(),
+        customerName: $id('f-name').value.trim(),
+        weight: w,
+        ratePerG: r,
+        labourPerG: +c.labourPerG.toFixed(4),
+        otherCharge: o,
+        gstPercent: g,
+        metalAmount: +c.metal.toFixed(4),
+        labourAmount: +c.labour.toFixed(4),
+        otherAmount: +c.other.toFixed(4),
+        gstAmount: +c.gstAmt.toFixed(4),
+        totalAmount: +c.total.toFixed(4),
+        metalPercent: +c.mPct.toFixed(4),
+        labourPercent: +c.lPct.toFixed(4),
+        otherPercent: +c.oPct.toFixed(4)
+      };
+    }
+
+    function setBusy(id, txt) { var b = $id(id); b.disabled = true; b.textContent = txt; }
+    function setFree(id, txt) { var b = $id(id); b.disabled = false; b.textContent = txt; }
+
+    function localAddRecord(calcId, data) {
+      S.records.push({
+        calcId: calcId,
+        date: data.date.split('-').reverse().join('/'),
+        customerName: data.customerName,
+        weight: data.weight,
+        ratePerG: data.ratePerG,
+        labourPerG: data.labourPerG,
+        otherCharge: data.otherCharge,
+        gstPercent: data.gstPercent,
+        metalAmount: data.metalAmount,
+        labourAmount: data.labourAmount,
+        otherAmount: data.otherAmount,
+        gstAmount: data.gstAmount,
+        totalAmount: data.totalAmount,
+        metalPercent: data.metalPercent,
+        labourPercent: data.labourPercent,
+        otherPercent: data.otherPercent
+      });
+    }
+
+    function localUpdateRecord(calcId, data) {
+      var idx = S.records.findIndex(function (r) { return r.calcId === calcId; });
+      if (idx > -1) {
+        S.records[idx] = Object.assign({}, S.records[idx], {
+          date: data.date.split('-').reverse().join('/'),
+          customerName: data.customerName,
+          weight: data.weight,
+          ratePerG: data.ratePerG,
+          labourPerG: data.labourPerG,
+          otherCharge: data.otherCharge,
+          gstPercent: data.gstPercent,
+          metalAmount: data.metalAmount,
+          labourAmount: data.labourAmount,
+          otherAmount: data.otherAmount,
+          gstAmount: data.gstAmount,
+          totalAmount: data.totalAmount,
+          metalPercent: data.metalPercent,
+          labourPercent: data.labourPercent,
+          otherPercent: data.otherPercent
+        });
+      }
+    }
+
+    // ── API Calls (replaces google.script.run) ────────────────────
+
+    function doSave() {
+      var data = collectFormData();
+      if (!data.customerName) { showErr('Please enter a customer name.'); return; }
+      showErr(null);
+      setBusy('b-save', 'Saving...');
+
+      gasCall('saveCalculation', data)
+        .then(function (res) {
+          setFree('b-save', 'Save Record');
+          if (!res || !res.ok) { showErr('Save failed: ' + (res ? res.error : 'No response')); return; }
+          localAddRecord(res.calcId, data);
+          renderAll();
+          resetForm();
+          toast('Saved successfully: ' + res.calcId, 'ok');
+        })
+        .catch(function (e) {
+          setFree('b-save', 'Save Record');
+          showErr('Save failed: ' + (e.message || e));
+        });
+    }
+
+    function doUpdate() {
+      if (!S.editId) return;
+      var data = collectFormData();
+      data.calcId = S.editId;
+      if (!data.customerName) { showErr('Please enter a customer name.'); return; }
+      showErr(null);
+      setBusy('b-update', 'Updating...');
+
+      gasCall('updateCalculation', data)
+        .then(function (res) {
+          setFree('b-update', 'Update');
+          if (!res || !res.ok) { showErr('Update failed: ' + (res ? res.error : 'No response')); return; }
+          localUpdateRecord(S.editId, data);
+          renderAll();
+          resetForm();
+          toast('Updated successfully: ' + S.editId, 'ok');
+        })
+        .catch(function (e) {
+          setFree('b-update', 'Update');
+          showErr('Update failed: ' + (e.message || e));
+        });
+    }
+
+    function doDelete(id) {
+      if (!isValidId(id)) { showErr('Cannot delete: "' + id + '" is not a valid record ID.'); return; }
+      if (!confirm('Are you sure you want to delete record ' + id + '?')) return;
+
+      gasCall('deleteCalculation', { id: id })
+        .then(function (res) {
+          if (!res || !res.ok) { showErr('Delete failed: ' + (res ? res.error : 'No response')); return; }
+          S.records = S.records.filter(function (r) { return r.calcId !== id; });
+          if (S.editId === id) resetForm();
+          $id('q').value = '';
+          renderAll();
+          toast('Deleted record ' + id, 'ok');
+        })
+        .catch(function (e) {
+          showErr('Delete failed: ' + (e.message || e));
+        });
+    }
+
+    function loadRecords(silent) {
+      var rBtn = $id('b-refresh');
+      if (rBtn) rBtn.classList.add('spinning');
+      if (!silent) {
+        // Show inline skeleton instead of full-screen overlay
+        var box = $id('tbl-wrap');
+        if (box) box.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted); font-weight: 600;">Loading records…</div>';
+        var cbox = $id('card-wrap');
+        if (cbox) cbox.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted); font-weight: 600;">Loading records…</div>';
+      }
+
+      gasCall('getCalculations')
+        .then(function (recRes) {
+          if (rBtn) rBtn.classList.remove('spinning');
+          if (!recRes || !recRes.ok) {
+            showErr('Records error: ' + (recRes ? recRes.error : 'No response from server'));
+            renderAll();
+            return;
+          }
+          S.records = (recRes.data || []).filter(function (r) { return isValidId(r.calcId); });
+          renderAll();
+          updateSummary();
+          if (silent) toast('Records refreshed', 'ok');
+        })
+        .catch(function (e) {
+          if (rBtn) rBtn.classList.remove('spinning');
+          showErr('Failed to load records: ' + (e.message || e));
+          renderAll();
+        });
+    }
+
+    function init() {
+      $id('f-date').value = todayISO();
+      $id('f-g').value = 3;
+
+      // ─── Show the UI instantly, never block on a spinner ───────────
+      hideLoader();
+      renderAll();
+      updateSummary();
+
+      // ─── Load config + records in parallel in the background ───────
+      Promise.all([
+        gasCall('getConfig'),
+        gasCall('getCalculations')
+      ])
+        .then(function (results) {
+          var cfgRes = results[0];
+          var recRes = results[1];
+
+          // Apply config
+          if (cfgRes && cfgRes.ok) {
+            S.config = cfgRes.data;
+            var bizEl = $id('biz-name');
+            if (bizEl) bizEl.textContent = S.config.businessName || 'Jewellery Calculator';
+            $id('ph-name').textContent = S.config.businessName || 'Jewellery Calculator';
+            $id('f-g').value = S.config.defaultGST || 3;
+            updateSummary();
+          } else {
+            showErr('Could not load config. Check your Apps Script deployment.');
+          }
+
+          // Apply records
+          if (recRes && recRes.ok) {
+            S.records = (recRes.data || []).filter(function (r) { return isValidId(r.calcId); });
+            renderAll();
+          } else {
+            showErr('Could not load records. Tap Refresh to try again.');
+          }
+        })
+        .catch(function (e) {
+          showErr((e.message || 'Network error') + ' — tap Refresh to retry.');
+        });
+    }
+
+    // ── Event listeners ───────────────────────────────────────────
+    $id('f-l-type').addEventListener('click', function (e) {
+      if (e.target.classList.contains('t-btn')) {
+        var tgroup = $id('f-l-type');
+        Array.prototype.forEach.call(tgroup.children, function (b) { b.className = 't-btn'; });
+        e.target.className = 't-btn active';
+        S.labourType = e.target.dataset.val;
+        updateSummary();
+      }
+    });
+
+    ['f-w', 'f-r', 'f-l', 'f-o', 'f-g'].forEach(function (id) {
+      $id(id).addEventListener('input', updateSummary);
+    });
+
+    // ── Enter key navigation between form fields ──────────────────
+    var FORM_FIELDS = ['f-name', 'f-date', 'f-w', 'f-r', 'f-l', 'f-o', 'f-g'];
+    FORM_FIELDS.forEach(function (id, idx) {
+      var el = $id(id);
+      if (!el) return;
+      el.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        var nextIdx = idx + 1;
+        if (nextIdx < FORM_FIELDS.length) {
+          var next = $id(FORM_FIELDS[nextIdx]);
+          if (next) next.focus();
+        } else {
+          // Last field — blur to close mobile keyboard
+          el.blur();
+        }
+      });
+    });
+
+    $id('q').addEventListener('input', renderAll);
+
+    $id('sf').addEventListener('change', function () {
+      S.sortField = this.value;
+      renderAll();
+    });
+
+    $id('sd').addEventListener('click', function () {
+      S.sortAsc = !S.sortAsc;
+      this.textContent = S.sortAsc ? '↑' : '↓';
+      renderAll();
+    });
+
+    $id('b-save').addEventListener('click', doSave);
+    $id('b-update').addEventListener('click', doUpdate);
+    $id('b-reset').addEventListener('click', resetForm);
+    if ($id('b-refresh')) $id('b-refresh').addEventListener('click', function () { loadRecords(true); });
+
+    $id('b-print').addEventListener('click', function () {
+      $id('ph-dt').textContent = 'Printed on ' + new Date().toLocaleDateString('en-IN');
+      window.print();
+    });
+
+    function onRecordsClick(e) {
+      var th = e.target.closest('th[data-col]');
+      if (th) {
+        var col = th.dataset.col;
+        if (S.sortField === col) {
+          S.sortAsc = !S.sortAsc;
+        } else {
+          S.sortField = col;
+          S.sortAsc = true;
+        }
+        $id('sf').value = S.sortField;
+        $id('sd').textContent = S.sortAsc ? '↑' : '↓';
+        renderAll();
+        return;
+      }
+
+      var btn = e.target.closest('button[data-id]');
+      if (btn) {
+        var id = btn.dataset.id;
+        if (btn.classList.contains('edit')) {
+          var rec = S.records.find(function (r) { return r.calcId === id; });
+          if (rec) fillForm(rec);
+        } else if (btn.classList.contains('del')) {
+          doDelete(id);
+        }
+        return;
+      }
+    }
+
+    $id('rec-section').addEventListener('change', function (e) {
+      if (e.target.id === 'cb-all') {
+        var checked = e.target.checked;
+        var list = getFilteredSorted();
+        if (checked) {
+          S.selectedIds = list.map(function (r) { return String(r.calcId); });
+        } else {
+          S.selectedIds = [];
+        }
+        renderAll();
+      } else if (e.target.classList.contains('cb-row')) {
+        var cid = String(e.target.value);
+        if (e.target.checked) {
+          if (S.selectedIds.indexOf(cid) === -1) S.selectedIds.push(cid);
+        } else {
+          S.selectedIds = S.selectedIds.filter(function (x) { return x !== cid; });
+        }
+        renderAll();
+      }
+    });
+
+    var bDelSel = $id('b-del-sel');
+    if (bDelSel) {
+      bDelSel.addEventListener('click', function () {
+        if (S.selectedIds.length === 0) return;
+        if (!confirm('Are you sure you want to delete ' + S.selectedIds.length + ' selected record(s)?')) return;
+
+        bDelSel.disabled = true;
+        bDelSel.classList.add('spinning');
+
+        gasCall('deleteCalculations', { ids: S.selectedIds })
+          .then(function (res) {
+            bDelSel.disabled = false;
+            bDelSel.classList.remove('spinning');
+            if (!res || !res.ok) { showErr('Bulk delete failed: ' + (res ? res.error : 'No response')); return; }
+
+            var deletedCount = res.deleted || S.selectedIds.length;
+            S.records = S.records.filter(function (r) { return S.selectedIds.indexOf(r.calcId) === -1; });
+            if (S.selectedIds.indexOf(S.editId) > -1) resetForm();
+
+            S.selectedIds = [];
+            $id('q').value = '';
+            renderAll();
+            toast('Deleted ' + deletedCount + ' record(s)', 'ok');
+          })
+          .catch(function (e) {
+            bDelSel.disabled = false;
+            bDelSel.classList.remove('spinning');
+            showErr('Bulk delete failed: ' + (e.message || e));
+          });
+      });
+    }
+
+    $id('tbl-wrap').addEventListener('click', onRecordsClick);
+    $id('card-wrap').addEventListener('click', onRecordsClick);
+
+    init();
+  </script>
+</body>
+
+</html>
