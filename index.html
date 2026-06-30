@@ -1361,11 +1361,13 @@
 
   <script>
     // ============================================================
-    //  CONFIG — paste your deployed Apps Script /exec URL below
-    //  After deploying Code.gs as a Web App, copy the /exec URL
-    //  and replace the placeholder string below.
+    //  CONFIG — Apps Script Web App /exec URL
+    //  ⚠️  IMPORTANT: This must be the /exec URL, NOT /dev
+    //      /dev requires Google login → causes CORS errors from Vercel
+    //      /exec is the public endpoint that works from any origin
     // ============================================================
-    var GAS_URL = 'PASTE_YOUR_GAS_EXEC_URL_HERE';
+    var GAS_URL = 'https://script.google.com/macros/s/AKfycbw-SPYEUVP9-nkizuQuThdeh9L6vRfwrq2HzovzfYg/exec';
+
 
     // ── API timeout (ms) ─────────────────────────────────────────
     var GAS_TIMEOUT_MS = 20000; // 20 seconds

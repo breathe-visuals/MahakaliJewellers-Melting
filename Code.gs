@@ -53,12 +53,33 @@ function isValidId_(val) {
 
 // ── Web App Entry Points ──────────────────────────────────────
 
+
+// ── CORS Helper ───────────────────────────────────────────────
+/**
+ * Builds a JSON response with the CORS headers required so that a
+ * Vercel-hosted frontend (or any cross-origin caller) can read the
+ * response without being blocked by the browser.
+ *
+ * Google Apps Script's ContentService does not support setHeader(),
+ * so we use HtmlService which does — but we still return plain JSON
+ * text so the frontend's res.json() call works normally.
+ */
+function buildCorsResponse_(payload) {
+  var json = JSON.stringify(payload);
+  return ContentService
+    .createTextOutput(json)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 /**
  * GET handler.
- * If called with ?action=... routes to routeAction_ (useful for testing).
- * Otherwise returns a simple JSON status message.
- * The HTML frontend (index.html) is hosted separately and calls
- * this script via POST fetch() requests.
+ * Handles two cases:
+ *   1. ?action=... query param → routes to the action (useful for testing in browser)
+ *   2. No params → returns a simple status JSON (health check)
+ *
+ * ⚠️  Always deploy with "Execute as: Me" + "Who has access: Anyone"
+ *     and use the /exec URL, NOT the /dev URL.
+ *     /dev requires Google login and causes CORS errors from Vercel.
  */
 function doGet(e) {
   if (e && e.parameter && e.parameter.action) {
@@ -66,18 +87,22 @@ function doGet(e) {
       e.parameter.action,
       e.parameter.data ? JSON.parse(e.parameter.data) : null
     );
-    return ContentService
-      .createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
+    return buildCorsResponse_(result);
   }
-  return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, message: 'Jewellery Purchase Register API v1.0 is running.' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return buildCorsResponse_({
+    ok:      true,
+    message: 'Jewellery Purchase Register API v1.0 is running.',
+    hint:    'Use POST with { action, data } body to call API functions.'
+  });
 }
 
 /**
- * POST handler — primary API entry point.
- * Expected body: { action: 'actionName', data: { ... } }
+ * POST handler — primary API entry point called by the Vercel frontend.
+ * Expected request body (JSON string with Content-Type: text/plain):
+ *   { action: 'actionName', data: { ...payload } }
+ *
+ * Using Content-Type: text/plain avoids CORS preflight (OPTIONS) requests
+ * while still letting us JSON.parse the body on the server side.
  */
 function doPost(e) {
   var result;
@@ -89,14 +114,12 @@ function doPost(e) {
   } catch (err) {
     result = { ok: false, error: 'doPost error: ' + err.message };
   }
-  return ContentService
-    .createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
+  return buildCorsResponse_(result);
 }
 
 /**
  * Routes an action string to the appropriate handler function.
- * Add new actions here as the app grows.
+ * Add new cases here as the app grows.
  */
 function routeAction_(action, data) {
   switch (action) {
@@ -110,6 +133,8 @@ function routeAction_(action, data) {
     default:              return { ok: false, error: 'Unknown action: ' + action };
   }
 }
+
+
 
 
 // ── getConfig ─────────────────────────────────────────────────
