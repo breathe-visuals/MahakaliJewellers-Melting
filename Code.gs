@@ -1,16 +1,16 @@
-// ============================================================
-// Code.gs  —  Jewellery Purchase Register
+﻿// ============================================================
+// Code.gs  â€”  Jewellery Purchase Register
 // Mahalaxmi Jewellers | v1.0.0
 //
 // Architecture (inherited & extended from reference project):
-//   doGet()  → JSON status page
-//   doPost() → REST API entry point
-//   routeAction_() → action dispatcher
+//   doGet()  â†’ JSON status page
+//   doPost() â†’ REST API entry point
+//   routeAction_() â†’ action dispatcher
 //
 // Sheets expected in the Google Spreadsheet:
 //   Config  (Key | Value)
 //   Users   (Username | Password | Role | Active)
-//   Records (15 columns — see getRecords() for schema)
+//   Records (15 columns â€” see getRecords() for schema)
 //
 // Config sheet only needs "Login Required" to start.
 // All other config keys use defaults from CFG_DEFAULTS.
@@ -18,7 +18,7 @@
 // ============================================================
 
 
-// ── Config Defaults ──────────────────────────────────────────
+// â”€â”€ Config Defaults â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Values used when a key is absent from the Config sheet.
 var CFG_DEFAULTS = {
   'Business Name':       'Mahalaxmi Jewellers',
@@ -26,7 +26,7 @@ var CFG_DEFAULTS = {
   'Business Phone':      '',
   'Record Prefix':       'MJ',
   'Next Record Number':  1,
-  'Currency Symbol':     '₹',
+  'Currency Symbol':     'â‚¹',
   'Theme Color':         '#033C3C',
   'Session Timeout':     480,
   'Version':             '1.0.0',
@@ -34,7 +34,7 @@ var CFG_DEFAULTS = {
 };
 
 
-// ── ID Validation ─────────────────────────────────────────────
+// â”€â”€ ID Validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Texts that indicate a column header rather than a real record ID.
 var RECORD_SKIP_TEXTS = ['record id', 'id', 'recordid'];
 
@@ -51,17 +51,17 @@ function isValidId_(val) {
 }
 
 
-// ── Web App Entry Points ──────────────────────────────────────
+// â”€â”€ Web App Entry Points â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 
-// ── CORS Helper ───────────────────────────────────────────────
+// â”€â”€ CORS Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Builds a JSON response with the CORS headers required so that a
  * Vercel-hosted frontend (or any cross-origin caller) can read the
  * response without being blocked by the browser.
  *
  * Google Apps Script's ContentService does not support setHeader(),
- * so we use HtmlService which does — but we still return plain JSON
+ * so we use HtmlService which does â€” but we still return plain JSON
  * text so the frontend's res.json() call works normally.
  */
 function buildCorsResponse_(payload) {
@@ -74,10 +74,10 @@ function buildCorsResponse_(payload) {
 /**
  * GET handler.
  * Handles two cases:
- *   1. ?action=... query param → routes to the action (useful for testing in browser)
- *   2. No params → returns a simple status JSON (health check)
+ *   1. ?action=... query param â†’ routes to the action (useful for testing in browser)
+ *   2. No params â†’ returns a simple status JSON (health check)
  *
- * ⚠️  Always deploy with "Execute as: Me" + "Who has access: Anyone"
+ * âš ï¸  Always deploy with "Execute as: Me" + "Who has access: Anyone"
  *     and use the /exec URL, NOT the /dev URL.
  *     /dev requires Google login and causes CORS errors from Vercel.
  */
@@ -97,7 +97,7 @@ function doGet(e) {
 }
 
 /**
- * POST handler — primary API entry point called by the Vercel frontend.
+ * POST handler â€” primary API entry point called by the Vercel frontend.
  * Expected request body (JSON string with Content-Type: text/plain):
  *   { action: 'actionName', data: { ...payload } }
  *
@@ -137,9 +137,9 @@ function routeAction_(action, data) {
 
 
 
-// ── getConfig ─────────────────────────────────────────────────
+// â”€â”€ getConfig â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
- * Returns all config values as a flat key→value map.
+ * Returns all config values as a flat keyâ†’value map.
  * Merges Config sheet values on top of CFG_DEFAULTS,
  * so the sheet only needs to contain overrides.
  *
@@ -183,7 +183,7 @@ function getConfig() {
 }
 
 
-// ── login ─────────────────────────────────────────────────────
+// â”€â”€ login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Validates credentials against the Users sheet.
  *
@@ -213,7 +213,7 @@ function login(data) {
     var uname = String(data.username).trim().toLowerCase();
     var upass = String(data.password).trim();
 
-    // Row 0 is the header — start from row 1
+    // Row 0 is the header â€” start from row 1
     for (var i = 1; i < rows.length; i++) {
       var rowUser   = String(rows[i][0]).trim().toLowerCase();
       var rowPass   = String(rows[i][1]).trim();
@@ -235,7 +235,7 @@ function login(data) {
 }
 
 
-// ── getRecords ────────────────────────────────────────────────
+// â”€â”€ getRecords â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Returns all purchase records from the Records sheet.
  *
@@ -311,7 +311,7 @@ function getRecords() {
 }
 
 
-// ── saveRecord ────────────────────────────────────────────────
+// â”€â”€ saveRecord â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Saves a new purchase record.
  * Auto-generates the Record ID (e.g. MJ000001).
@@ -355,11 +355,11 @@ function saveRecord(data) {
 }
 
 
-// ── updateRecord ──────────────────────────────────────────────
+// â”€â”€ updateRecord â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Updates an existing record by its Record ID.
  * Preserves the original Created By and Created Time.
- * Never locks records — always editable per user permissions.
+ * Never locks records â€” always editable per user permissions.
  */
 function updateRecord(data) {
   try {
@@ -401,7 +401,7 @@ function updateRecord(data) {
 }
 
 
-// ── deleteRecord ──────────────────────────────────────────────
+// â”€â”€ deleteRecord â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Deletes a single record row by its Record ID.
  * Access control (Admin only) is enforced on the frontend;
@@ -426,7 +426,7 @@ function deleteRecord(id) {
 }
 
 
-// ── deleteRecords (Bulk) ──────────────────────────────────────
+// â”€â”€ deleteRecords (Bulk) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Deletes multiple records by an array of Record IDs.
  * Rows are sorted descending before deletion to prevent
@@ -451,7 +451,7 @@ function deleteRecords(ids) {
       }
     }
 
-    // Sort rows descending — delete from bottom to top
+    // Sort rows descending â€” delete from bottom to top
     rowsToDelete.sort(function (a, b) { return b - a; });
     for (var j = 0; j < rowsToDelete.length; j++) {
       sheet.deleteRow(rowsToDelete[j]);
@@ -465,14 +465,14 @@ function deleteRecords(ids) {
 }
 
 
-// ── Record ID Generator ───────────────────────────────────────
+// â”€â”€ Record ID Generator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Generates the next sequential Record ID, e.g. MJ000001.
  *
  * Algorithm:
  *   1. Read 'Record Prefix' and 'Next Record Number' from Config sheet.
- *   2. If 'Next Record Number' row is found → increment and update it.
- *   3. If 'Next Record Number' row is missing → append it (handles the
+ *   2. If 'Next Record Number' row is found â†’ increment and update it.
+ *   3. If 'Next Record Number' row is missing â†’ append it (handles the
  *      case where Config only has "Login Required" so far).
  *   4. Return prefix + zero-padded number.
  */
@@ -495,11 +495,11 @@ function generateRecordId_(ss) {
     var newNum = lastNum + 1;
 
     if (lastNumRow >= 0) {
-      // "Next Record Number" row already exists — update column B
+      // "Next Record Number" row already exists â€” update column B
       // Index i is 0-based; sheet row = i + 1
       sheet.getRange(lastNumRow + 1, 2).setValue(newNum);
     } else {
-      // Row does not exist — append it to the Config sheet automatically
+      // Row does not exist â€” append it to the Config sheet automatically
       var lastDataRow = getLastDataRow_(sheet);
       sheet.getRange(lastDataRow + 1, 1).setValue('Next Record Number');
       sheet.getRange(lastDataRow + 1, 2).setValue(newNum);
@@ -513,7 +513,7 @@ function generateRecordId_(ss) {
 }
 
 
-// ── Sheet Accessors ───────────────────────────────────────────
+// â”€â”€ Sheet Accessors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
  * Gets the Config sheet.
@@ -546,7 +546,7 @@ function getRecordsSheet_(ss) {
 }
 
 
-// ── Row Helpers ───────────────────────────────────────────────
+// â”€â”€ Row Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
  * Returns the last row index (1-based) that has a non-empty value in column A.
