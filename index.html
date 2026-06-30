@@ -33,37 +33,37 @@
        (Reused & extended from reference project)
     ══════════════════════════════════════════════════════════ */
     :root {
-      --font:        'Inter', system-ui, -apple-system, sans-serif;
-      --font-serif:  'Cinzel', Georgia, serif;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-serif: 'Cinzel', Georgia, serif;
 
       /* Palette */
-      --bg:          #F4F5EC;
-      --surface:     #FFFFFF;
-      --border:      #EAEAEA;
-      --text-main:   #033C3C;
-      --text-sec:    #556B72;
-      --text-muted:  #8E9BA4;
-      --primary:     #033C3C;
+      --bg: #F4F5EC;
+      --surface: #FFFFFF;
+      --border: #EAEAEA;
+      --text-main: #033C3C;
+      --text-sec: #556B72;
+      --text-muted: #8E9BA4;
+      --primary: #033C3C;
       --primary-hov: #022a2a;
-      --primary-bg:  #E6EFEF;
-      --gold:        #C9941E;
-      --gold-lt:     #FBF3E3;
-      --silver:      #6B7280;
-      --silver-lt:   #F3F4F6;
-      --danger:      #EF4B4B;
-      --danger-hov:  #D83A3A;
-      --danger-bg:   #FEE5E5;
-      --success:     #3FB568;
-      --success-bg:  #DDF4E4;
-      --warn:        #D97706;
-      --warn-bg:     #FEF3C7;
+      --primary-bg: #E6EFEF;
+      --gold: #C9941E;
+      --gold-lt: #FBF3E3;
+      --silver: #6B7280;
+      --silver-lt: #F3F4F6;
+      --danger: #EF4B4B;
+      --danger-hov: #D83A3A;
+      --danger-bg: #FEE5E5;
+      --success: #3FB568;
+      --success-bg: #DDF4E4;
+      --warn: #D97706;
+      --warn-bg: #FEF3C7;
 
       /* Shape */
-      --r-lg:  12px;
-      --r-md:  8px;
-      --r-sm:  6px;
-      --sh-lg: 0 4px 20px rgba(0,0,0,0.07);
-      --sh-sm: 0 2px 8px  rgba(0,0,0,0.04);
+      --r-lg: 12px;
+      --r-md: 8px;
+      --r-sm: 6px;
+      --sh-lg: 0 4px 20px rgba(0, 0, 0, 0.07);
+      --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
 
       /* Spacing */
       --sp-xs: 4px;
@@ -73,8 +73,19 @@
       --sp-xl: 32px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font);
       background: var(--bg);
@@ -99,7 +110,12 @@
       padding: var(--sp-lg);
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-    #login-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    #login-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
 
     .login-card {
       background: var(--surface);
@@ -107,12 +123,20 @@
       padding: var(--sp-xl) var(--sp-xl);
       width: 100%;
       max-width: 380px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
-      animation: slideUp 0.45s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+      animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .login-logo {
@@ -122,6 +146,7 @@
       margin: 0 auto var(--sp-md);
       object-fit: contain;
     }
+
     .login-title {
       font-family: var(--font-serif);
       font-size: 19px;
@@ -132,12 +157,14 @@
       line-height: 1.3;
       margin-bottom: 4px;
     }
+
     .login-sub {
       font-size: 13px;
       color: var(--text-muted);
       text-align: center;
       margin-bottom: var(--sp-xl);
     }
+
     #login-err {
       display: none;
       background: var(--danger-bg);
@@ -148,9 +175,16 @@
       border-radius: var(--r-md);
       margin-bottom: var(--sp-md);
       text-align: center;
-      border: 1px solid rgba(239,75,75,0.25);
+      border: 1px solid rgba(239, 75, 75, 0.25);
     }
-    .lf { display: flex; flex-direction: column; gap: 5px; margin-bottom: var(--sp-md); }
+
+    .lf {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: var(--sp-md);
+    }
+
     .lf label {
       font-size: 11px;
       font-weight: 700;
@@ -158,6 +192,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .lf input {
       height: 48px;
       padding: 0 16px;
@@ -172,8 +207,17 @@
       transition: all 0.2s;
       width: 100%;
     }
-    .lf input:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px var(--primary-bg); }
-    .lf input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+    .lf input:focus {
+      border-color: var(--primary);
+      background: #FFF;
+      box-shadow: 0 0 0 3px var(--primary-bg);
+    }
+
+    .lf input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
     #btn-login {
       width: 100%;
@@ -190,9 +234,19 @@
       letter-spacing: 0.02em;
       margin-top: var(--sp-sm);
     }
-    #btn-login:hover:not(:disabled) { background: var(--primary-hov); }
-    #btn-login:active:not(:disabled) { transform: scale(0.98); }
-    #btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    #btn-login:hover:not(:disabled) {
+      background: var(--primary-hov);
+    }
+
+    #btn-login:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    #btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
     /* ══════════════════════════════════════════════════════════
        TOPBAR
@@ -204,6 +258,7 @@
       background: var(--primary);
       border-bottom: 3px solid var(--gold);
     }
+
     .tb-inner {
       margin: 0 auto;
       display: flex;
@@ -213,25 +268,41 @@
       padding: 10px 20px;
       position: relative;
     }
+
     #navbar-logo {
-      height: 52px; width: auto; object-fit: contain; display: block; flex-shrink: 0;
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .tb-right { display: flex; align-items: center; gap: var(--sp-sm); }
+    .tb-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+
     .tb-user-pill {
       display: flex;
       align-items: center;
       gap: 7px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 9999px;
       padding: 5px 14px 5px 10px;
     }
-    .tb-uname { font-size: 13px; font-weight: 700; color: #FFF; }
+
+    .tb-uname {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
     .role-badge {
       font-size: 10px;
       font-weight: 700;
@@ -240,15 +311,27 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .role-badge.admin  { background: var(--gold);    color: #FFF; }
-    .role-badge.staff  { background: var(--success);  color: #FFF; }
-    .role-badge.viewer { background: var(--text-sec); color: #FFF; }
+
+    .role-badge.admin {
+      background: var(--gold);
+      color: #FFF;
+    }
+
+    .role-badge.staff {
+      background: var(--success);
+      color: #FFF;
+    }
+
+    .role-badge.viewer {
+      background: var(--text-sec);
+      color: #FFF;
+    }
 
     #btn-logout {
       height: 36px;
       padding: 0 14px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: var(--r-sm);
       color: #FFF;
       font-family: var(--font);
@@ -257,7 +340,10 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    #btn-logout:hover { background: rgba(255,255,255,0.2); }
+
+    #btn-logout:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
 
     /* ══════════════════════════════════════════════════════════
        LAYOUT & CONTAINERS
@@ -268,6 +354,7 @@
       flex-direction: column;
       gap: var(--sp-xl);
     }
+
     .card {
       background: var(--surface);
       border-radius: var(--r-lg);
@@ -275,6 +362,7 @@
       border: 1px solid var(--border);
       padding: var(--sp-xl);
     }
+
     .slabel {
       font-size: 15px;
       font-weight: 700;
@@ -286,7 +374,13 @@
       align-items: center;
       justify-content: space-between;
     }
-    .slabel-actions { display: flex; align-items: center; gap: var(--sp-sm); }
+
+    .slabel-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+
     #mode-pill {
       font-size: 12px;
       font-weight: 700;
@@ -298,7 +392,12 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    #mode-pill.edit { background: var(--gold); color: #FFF; border-color: var(--gold); }
+
+    #mode-pill.edit {
+      background: var(--gold);
+      color: #FFF;
+      border-color: var(--gold);
+    }
 
     /* ══════════════════════════════════════════════════════════
        FORM GRID & FIELDS
@@ -308,11 +407,26 @@
       grid-template-columns: repeat(2, 1fr);
       gap: var(--sp-md);
     }
-    .full { grid-column: 1 / -1; }
 
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .fhdr  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1px; }
-    .field label, .flbl {
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .fhdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1px;
+    }
+
+    .field label,
+    .flbl {
       font-size: 12px;
       font-weight: 700;
       color: var(--text-sec);
@@ -332,6 +446,7 @@
       cursor: default;
       transition: all 0.2s;
     }
+
     .auto-badge.manual {
       background: var(--warn-bg);
       color: var(--warn);
@@ -354,9 +469,19 @@
       width: 100%;
       font-weight: 600;
     }
+
     .field input,
-    .field select   { height: 46px; }
-    .field textarea { padding: 12px 14px; height: 72px; resize: vertical; line-height: 1.5; }
+    .field select {
+      height: 46px;
+    }
+
+    .field textarea {
+      padding: 12px 14px;
+      height: 72px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
     .field input:focus,
     .field select:focus,
     .field textarea:focus {
@@ -364,19 +489,26 @@
       background: #FFF;
       box-shadow: 0 0 0 3px var(--primary-bg);
     }
+
     .field input::placeholder,
-    .field textarea::placeholder { color: var(--text-muted); font-weight: 400; }
+    .field textarea::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
     /* iOS Safari date input fix */
     input[type="date"] {
-      width: 100%; max-width: 100%; min-width: 0;
-      -webkit-appearance: none; appearance: none;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     #err-banner {
       display: none;
       background: var(--danger-bg);
-      border: 1px solid rgba(239,75,75,0.3);
+      border: 1px solid rgba(239, 75, 75, 0.3);
       color: var(--danger);
       font-size: 13px;
       padding: 12px 16px;
@@ -384,10 +516,17 @@
       margin-bottom: var(--sp-md);
       font-weight: 600;
     }
-    .divider { height: 1px; background: var(--border); margin: var(--sp-lg) 0; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--sp-lg) 0;
+    }
 
     /* ── Metal select color coding ── */
-    #f-metal { transition: color 0.2s; }
+    #f-metal {
+      transition: color 0.2s;
+    }
 
     /* ══════════════════════════════════════════════════════════
        SUMMARY PANEL
@@ -398,6 +537,7 @@
       justify-content: space-between;
       margin-bottom: 12px;
     }
+
     .sum-top-lbl {
       font-size: 13px;
       font-weight: 700;
@@ -405,6 +545,7 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .metal-badge {
       display: inline-flex;
       align-items: center;
@@ -414,8 +555,18 @@
       font-size: 13px;
       font-weight: 700;
     }
-    .metal-badge.gold   { background: var(--gold-lt);   color: var(--gold);   border: 1.5px solid var(--gold); }
-    .metal-badge.silver { background: var(--silver-lt); color: var(--silver); border: 1.5px solid var(--silver); }
+
+    .metal-badge.gold {
+      background: var(--gold-lt);
+      color: var(--gold);
+      border: 1.5px solid var(--gold);
+    }
+
+    .metal-badge.silver {
+      background: var(--silver-lt);
+      color: var(--silver);
+      border: 1.5px solid var(--silver);
+    }
 
     .sum-grid {
       display: grid;
@@ -423,6 +574,7 @@
       gap: var(--sp-sm);
       margin-bottom: var(--sp-md);
     }
+
     .sbox {
       background: #F9FAFC;
       border: 1px solid var(--border);
@@ -430,7 +582,12 @@
       padding: 10px 8px;
       text-align: center;
     }
-    .sbox.primary-tint { background: var(--primary-bg); border-color: var(--primary); }
+
+    .sbox.primary-tint {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+    }
+
     .sbox-lbl {
       font-size: 10px;
       font-weight: 700;
@@ -439,14 +596,22 @@
       letter-spacing: 0.04em;
       margin-bottom: 4px;
     }
-    .sbox.primary-tint .sbox-lbl { color: var(--primary); }
+
+    .sbox.primary-tint .sbox-lbl {
+      color: var(--primary);
+    }
+
     .sbox-val {
       font-size: 14px;
       font-weight: 800;
       color: var(--text-main);
       font-variant-numeric: tabular-nums;
     }
-    .sbox.primary-tint .sbox-val { color: var(--primary); font-size: 13px; }
+
+    .sbox.primary-tint .sbox-val {
+      color: var(--primary);
+      font-size: 13px;
+    }
 
     .price-row {
       display: flex;
@@ -457,6 +622,7 @@
       border-radius: var(--r-md);
       border: 2px solid var(--primary);
     }
+
     .price-lbl {
       font-size: 14px;
       font-weight: 700;
@@ -464,6 +630,7 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .price-val {
       font-size: 26px;
       font-weight: 800;
@@ -474,7 +641,9 @@
     /* ══════════════════════════════════════════════════════════
        RECORDS TOOLBAR
     ══════════════════════════════════════════════════════════ */
-    #rec-section { background: #F0F4F4; }
+    #rec-section {
+      background: #F0F4F4;
+    }
 
     .rbar {
       display: flex;
@@ -482,16 +651,25 @@
       gap: var(--sp-md);
       margin-bottom: var(--sp-md);
     }
-    .sbox-search { flex: 1; min-width: 220px; position: relative; }
+
+    .sbox-search {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+
     .sbox-search svg {
       position: absolute;
-      left: 14px; top: 50%;
+      left: 14px;
+      top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
       pointer-events: none;
     }
+
     #q {
-      width: 100%; height: 46px;
+      width: 100%;
+      height: 46px;
       padding: 0 16px 0 42px;
       border-radius: var(--r-md);
       border: 1.5px solid var(--border);
@@ -503,12 +681,33 @@
       transition: 0.2s;
       font-weight: 600;
     }
-    #q:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px var(--primary-bg); }
-    #q::placeholder { color: var(--text-muted); font-weight: 400; }
 
-    .sgrp { display: flex; align-items: center; gap: var(--sp-sm); }
-    .sgrp-lbl { font-size: 13px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; }
-    #sf, #sd {
+    #q:focus {
+      border-color: var(--primary);
+      background: #FFF;
+      box-shadow: 0 0 0 3px var(--primary-bg);
+    }
+
+    #q::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .sgrp {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+
+    .sgrp-lbl {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sec);
+      text-transform: uppercase;
+    }
+
+    #sf,
+    #sd {
       height: 46px;
       border-radius: var(--r-md);
       border: 1.5px solid var(--border);
@@ -521,10 +720,26 @@
       padding: 0 14px;
       color: var(--primary);
     }
-    #sf:focus, #sd:focus { border-color: var(--primary); background: #FFF; }
-    #sd { width: 46px; padding: 0; text-align: center; font-size: 18px; }
 
-    #rmeta { font-size: 13px; color: var(--text-muted); margin-bottom: var(--sp-md); font-weight: 600; }
+    #sf:focus,
+    #sd:focus {
+      border-color: var(--primary);
+      background: #FFF;
+    }
+
+    #sd {
+      width: 46px;
+      padding: 0;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    #rmeta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: var(--sp-md);
+      font-weight: 600;
+    }
 
     /* ══════════════════════════════════════════════════════════
        TABLE (Desktop)
@@ -535,7 +750,14 @@
       overflow-x: auto;
       background: var(--surface);
     }
-    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 700px;
+    }
+
     thead th {
       background: var(--primary);
       padding: 0 14px;
@@ -549,15 +771,48 @@
       user-select: none;
       transition: background 0.2s;
     }
-    thead th:hover { background: var(--primary-hov); }
-    .thi { display: flex; align-items: center; gap: 6px; }
-    .arr { opacity: 0.5; font-size: 14px; }
-    th.on .arr { opacity: 1; color: var(--gold); }
 
-    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; height: 50px; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #F9FAFC; }
-    td { padding: 0 14px; font-size: 13px; font-weight: 600; vertical-align: middle; color: var(--text-main); }
+    thead th:hover {
+      background: var(--primary-hov);
+    }
+
+    .thi {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .arr {
+      opacity: 0.5;
+      font-size: 14px;
+    }
+
+    th.on .arr {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      height: 50px;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #F9FAFC;
+    }
+
+    td {
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      vertical-align: middle;
+      color: var(--text-main);
+    }
 
     .cid-pill {
       display: inline-block;
@@ -569,6 +824,7 @@
       border-radius: 999px;
       white-space: nowrap;
     }
+
     .tbl-metal {
       display: inline-flex;
       align-items: center;
@@ -577,10 +833,28 @@
       padding: 3px 9px;
       border-radius: 999px;
     }
-    .tbl-metal.gold   { background: var(--gold-lt);   color: var(--gold);   }
-    .tbl-metal.silver { background: var(--silver-lt); color: var(--silver); }
-    .camt { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--primary); }
-    .acts { display: flex; gap: 6px; align-items: center; }
+
+    .tbl-metal.gold {
+      background: var(--gold-lt);
+      color: var(--gold);
+    }
+
+    .tbl-metal.silver {
+      background: var(--silver-lt);
+      color: var(--silver);
+    }
+
+    .camt {
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+    }
+
+    .acts {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
 
     /* ── Action Buttons (table & cards) ── */
     .ab {
@@ -597,16 +871,37 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .ab:hover     { background: #F3F4F6; }
-    .ab.del       { color: var(--danger); border-color: var(--danger-bg); }
-    .ab.del:hover { background: var(--danger-bg); border-color: var(--danger); }
-    .ab.prn       { color: var(--text-sec); }
-    .ab.prn:hover { background: #F3F4F6; color: var(--text-main); }
+
+    .ab:hover {
+      background: #F3F4F6;
+    }
+
+    .ab.del {
+      color: var(--danger);
+      border-color: var(--danger-bg);
+    }
+
+    .ab.del:hover {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+    }
+
+    .ab.prn {
+      color: var(--text-sec);
+    }
+
+    .ab.prn:hover {
+      background: #F3F4F6;
+      color: var(--text-main);
+    }
 
     /* ══════════════════════════════════════════════════════════
        CARDS (Mobile & Tablet)
     ══════════════════════════════════════════════════════════ */
-    .card-list { display: none; }
+    .card-list {
+      display: none;
+    }
+
     .record-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -614,7 +909,11 @@
       background: var(--surface);
       transition: transform 0.15s;
     }
-    .record-card:active { transform: scale(0.99); }
+
+    .record-card:active {
+      transform: scale(0.99);
+    }
+
     .rc-header {
       display: flex;
       justify-content: space-between;
@@ -623,6 +922,7 @@
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
+
     .rc-id {
       display: inline-block;
       font-weight: 700;
@@ -632,16 +932,40 @@
       padding: 3px 8px;
       border-radius: 999px;
     }
-    .rc-date { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+    .rc-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
     .rc-body {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px 10px;
       margin-bottom: 8px;
     }
-    .rc-val { display: flex; flex-direction: column; gap: 1px; }
-    .rc-lbl { font-size: 10px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-    .rc-txt { font-size: 13px; font-weight: 700; color: var(--text-main); }
+
+    .rc-val {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .rc-lbl {
+      font-size: 10px;
+      color: var(--text-sec);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .rc-txt {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
     .rc-acts {
       display: flex;
       gap: 6px;
@@ -649,26 +973,39 @@
       border-top: 1px solid var(--border);
       padding-top: 8px;
     }
-    .rc-acts .ab { height: 30px; padding: 0 10px; font-size: 11px; }
+
+    .rc-acts .ab {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 11px;
+    }
 
     /* ══════════════════════════════════════════════════════════
        ACTION BAR (bottom fixed)
     ══════════════════════════════════════════════════════════ */
     #abar {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
       z-index: 50;
-      background: rgba(255,255,255,0.96);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
       padding: var(--sp-md) var(--sp-lg);
       padding-bottom: max(var(--sp-md), env(safe-area-inset-bottom));
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
       display: flex;
       justify-content: center;
     }
-    .abar-inner { max-width: 1280px; width: 100%; display: flex; gap: var(--sp-md); }
+
+    .abar-inner {
+      max-width: 1280px;
+      width: 100%;
+      display: flex;
+      gap: var(--sp-md);
+    }
 
     .btn {
       flex: 1;
@@ -685,18 +1022,49 @@
       justify-content: center;
       gap: 5px;
     }
-    .btn:active:not(:disabled)  { transform: scale(0.97); }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
     .btn:disabled {
-      opacity: 0.4; cursor: not-allowed; transform: none;
-      background: #F3F4F6 !important; color: var(--text-muted) !important;
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      background: #F3F4F6 !important;
+      color: var(--text-muted) !important;
       border: 1px solid var(--border) !important;
     }
-    .bp { background: var(--primary);   color: #FFF; }
-    .bp:hover:not(:disabled) { background: var(--primary-hov); }
-    .bs { background: #FFF; border: 1.5px solid var(--primary); color: var(--primary); }
-    .bs:hover:not(:disabled) { background: var(--primary-bg); }
-    .bg { background: transparent; border: 1.5px solid var(--border); color: var(--text-sec); }
-    .bg:hover:not(:disabled) { background: #F9FAFC; color: var(--text-main); }
+
+    .bp {
+      background: var(--primary);
+      color: #FFF;
+    }
+
+    .bp:hover:not(:disabled) {
+      background: var(--primary-hov);
+    }
+
+    .bs {
+      background: #FFF;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .bs:hover:not(:disabled) {
+      background: var(--primary-bg);
+    }
+
+    .bg {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text-sec);
+    }
+
+    .bg:hover:not(:disabled) {
+      background: #F9FAFC;
+      color: var(--text-main);
+    }
 
     /* ── Icon Button (refresh, bulk delete) ── */
     .btn-icon {
@@ -714,10 +1082,25 @@
       padding: 7px 12px;
       border-radius: 8px;
     }
-    .btn-icon:hover { background: var(--primary-bg); border-color: var(--primary); }
-    .btn-icon:active { transform: scale(0.95); }
-    .btn-icon.spinning svg { animation: rot 1s linear infinite; }
-    @keyframes rot { to { transform: rotate(360deg); } }
+
+    .btn-icon:hover {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+    }
+
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
+
+    .btn-icon.spinning svg {
+      animation: rot 1s linear infinite;
+    }
+
+    @keyframes rot {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ══════════════════════════════════════════════════════════
        LOADER
@@ -725,14 +1108,16 @@
     #loader {
       position: fixed;
       inset: 0;
-      background: rgba(244,245,236,0.88);
+      background: rgba(244, 245, 236, 0.88);
       backdrop-filter: blur(6px);
       z-index: 100;
       display: grid;
       place-items: center;
     }
+
     .spin {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border: 4px solid var(--border);
       border-top-color: var(--primary);
       border-radius: 50%;
@@ -744,7 +1129,8 @@
     ══════════════════════════════════════════════════════════ */
     #toast {
       position: fixed;
-      bottom: 100px; left: 50%;
+      bottom: 100px;
+      left: 50%;
       transform: translate(-50%, 20px);
       z-index: 70;
       background: var(--text-main);
@@ -756,44 +1142,66 @@
       box-shadow: var(--sh-lg);
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
       max-width: 90vw;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    #toast.show { opacity: 1; transform: translate(-50%, 0); }
-    #toast.ok   { background: var(--success); }
-    #toast.err  { background: var(--danger);  }
+
+    #toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    #toast.ok {
+      background: var(--success);
+    }
+
+    #toast.err {
+      background: var(--danger);
+    }
 
     /* ══════════════════════════════════════════════════════════
        DELETE CONFIRM MODAL
     ══════════════════════════════════════════════════════════ */
     #modal-overlay {
       position: fixed;
-      inset: 0; z-index: 150;
-      background: rgba(0,0,0,0.52);
+      inset: 0;
+      z-index: 150;
+      background: rgba(0, 0, 0, 0.52);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: var(--sp-lg);
-      opacity: 0; visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
       transition: all 0.25s;
     }
-    #modal-overlay.show { opacity: 1; visibility: visible; }
+
+    #modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
     .modal-card {
       background: var(--surface);
       border-radius: 16px;
       padding: var(--sp-xl);
       max-width: 360px;
       width: 100%;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
       transform: scale(0.94);
-      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    #modal-overlay.show .modal-card { transform: scale(1); }
+
+    #modal-overlay.show .modal-card {
+      transform: scale(1);
+    }
+
     .modal-icon {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       background: var(--danger-bg);
       border-radius: 50%;
       display: flex;
@@ -801,18 +1209,51 @@
       justify-content: center;
       margin: 0 auto var(--sp-md);
     }
-    .modal-icon svg { color: var(--danger); }
-    .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px; }
-    .modal-body  { font-size: 14px; color: var(--text-sec); text-align: center; line-height: 1.5; margin-bottom: var(--sp-lg); }
-    .modal-acts  { display: flex; gap: var(--sp-md); }
-    .modal-acts .btn { height: 44px; font-size: 14px; }
-    .btn-danger  { background: var(--danger); color: #FFF; }
-    .btn-danger:hover:not(:disabled) { background: var(--danger-hov); }
+
+    .modal-icon svg {
+      color: var(--danger);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .modal-body {
+      font-size: 14px;
+      color: var(--text-sec);
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: var(--sp-lg);
+    }
+
+    .modal-acts {
+      display: flex;
+      gap: var(--sp-md);
+    }
+
+    .modal-acts .btn {
+      height: 44px;
+      font-size: 14px;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #FFF;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: var(--danger-hov);
+    }
 
     /* ══════════════════════════════════════════════════════════
        THERMAL RECEIPT (hidden in UI, shown only in print)
     ══════════════════════════════════════════════════════════ */
-    #print-receipt { display: none; }
+    #print-receipt {
+      display: none;
+    }
 
     @media print {
       @page {
@@ -821,8 +1262,15 @@
       }
 
       /* Hide everything except the receipt */
-      body > *:not(#print-receipt) { display: none !important; }
-      body { background: #FFF !important; padding: 0 !important; margin: 0 !important; }
+      body>*:not(#print-receipt) {
+        display: none !important;
+      }
+
+      body {
+        background: #FFF !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
 
       #print-receipt {
         display: block !important;
@@ -855,6 +1303,7 @@
         line-height: 1.2;
         color: #000 !important;
       }
+
       .rcp-biz-sub {
         font-size: 8pt;
         text-align: center;
@@ -864,8 +1313,17 @@
       }
 
       /* Dividers */
-      .rcp-divider-thick { border: none; border-top: 2px solid #000; margin: 2mm 0; }
-      .rcp-divider       { border: none; border-top: 1px dashed #555; margin: 1.5mm 0; }
+      .rcp-divider-thick {
+        border: none;
+        border-top: 2px solid #000;
+        margin: 2mm 0;
+      }
+
+      .rcp-divider {
+        border: none;
+        border-top: 1px dashed #555;
+        margin: 1.5mm 0;
+      }
 
       /* Title */
       .rcp-title {
@@ -886,8 +1344,21 @@
         font-size: 9pt;
         line-height: 1.35;
       }
-      .rcp-lbl   { color: #333; font-weight: normal; flex-shrink: 0; margin-right: 2mm; white-space: nowrap; }
-      .rcp-val   { font-weight: bold; text-align: right; word-break: break-word; flex: 1; }
+
+      .rcp-lbl {
+        color: #333;
+        font-weight: normal;
+        flex-shrink: 0;
+        margin-right: 2mm;
+        white-space: nowrap;
+      }
+
+      .rcp-val {
+        font-weight: bold;
+        text-align: right;
+        word-break: break-word;
+        flex: 1;
+      }
 
       /* Section heading */
       .rcp-section {
@@ -909,17 +1380,48 @@
         padding: 1.5mm 2mm;
         border: 1.5px solid #000;
       }
-      .rcp-price-lbl { font-size: 10pt; font-weight: bold; text-transform: uppercase; }
-      .rcp-price-val { font-size: 14pt; font-weight: bold; }
+
+      .rcp-price-lbl {
+        font-size: 10pt;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .rcp-price-val {
+        font-size: 14pt;
+        font-weight: bold;
+      }
 
       /* Remarks */
-      .rcp-remarks-text { font-size: 8.5pt; color: #444; margin: 0.5mm 0 1mm; font-style: italic; }
+      .rcp-remarks-text {
+        font-size: 8.5pt;
+        color: #444;
+        margin: 0.5mm 0 1mm;
+        font-style: italic;
+      }
 
       /* Signature area */
-      .rcp-sig-area { margin-top: 5mm; display: flex; justify-content: space-between; }
-      .rcp-sig      { width: 45%; text-align: center; }
-      .rcp-sig-line { border-bottom: 1px solid #000; margin-bottom: 1.5mm; height: 7mm; }
-      .rcp-sig-lbl  { font-size: 7.5pt; color: #444; }
+      .rcp-sig-area {
+        margin-top: 5mm;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .rcp-sig {
+        width: 45%;
+        text-align: center;
+      }
+
+      .rcp-sig-line {
+        border-bottom: 1px solid #000;
+        margin-bottom: 1.5mm;
+        height: 7mm;
+      }
+
+      .rcp-sig-lbl {
+        font-size: 7.5pt;
+        color: #444;
+      }
 
       /* Footer */
       .rcp-footer {
@@ -938,71 +1440,224 @@
 
     /* Desktop (≥ 901px) */
     @media (min-width: 901px) {
-      .tb-inner { height: 88px; max-width: 1280px; }
-      #navbar-logo { height: 60px; }
-      .tb-biz-name { font-size: 17px; }
-      .wrap { max-width: 1280px; padding: 0 32px; gap: var(--sp-lg); margin-top: var(--sp-xl); }
-      .card { padding: var(--sp-xl); }
+      .tb-inner {
+        height: 88px;
+        max-width: 1280px;
+      }
+
+      #navbar-logo {
+        height: 60px;
+      }
+
+      .tb-biz-name {
+        font-size: 17px;
+      }
+
+      .wrap {
+        max-width: 1280px;
+        padding: 0 32px;
+        gap: var(--sp-lg);
+        margin-top: var(--sp-xl);
+      }
+
+      .card {
+        padding: var(--sp-xl);
+      }
     }
 
     /* Tablet (769–900px) */
     @media (min-width: 769px) and (max-width: 900px) {
-      .tb-inner { height: 76px; }
-      #navbar-logo { height: 50px; }
-      .wrap { padding: 0 24px; gap: var(--sp-lg); }
-      .card { padding: 24px; }
-      .tbl-outer { display: none; }
-      .card-list { display: flex; flex-direction: column; gap: var(--sp-md); }
+      .tb-inner {
+        height: 76px;
+      }
+
+      #navbar-logo {
+        height: 50px;
+      }
+
+      .wrap {
+        padding: 0 24px;
+        gap: var(--sp-lg);
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .tbl-outer {
+        display: none;
+      }
+
+      .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-md);
+      }
     }
 
     /* Mobile (≤ 768px) */
     @media (max-width: 768px) {
-      .tb-inner { height: 62px; padding: 8px 14px; }
-      #navbar-logo { height: 42px; }
-      .tb-biz-name { font-size: 13px; }
-      .tb-biz-sub  { display: none; }
-      .tb-user-pill { display: none; } /* hidden — shown on desktop */
+      .tb-inner {
+        height: 62px;
+        padding: 8px 14px;
+      }
 
-      .grid2 { grid-template-columns: repeat(2, 1fr); gap: var(--sp-sm); }
-      .wrap  { padding: 0 14px; margin: 10px auto; gap: var(--sp-md); }
-      .card  { padding: 14px; }
-      .tbl-outer { display: none; }
-      .card-list { display: flex; flex-direction: column; gap: 6px; }
+      #navbar-logo {
+        height: 42px;
+      }
 
-      .record-card { padding: 10px 12px; }
-      .rc-header   { margin-bottom: 6px; padding-bottom: 6px; }
-      .rc-body     { gap: 4px 8px; margin-bottom: 6px; }
-      .rc-lbl      { font-size: 9px; }
-      .rc-txt      { font-size: 12px; }
-      .rc-acts     { padding-top: 6px; gap: 6px; }
-      .rc-acts .ab { height: 28px; padding: 0 8px; font-size: 11px; }
+      .tb-biz-name {
+        font-size: 13px;
+      }
 
-      .slabel      { font-size: 13px; margin-bottom: 12px; }
-      .rbar        { flex-direction: column; align-items: stretch; gap: var(--sp-sm); }
-      .sbox-search { min-width: 100%; }
-      .sgrp        { justify-content: space-between; }
-      .sgrp-lbl    { display: none; }
-      #sf          { flex: 1; }
+      .tb-biz-sub {
+        display: none;
+      }
 
-      #abar        { padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
-      .abar-inner  { gap: 6px; }
-      .btn         { height: 44px; font-size: 13px; padding: 0 4px; }
+      .tb-user-pill {
+        display: none;
+      }
+
+      /* hidden — shown on desktop */
+
+      .grid2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--sp-sm);
+      }
+
+      .wrap {
+        padding: 0 14px;
+        margin: 10px auto;
+        gap: var(--sp-md);
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .tbl-outer {
+        display: none;
+      }
+
+      .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .record-card {
+        padding: 10px 12px;
+      }
+
+      .rc-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+      }
+
+      .rc-body {
+        gap: 4px 8px;
+        margin-bottom: 6px;
+      }
+
+      .rc-lbl {
+        font-size: 9px;
+      }
+
+      .rc-txt {
+        font-size: 12px;
+      }
+
+      .rc-acts {
+        padding-top: 6px;
+        gap: 6px;
+      }
+
+      .rc-acts .ab {
+        height: 28px;
+        padding: 0 8px;
+        font-size: 11px;
+      }
+
+      .slabel {
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .rbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--sp-sm);
+      }
+
+      .sbox-search {
+        min-width: 100%;
+      }
+
+      .sgrp {
+        justify-content: space-between;
+      }
+
+      .sgrp-lbl {
+        display: none;
+      }
+
+      #sf {
+        flex: 1;
+      }
+
+      #abar {
+        padding: 10px 14px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+      }
+
+      .abar-inner {
+        gap: 6px;
+      }
+
+      .btn {
+        height: 44px;
+        font-size: 13px;
+        padding: 0 4px;
+      }
 
       .field input,
-      .field select { height: 42px; font-size: 14px; padding: 0 12px; }
-      .field label,
-      .flbl         { font-size: 11px; }
-      .field         { gap: 3px; }
-      .grid2         { gap: 8px; }
-      .divider       { margin: 10px 0; }
+      .field select {
+        height: 42px;
+        font-size: 14px;
+        padding: 0 12px;
+      }
 
-      .sum-grid  { grid-template-columns: repeat(2, 1fr); }
-      .price-val { font-size: 22px; }
+      .field label,
+      .flbl {
+        font-size: 11px;
+      }
+
+      .field {
+        gap: 3px;
+      }
+
+      .grid2 {
+        gap: 8px;
+      }
+
+      .divider {
+        margin: 10px 0;
+      }
+
+      .sum-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .price-val {
+        font-size: 22px;
+      }
     }
 
     /* Very small phones */
     @media (max-width: 380px) {
-      .tb-biz  { display: none; }
+      .tb-biz {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1021,8 +1676,8 @@
       <div id="login-err"></div>
       <div class="lf">
         <label for="l-user">Username</label>
-        <input id="l-user" type="text" placeholder="Enter username"
-          autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input id="l-user" type="text" placeholder="Enter username" autocomplete="username" autocorrect="off"
+          autocapitalize="off" spellcheck="false">
       </div>
       <div class="lf">
         <label for="l-pass">Password</label>
@@ -1035,7 +1690,9 @@
   <!-- ══════════════════════════════════════════════════════════
        LOADER
   ═══════════════════════════════════════════════════════════ -->
-  <div id="loader" style="display:none;"><div class="spin"></div></div>
+  <div id="loader" style="display:none;">
+    <div class="spin"></div>
+  </div>
 
   <!-- ══════════════════════════════════════════════════════════
        TOAST
@@ -1048,16 +1705,16 @@
   <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-el">
     <div class="modal-card">
       <div class="modal-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
           <polyline points="3 6 5 6 21 6"></polyline>
           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
         </svg>
       </div>
       <div class="modal-title" id="modal-title-el">Delete Record?</div>
-      <div class="modal-body"  id="modal-body-el">This action cannot be undone.</div>
+      <div class="modal-body" id="modal-body-el">This action cannot be undone.</div>
       <div class="modal-acts">
-        <button id="modal-cancel"  class="btn bg">Cancel</button>
+        <button id="modal-cancel" class="btn bg">Cancel</button>
         <button id="modal-confirm" class="btn btn-danger">Delete</button>
       </div>
     </div>
@@ -1067,27 +1724,32 @@
        THERMAL PRINT RECEIPT (hidden in UI, visible in @media print)
   ═══════════════════════════════════════════════════════════ -->
   <div id="print-receipt" aria-hidden="true">
-    <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt=""
-      onerror="this.style.display='none'">
+    <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt="" onerror="this.style.display='none'">
     <div class="rcp-biz-name">|| શ્રી ૧! ||</div>
     <hr class="rcp-divider-thick">
     <div class="rcp-title">Purchase Voucher</div>
     <hr class="rcp-divider">
     <div class="rcp-row"><span class="rcp-lbl">Receipt No. :</span><span class="rcp-val" id="rcp-id">—</span></div>
-    <div class="rcp-row"><span class="rcp-lbl">Date        :</span><span class="rcp-val" id="rcp-date">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Date :</span><span class="rcp-val" id="rcp-date">—</span></div>
     <hr class="rcp-divider">
     <div class="rcp-section">Customer Details</div>
-    <div class="rcp-row"><span class="rcp-lbl">Name    :</span><span class="rcp-val" id="rcp-name">—</span></div>
-    <div class="rcp-row" id="rcp-mob-row" ><span class="rcp-lbl">Mobile  :</span><span class="rcp-val" id="rcp-mob">—</span></div>
-    <div class="rcp-row" id="rcp-addr-row"><span class="rcp-lbl">Address :</span><span class="rcp-val" id="rcp-addr">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Name :</span><span class="rcp-val" id="rcp-name">—</span></div>
+    <div class="rcp-row" id="rcp-mob-row"><span class="rcp-lbl">Mobile :</span><span class="rcp-val"
+        id="rcp-mob">—</span></div>
+    <div class="rcp-row" id="rcp-addr-row"><span class="rcp-lbl">Address :</span><span class="rcp-val"
+        id="rcp-addr">—</span></div>
     <hr class="rcp-divider">
     <div class="rcp-section">Jewellery Details</div>
-    <div class="rcp-row"><span class="rcp-lbl">Metal       :</span><span class="rcp-val" id="rcp-metal">—</span></div>
-    <div class="rcp-row"><span class="rcp-lbl">Gross Wt    :</span><span class="rcp-val" id="rcp-gross">—</span></div>
-    <div class="rcp-row" id="rcp-ded-row"><span class="rcp-lbl">Deduction   :</span><span class="rcp-val" id="rcp-ded">—</span></div>
-    <div class="rcp-row" id="rcp-bef-row"><span class="rcp-lbl">Before Melt :</span><span class="rcp-val" id="rcp-bef">—</span></div>
-    <div class="rcp-row" id="rcp-aft-row"><span class="rcp-lbl">After Melt  :</span><span class="rcp-val" id="rcp-aft">—</span></div>
-    <div class="rcp-row" id="rcp-pur-row"><span class="rcp-lbl">Purity      :</span><span class="rcp-val" id="rcp-pur">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Metal :</span><span class="rcp-val" id="rcp-metal">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Gross Wt :</span><span class="rcp-val" id="rcp-gross">—</span></div>
+    <div class="rcp-row" id="rcp-ded-row"><span class="rcp-lbl">Deduction :</span><span class="rcp-val"
+        id="rcp-ded">—</span></div>
+    <div class="rcp-row" id="rcp-bef-row"><span class="rcp-lbl">Before Melt :</span><span class="rcp-val"
+        id="rcp-bef">—</span></div>
+    <div class="rcp-row" id="rcp-aft-row"><span class="rcp-lbl">After Melt :</span><span class="rcp-val"
+        id="rcp-aft">—</span></div>
+    <div class="rcp-row" id="rcp-pur-row"><span class="rcp-lbl">Purity :</span><span class="rcp-val"
+        id="rcp-pur">—</span></div>
     <hr class="rcp-divider">
     <div class="rcp-price-block">
       <span class="rcp-price-lbl">Final Price</span>
@@ -1116,8 +1778,7 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="topbar">
     <div class="tb-inner">
-      <img id="navbar-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo"
-        onerror="this.style.display='none'">
+      <img id="navbar-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo" onerror="this.style.display='none'">
       <div class="tb-right">
         <div class="tb-user-pill">
           <span class="tb-uname" id="tb-username">—</span>
@@ -1154,22 +1815,19 @@
         <!-- Customer Name -->
         <div class="field">
           <label for="f-name">Customer Name *</label>
-          <input id="f-name" type="text" placeholder="Full name"
-            autocomplete="off" spellcheck="false">
+          <input id="f-name" type="text" placeholder="Full name" autocomplete="off" spellcheck="false">
         </div>
 
         <!-- Address (full row) -->
         <div class="field full">
           <label for="f-addr">Address</label>
-          <input id="f-addr" type="text" placeholder="Customer address (optional)"
-            autocomplete="off">
+          <input id="f-addr" type="text" placeholder="Customer address (optional)" autocomplete="off">
         </div>
 
         <!-- Mobile -->
         <div class="field">
           <label for="f-mobile">Mobile No.</label>
-          <input id="f-mobile" type="tel" placeholder="Mobile number"
-            inputmode="numeric" maxlength="15">
+          <input id="f-mobile" type="tel" placeholder="Mobile number" inputmode="numeric" maxlength="15">
         </div>
 
         <!-- Metal Type -->
@@ -1187,47 +1845,41 @@
         <!-- Gross Weight -->
         <div class="field">
           <label for="f-gross">Gross Weight (g) *</label>
-          <input id="f-gross" type="number" placeholder="0.000"
-            step="0.001" min="0" inputmode="decimal">
+          <input id="f-gross" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
         </div>
 
         <!-- Deduction Weight -->
         <div class="field">
           <label for="f-ded">Deduction Wt (g)</label>
-          <input id="f-ded" type="number" placeholder="0.000"
-            step="0.001" min="0" inputmode="decimal">
+          <input id="f-ded" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
         </div>
 
         <!-- Before Melt Weight (auto-calculated) -->
         <div class="field">
           <div class="fhdr">
             <span class="flbl">Before Melt Wt (g)</span>
-            <span id="auto-badge" class="auto-badge"
-              title="Auto-calculated. Click to toggle manual edit.">Auto</span>
+            <span id="auto-badge" class="auto-badge" title="Auto-calculated. Click to toggle manual edit.">Auto</span>
           </div>
-          <input id="f-bef" type="number" placeholder="0.000"
-            step="0.001" min="0" inputmode="decimal">
+          <input id="f-bef" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
         </div>
 
         <!-- After Melt Weight -->
         <div class="field">
           <label for="f-aft">After Melt Wt (g)</label>
-          <input id="f-aft" type="number" placeholder="0.000"
-            step="0.001" min="0" inputmode="decimal">
+          <input id="f-aft" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
         </div>
 
         <!-- Purity -->
         <div class="field">
           <label for="f-purity">Purity</label>
-          <input id="f-purity" type="text" placeholder="e.g. 22K, 18K, 999"
-            autocomplete="off" autocapitalize="characters">
+          <input id="f-purity" type="text" placeholder="e.g. 22K, 18K, 999" autocomplete="off"
+            autocapitalize="characters">
         </div>
 
         <!-- Final Price -->
         <div class="field">
           <label for="f-price">Final Price (₹) *</label>
-          <input id="f-price" type="number" placeholder="0.00"
-            step="0.01" min="0" inputmode="decimal">
+          <input id="f-price" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
         </div>
 
         <!-- Remarks (full row) -->
@@ -1287,8 +1939,8 @@
             <!-- Bulk delete button (Admin only) -->
             <button id="b-del-sel" class="btn-icon" style="display:none; color:var(--danger);"
               title="Delete selected records">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
@@ -1296,8 +1948,8 @@
             </button>
             <!-- Refresh button -->
             <button id="b-refresh" class="btn-icon" title="Refresh records">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 2v6h-6"></path>
                 <path d="M3 12a9 9 0 1 0 2.63-6.37L21 8"></path>
               </svg>
@@ -1308,13 +1960,12 @@
         <!-- Search + Sort toolbar -->
         <div class="rbar">
           <div class="sbox-search">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input id="q" type="search" placeholder="Search name, ID, mobile, purity…"
-              autocomplete="off">
+            <input id="q" type="search" placeholder="Search name, ID, mobile, purity…" autocomplete="off">
           </div>
           <div class="sgrp">
             <span class="sgrp-lbl">Sort by</span>
@@ -1333,7 +1984,7 @@
 
       <!-- Table (desktop) & Cards (mobile/tablet) -->
       <div class="tbl-outer" id="tbl-wrap"></div>
-      <div class="card-list"  id="card-wrap"></div>
+      <div class="card-list" id="card-wrap"></div>
     </div><!-- /#rec-section -->
 
   </div><!-- /.wrap -->
@@ -1343,10 +1994,10 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="abar">
     <div class="abar-inner">
-      <button id="b-save"   class="btn bp">💾 Save</button>
+      <button id="b-save" class="btn bp">💾 Save</button>
       <button id="b-update" class="btn bs" disabled>✏️ Update</button>
-      <button id="b-print"  class="btn bg">🖨️ Print</button>
-      <button id="b-reset"  class="btn bg">✕ Reset</button>
+      <button id="b-print" class="btn bg">🖨️ Print</button>
+      <button id="b-reset" class="btn bg">✕ Reset</button>
     </div>
   </div>
 
@@ -1375,10 +2026,10 @@
         : null;
 
       return fetch(GAS_URL, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body:    JSON.stringify({ action: action, data: data || null }),
-        signal:  controller ? controller.signal : undefined
+        body: JSON.stringify({ action: action, data: data || null }),
+        signal: controller ? controller.signal : undefined
       })
         .then(function (res) {
           if (timer) clearTimeout(timer);
@@ -1396,15 +2047,15 @@
     //  APPLICATION STATE
     // ════════════════════════════════════════════════════════════
     var S = {
-      records:          [],     // all loaded purchase records
-      config:           {},     // loaded from Config sheet
-      editId:           null,   // recordId being edited (null = new)
-      printRec:         null,   // record queued for printing
-      sortField:        'date',
-      sortAsc:          false,
-      selectedIds:      [],     // for bulk delete
+      records: [],     // all loaded purchase records
+      config: {},     // loaded from Config sheet
+      editId: null,   // recordId being edited (null = new)
+      printRec: null,   // record queued for printing
+      sortField: 'date',
+      sortAsc: false,
+      selectedIds: [],     // for bulk delete
       beforeMeltManual: false,  // true when user manually overrides auto-calc
-      user:             null    // { username, role }
+      user: null    // { username, role }
     };
 
     // ════════════════════════════════════════════════════════════
@@ -1443,7 +2094,7 @@
     function toast(msg, type) {
       var t = $id('toast');
       t.textContent = msg;
-      t.className   = 'show ' + (type || '');
+      t.className = 'show ' + (type || '');
       clearTimeout(t._timer);
       t._timer = setTimeout(function () { t.className = ''; }, 3000);
     }
@@ -1451,7 +2102,7 @@
     /** Show or hide the error banner above the form */
     function showErr(msg) {
       var b = $id('err-banner');
-      b.textContent  = msg || '';
+      b.textContent = msg || '';
       b.style.display = msg ? 'block' : 'none';
       if (msg) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1469,7 +2120,7 @@
     // ════════════════════════════════════════════════════════════
 
     function canCreate() { return S.user && (S.user.role === 'Admin' || S.user.role === 'Staff'); }
-    function canEdit()   { return S.user && (S.user.role === 'Admin' || S.user.role === 'Staff'); }
+    function canEdit() { return S.user && (S.user.role === 'Admin' || S.user.role === 'Staff'); }
     function canDelete() { return S.user && S.user.role === 'Admin'; }
 
     /**
@@ -1478,15 +2129,15 @@
      */
     function applyPermissions() {
       var formSection = $id('form-section');
-      var abar        = $id('abar');
+      var abar = $id('abar');
 
       if (!S.user || S.user.role === 'Viewer') {
         // Viewers can only see records — no form, no action bar
         formSection.style.display = 'none';
-        abar.style.display        = 'none';
+        abar.style.display = 'none';
       } else {
         formSection.style.display = 'block';
-        abar.style.display        = 'flex';
+        abar.style.display = 'flex';
       }
 
       // Bulk delete button only visible to Admins (and only when items selected)
@@ -1497,24 +2148,24 @@
     //  SESSION MANAGEMENT
     //  Uses sessionStorage so the session clears when the tab closes.
     // ════════════════════════════════════════════════════════════
-    var SESSION_KEY         = 'mj_purchase_session';
+    var SESSION_KEY = 'mj_purchase_session';
     var DEFAULT_TIMEOUT_MIN = 480; // 8 hours
 
     function saveSession(user) {
       try {
         sessionStorage.setItem(SESSION_KEY, JSON.stringify({
-          user:      user,
+          user: user,
           loginTime: Date.now()
         }));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     function loadSession() {
       try {
         var raw = sessionStorage.getItem(SESSION_KEY);
         if (!raw) return null;
-        var data       = JSON.parse(raw);
-        var timeoutMs  = (parseInt(S.config && S.config['Session Timeout']) || DEFAULT_TIMEOUT_MIN) * 60000;
+        var data = JSON.parse(raw);
+        var timeoutMs = (parseInt(S.config && S.config['Session Timeout']) || DEFAULT_TIMEOUT_MIN) * 60000;
         if (Date.now() - data.loginTime > timeoutMs) {
           sessionStorage.removeItem(SESSION_KEY);
           return null;
@@ -1524,7 +2175,7 @@
     }
 
     function clearSession() {
-      try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (e) { }
     }
 
     // ════════════════════════════════════════════════════════════
@@ -1535,7 +2186,7 @@
       $id('login-overlay').classList.remove('hidden');
       var errEl = $id('login-err');
       if (errMsg) { errEl.textContent = errMsg; errEl.style.display = 'block'; }
-      else          { errEl.style.display = 'none'; }
+      else { errEl.style.display = 'none'; }
     }
 
     function hideLogin() { $id('login-overlay').classList.add('hidden'); }
@@ -1547,23 +2198,23 @@
 
       if (!username || !password) {
         var e = $id('login-err');
-        e.textContent   = 'Please enter your username and password.';
+        e.textContent = 'Please enter your username and password.';
         e.style.display = 'block';
         return;
       }
 
-      $id('btn-login').disabled    = true;
+      $id('btn-login').disabled = true;
       $id('btn-login').textContent = 'Signing in…';
       $id('login-err').style.display = 'none';
 
       gasCall('login', { username: username, password: password })
         .then(function (res) {
-          $id('btn-login').disabled    = false;
+          $id('btn-login').disabled = false;
           $id('btn-login').textContent = 'Sign In';
 
           if (!res || !res.ok) {
             var e = $id('login-err');
-            e.textContent   = res ? res.error : 'Login failed. Try again.';
+            e.textContent = res ? res.error : 'Login failed. Try again.';
             e.style.display = 'block';
             return;
           }
@@ -1574,10 +2225,10 @@
           onLoginSuccess();
         })
         .catch(function (err) {
-          $id('btn-login').disabled    = false;
+          $id('btn-login').disabled = false;
           $id('btn-login').textContent = 'Sign In';
           var e = $id('login-err');
-          e.textContent   = 'Connection error: ' + (err.message || 'Please check your GAS URL.');
+          e.textContent = 'Connection error: ' + (err.message || 'Please check your GAS URL.');
           e.style.display = 'block';
         });
     }
@@ -1590,7 +2241,7 @@
       $id('tb-username').textContent = S.user.username;
       var badge = $id('tb-role');
       badge.textContent = S.user.role;
-      badge.className   = 'role-badge ' + S.user.role.toLowerCase();
+      badge.className = 'role-badge ' + S.user.role.toLowerCase();
 
       applyPermissions();
       loadAllData();
@@ -1600,10 +2251,10 @@
     function doLogout() {
       if (!confirm('Sign out of the Purchase Register?')) return;
       clearSession();
-      S.user       = null;
-      S.records    = [];
-      S.editId     = null;
-      S.printRec   = null;
+      S.user = null;
+      S.records = [];
+      S.editId = null;
+      S.printRec = null;
       S.selectedIds = [];
       resetForm();
       renderAll();
@@ -1623,29 +2274,29 @@
     function autoCalcBeforeMelt() {
       if (S.beforeMeltManual) return; // respect manual override
       var gross = +($id('f-gross').value) || 0;
-      var ded   = +($id('f-ded').value)   || 0;
-      var bef   = Math.max(0, +(gross - ded).toFixed(3));
+      var ded = +($id('f-ded').value) || 0;
+      var bef = Math.max(0, +(gross - ded).toFixed(3));
       $id('f-bef').value = bef > 0 ? bef.toFixed(3) : '';
       updateSummary();
     }
 
     /** Updates the live summary panel below the form */
     function updateSummary() {
-      var gross  = +($id('f-gross').value)  || 0;
-      var ded    = +($id('f-ded').value)    || 0;
-      var bef    = +($id('f-bef').value)    || 0;
-      var aft    = +($id('f-aft').value)    || 0;
-      var price  = +($id('f-price').value)  || 0;
+      var gross = +($id('f-gross').value) || 0;
+      var ded = +($id('f-ded').value) || 0;
+      var bef = +($id('f-bef').value) || 0;
+      var aft = +($id('f-aft').value) || 0;
+      var price = +($id('f-price').value) || 0;
       var purity = $id('f-purity').value.trim();
-      var metal  = $id('f-metal').value || 'Gold';
+      var metal = $id('f-metal').value || 'Gold';
 
       // Weight boxes
       $id('s-gross').textContent = gross > 0 ? fmtWt(gross) + ' g' : '— g';
-      $id('s-ded').textContent   = ded   > 0 ? fmtWt(ded)   + ' g' : '— g';
-      $id('s-bef').textContent   = bef   > 0 ? fmtWt(bef)   + ' g' : '— g';
-      $id('s-aft').textContent   = aft   > 0 ? fmtWt(aft)   + ' g' : '— g';
-      $id('s-pur').textContent   = purity || '—';
-      $id('s-id').textContent    = S.editId || 'New';
+      $id('s-ded').textContent = ded > 0 ? fmtWt(ded) + ' g' : '— g';
+      $id('s-bef').textContent = bef > 0 ? fmtWt(bef) + ' g' : '— g';
+      $id('s-aft').textContent = aft > 0 ? fmtWt(aft) + ' g' : '— g';
+      $id('s-pur').textContent = purity || '—';
+      $id('s-id').textContent = S.editId || 'New';
 
       // Final price
       $id('s-price').textContent = price > 0 ? fmtINR(price) : '₹ —';
@@ -1654,10 +2305,10 @@
       var badge = $id('s-metal-badge');
       if (metal === 'Silver') {
         badge.textContent = '● Silver';
-        badge.className   = 'metal-badge silver';
+        badge.className = 'metal-badge silver';
       } else {
         badge.textContent = '● Gold';
-        badge.className   = 'metal-badge gold';
+        badge.className = 'metal-badge gold';
       }
 
       // Metal select color
@@ -1670,33 +2321,33 @@
 
     /** Resets the form to its initial new-record state */
     function resetForm() {
-      $id('f-date').value    = todayISO();
-      $id('f-name').value    = '';
-      $id('f-addr').value    = '';
-      $id('f-mobile').value  = '';
-      $id('f-metal').value   = 'Gold';
-      $id('f-gross').value   = '';
-      $id('f-ded').value     = '';
-      $id('f-bef').value     = '';
-      $id('f-aft').value     = '';
-      $id('f-price').value   = '';
-      $id('f-purity').value  = '';
+      $id('f-date').value = todayISO();
+      $id('f-name').value = '';
+      $id('f-addr').value = '';
+      $id('f-mobile').value = '';
+      $id('f-metal').value = 'Gold';
+      $id('f-gross').value = '';
+      $id('f-ded').value = '';
+      $id('f-bef').value = '';
+      $id('f-aft').value = '';
+      $id('f-price').value = '';
+      $id('f-purity').value = '';
       $id('f-remarks').value = '';
 
-      S.editId           = null;
-      S.printRec         = null;
+      S.editId = null;
+      S.printRec = null;
       S.beforeMeltManual = false;
 
       // Reset auto-badge
       var badge = $id('auto-badge');
       badge.textContent = 'Auto';
-      badge.className   = 'auto-badge';
+      badge.className = 'auto-badge';
 
       // Reset buttons
-      $id('b-update').disabled    = true;
-      $id('b-save').disabled      = false;
+      $id('b-update').disabled = true;
+      $id('b-save').disabled = false;
       $id('mode-pill').textContent = 'New Record';
-      $id('mode-pill').className   = '';
+      $id('mode-pill').className = '';
 
       showErr(null);
       updateSummary();
@@ -1707,18 +2358,18 @@
      * Used for both Edit and Reprint workflows.
      */
     function fillForm(rec) {
-      $id('f-date').value    = rec.date ? rec.date.split('/').reverse().join('-') : todayISO();
-      $id('f-name').value    = rec.customerName  || '';
-      $id('f-addr').value    = rec.address       || '';
-      $id('f-mobile').value  = rec.mobile        || '';
-      $id('f-metal').value   = rec.metalType     || 'Gold';
-      $id('f-gross').value   = rec.grossWT       || '';
-      $id('f-ded').value     = rec.deductionWT   || '';
-      $id('f-bef').value     = rec.beforeMeltWT  || '';
-      $id('f-aft').value     = rec.afterMeltWT   || '';
-      $id('f-price').value   = rec.finalPrice    || '';
-      $id('f-purity').value  = rec.purity        || '';
-      $id('f-remarks').value = rec.remarks       || '';
+      $id('f-date').value = rec.date ? rec.date.split('/').reverse().join('-') : todayISO();
+      $id('f-name').value = rec.customerName || '';
+      $id('f-addr').value = rec.address || '';
+      $id('f-mobile').value = rec.mobile || '';
+      $id('f-metal').value = rec.metalType || 'Gold';
+      $id('f-gross').value = rec.grossWT || '';
+      $id('f-ded').value = rec.deductionWT || '';
+      $id('f-bef').value = rec.beforeMeltWT || '';
+      $id('f-aft').value = rec.afterMeltWT || '';
+      $id('f-price').value = rec.finalPrice || '';
+      $id('f-purity').value = rec.purity || '';
+      $id('f-remarks').value = rec.remarks || '';
 
       // Determine if Before Melt WT was manually set (vs auto-calculated)
       var autoBef = (+rec.grossWT || 0) - (+rec.deductionWT || 0);
@@ -1727,19 +2378,19 @@
       var badge = $id('auto-badge');
       if (S.beforeMeltManual) {
         badge.textContent = '↺ Reset Auto';
-        badge.className   = 'auto-badge manual';
+        badge.className = 'auto-badge manual';
       } else {
         badge.textContent = 'Auto';
-        badge.className   = 'auto-badge';
+        badge.className = 'auto-badge';
       }
 
-      S.editId   = rec.recordId;
+      S.editId = rec.recordId;
       S.printRec = rec;
 
-      $id('b-update').disabled    = !canEdit();
-      $id('b-save').disabled      = true;
+      $id('b-update').disabled = !canEdit();
+      $id('b-save').disabled = true;
       $id('mode-pill').textContent = 'Editing ' + rec.recordId;
-      $id('mode-pill').className   = 'edit';
+      $id('mode-pill').className = 'edit';
 
       showErr(null);
       updateSummary();
@@ -1749,26 +2400,26 @@
     /** Collects all form field values into a data object */
     function collectFormData() {
       return {
-        date:         $id('f-date').value   || todayISO(),
+        date: $id('f-date').value || todayISO(),
         customerName: $id('f-name').value.trim(),
-        address:      $id('f-addr').value.trim(),
-        mobile:       $id('f-mobile').value.trim(),
-        metalType:    $id('f-metal').value  || 'Gold',
-        grossWT:      +($id('f-gross').value)  || 0,
-        deductionWT:  +($id('f-ded').value)    || 0,
-        beforeMeltWT: +($id('f-bef').value)    || 0,
-        afterMeltWT:  +($id('f-aft').value)    || 0,
-        finalPrice:   +($id('f-price').value)  || 0,
-        purity:       $id('f-purity').value.trim(),
-        remarks:      $id('f-remarks').value.trim(),
-        createdBy:    S.user ? S.user.username : ''
+        address: $id('f-addr').value.trim(),
+        mobile: $id('f-mobile').value.trim(),
+        metalType: $id('f-metal').value || 'Gold',
+        grossWT: +($id('f-gross').value) || 0,
+        deductionWT: +($id('f-ded').value) || 0,
+        beforeMeltWT: +($id('f-bef').value) || 0,
+        afterMeltWT: +($id('f-aft').value) || 0,
+        finalPrice: +($id('f-price').value) || 0,
+        purity: $id('f-purity').value.trim(),
+        remarks: $id('f-remarks').value.trim(),
+        createdBy: S.user ? S.user.username : ''
       };
     }
 
     /** Validates form data; shows error and returns false if invalid */
     function validateForm(data) {
       if (!data.customerName) { showErr('Customer name is required.'); return false; }
-      if (!data.metalType)    { showErr('Metal type is required.'); return false; }
+      if (!data.metalType) { showErr('Metal type is required.'); return false; }
       if (!data.grossWT && data.grossWT !== 0) {
         showErr('Gross weight is required.');
         return false;
@@ -1794,25 +2445,25 @@
     /** Builds a local record object from form data and a generated ID */
     function buildLocalRecord(id, data) {
       return {
-        recordId:     id,
-        date:         data.date ? data.date.split('-').reverse().join('/') : '',
+        recordId: id,
+        date: data.date ? data.date.split('-').reverse().join('/') : '',
         customerName: data.customerName,
-        address:      data.address,
-        mobile:       data.mobile,
-        metalType:    data.metalType,
-        grossWT:      data.grossWT,
-        deductionWT:  data.deductionWT,
+        address: data.address,
+        mobile: data.mobile,
+        metalType: data.metalType,
+        grossWT: data.grossWT,
+        deductionWT: data.deductionWT,
         beforeMeltWT: data.beforeMeltWT,
-        afterMeltWT:  data.afterMeltWT,
-        finalPrice:   data.finalPrice,
-        purity:       data.purity,
-        remarks:      data.remarks
+        afterMeltWT: data.afterMeltWT,
+        finalPrice: data.finalPrice,
+        purity: data.purity,
+        remarks: data.remarks
       };
     }
 
     function localAddRecord(id, data) {
       var rec = buildLocalRecord(id, data);
-      rec.createdBy   = data.createdBy;
+      rec.createdBy = data.createdBy;
       rec.createdTime = new Date().toLocaleString('en-IN');
       S.records.push(rec);
     }
@@ -1888,7 +2539,7 @@
 
     function showDeleteModal(title, body, onConfirm) {
       $id('modal-title-el').textContent = title;
-      $id('modal-body-el').textContent  = body;
+      $id('modal-body-el').textContent = body;
       $id('modal-overlay').classList.add('show');
       _deleteCallback = onConfirm;
     }
@@ -1963,27 +2614,27 @@
      * Hides optional rows when their values are empty.
      */
     function populateReceipt(rec) {
-      var cfg      = S.config || {};
-      var bizName  = cfg['Business Name']  || 'Mahalaxmi Jewellers';
-      var bizAddr  = cfg['Business Address'] || '';
-      var bizPhone = cfg['Business Phone']   || '';
-      var sym      = cfg['Currency Symbol']  || '₹';
+      var cfg = S.config || {};
+      var bizName = cfg['Business Name'] || 'Mahalaxmi Jewellers';
+      var bizAddr = cfg['Business Address'] || '';
+      var bizPhone = cfg['Business Phone'] || '';
+      var sym = cfg['Currency Symbol'] || '₹';
 
-      $id('rcp-id').textContent       = rec.recordId || '—';
-      $id('rcp-date').textContent     = rec.date     || todayISO().split('-').reverse().join('/');
-      $id('rcp-name').textContent     = rec.customerName || '—';
+      $id('rcp-id').textContent = rec.recordId || '—';
+      $id('rcp-date').textContent = rec.date || todayISO().split('-').reverse().join('/');
+      $id('rcp-name').textContent = rec.customerName || '—';
 
       // Optional rows — hide if empty
       function setRow(rowId, valId, val) {
         $id(rowId).style.display = val ? 'flex' : 'none';
-        $id(valId).textContent   = val || '';
+        $id(valId).textContent = val || '';
       }
-      setRow('rcp-mob-row',  'rcp-mob',   rec.mobile);
-      setRow('rcp-addr-row', 'rcp-addr',  rec.address);
-      setRow('rcp-ded-row',  'rcp-ded',   rec.deductionWT  ? fmtWt(rec.deductionWT)  + ' g' : '');
-      setRow('rcp-bef-row',  'rcp-bef',   rec.beforeMeltWT ? fmtWt(rec.beforeMeltWT) + ' g' : '');
-      setRow('rcp-aft-row',  'rcp-aft',   rec.afterMeltWT  ? fmtWt(rec.afterMeltWT)  + ' g' : '');
-      setRow('rcp-pur-row',  'rcp-pur',   rec.purity);
+      setRow('rcp-mob-row', 'rcp-mob', rec.mobile);
+      setRow('rcp-addr-row', 'rcp-addr', rec.address);
+      setRow('rcp-ded-row', 'rcp-ded', rec.deductionWT ? fmtWt(rec.deductionWT) + ' g' : '');
+      setRow('rcp-bef-row', 'rcp-bef', rec.beforeMeltWT ? fmtWt(rec.beforeMeltWT) + ' g' : '');
+      setRow('rcp-aft-row', 'rcp-aft', rec.afterMeltWT ? fmtWt(rec.afterMeltWT) + ' g' : '');
+      setRow('rcp-pur-row', 'rcp-pur', rec.purity);
 
       $id('rcp-metal').textContent = rec.metalType || 'Gold';
       $id('rcp-gross').textContent = fmtWt(rec.grossWT || 0) + ' g';
@@ -2027,18 +2678,18 @@
 
     /** Returns the filtered and sorted records array based on current UI state */
     function getFilteredSorted() {
-      var q    = ($id('q').value || '').trim().toLowerCase();
+      var q = ($id('q').value || '').trim().toLowerCase();
       var list = S.records.filter(function (r) { return isValidId(r.recordId); });
 
       if (q) {
         list = list.filter(function (r) {
-          return (r.recordId      + '').toLowerCase().indexOf(q) > -1
-            ||   (r.customerName  + '').toLowerCase().indexOf(q) > -1
-            ||   (r.mobile        + '').toLowerCase().indexOf(q) > -1
-            ||   (r.date          + '').toLowerCase().indexOf(q) > -1
-            ||   (r.metalType     + '').toLowerCase().indexOf(q) > -1
-            ||   (r.purity        + '').toLowerCase().indexOf(q) > -1
-            ||   (r.address       + '').toLowerCase().indexOf(q) > -1;
+          return (r.recordId + '').toLowerCase().indexOf(q) > -1
+            || (r.customerName + '').toLowerCase().indexOf(q) > -1
+            || (r.mobile + '').toLowerCase().indexOf(q) > -1
+            || (r.date + '').toLowerCase().indexOf(q) > -1
+            || (r.metalType + '').toLowerCase().indexOf(q) > -1
+            || (r.purity + '').toLowerCase().indexOf(q) > -1
+            || (r.address + '').toLowerCase().indexOf(q) > -1;
         });
       }
 
@@ -2048,12 +2699,12 @@
         if (f === 'date') {
           va = dmyToNum(va); vb = dmyToNum(vb);
         } else if (f === 'finalPrice' || f === 'afterMeltWT' || f === 'grossWT') {
-          va = +va || 0;  vb = +vb || 0;
+          va = +va || 0; vb = +vb || 0;
         } else {
           va = (va + '').toLowerCase(); vb = (vb + '').toLowerCase();
         }
-        if (va < vb) return asc ? -1 :  1;
-        if (va > vb) return asc ?  1 : -1;
+        if (va < vb) return asc ? -1 : 1;
+        if (va > vb) return asc ? 1 : -1;
         return 0;
       });
 
@@ -2066,12 +2717,12 @@
 
     /** Table column definitions */
     var TABLE_COLS = [
-      { k: 'recordId',    l: 'ID'         },
-      { k: 'date',        l: 'Date'       },
-      { k: 'customerName',l: 'Customer'   },
-      { k: 'metalType',   l: 'Metal'      },
+      { k: 'recordId', l: 'ID' },
+      { k: 'date', l: 'Date' },
+      { k: 'customerName', l: 'Customer' },
+      { k: 'metalType', l: 'Metal' },
       { k: 'afterMeltWT', l: 'After Melt' },
-      { k: 'finalPrice',  l: 'Price'      }
+      { k: 'finalPrice', l: 'Price' }
     ];
 
     /** Returns a colored metal type pill span */
@@ -2082,7 +2733,7 @@
 
     /** Returns the action buttons HTML for a record */
     function actionBtns(rec) {
-      var id   = esc(rec.recordId);
+      var id = esc(rec.recordId);
       var html = '';
       if (canEdit()) {
         html += '<button class="ab edit" data-id="' + id + '" data-action="edit">Edit</button>';
@@ -2112,7 +2763,7 @@
         ths += '<th style="width:40px; padding-right:0;"><input type="checkbox" id="cb-all" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);"></th>';
       }
       ths += TABLE_COLS.map(function (c) {
-        var on  = S.sortField === c.k;
+        var on = S.sortField === c.k;
         var arr = on ? (S.sortAsc ? '↑' : '↓') : '↕';
         return '<th' + (on ? ' class="on"' : '') + ' data-col="' + c.k + '">'
           + '<div class="thi">' + c.l + '<span class="arr">' + arr + '</span></div></th>';
@@ -2120,7 +2771,7 @@
 
       // Data rows
       var trs = list.map(function (r) {
-        var id      = esc(r.recordId);
+        var id = esc(r.recordId);
         var checked = S.selectedIds.indexOf(r.recordId) > -1 ? 'checked' : '';
         var row = '<tr data-id="' + id + '">';
         if (canDelete()) {
@@ -2153,25 +2804,25 @@
       }
 
       box.innerHTML = list.map(function (r) {
-        var id      = esc(r.recordId);
+        var id = esc(r.recordId);
         var checked = S.selectedIds.indexOf(r.recordId) > -1 ? 'checked' : '';
-        var mCls    = (r.metalType === 'Silver') ? 'silver' : 'gold';
+        var mCls = (r.metalType === 'Silver') ? 'silver' : 'gold';
 
         return '<div class="record-card" data-id="' + id + '">'
           + '<div class="rc-header">'
-          +   '<div style="display:flex; align-items:center; gap:8px;">'
-          +     (canDelete() ? '<input type="checkbox" class="cb-row" value="' + id + '" style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);" ' + checked + '>' : '')
-          +     '<span class="rc-id">' + id + '</span>'
-          +     '<span class="metal-badge ' + mCls + '" style="font-size:11px; padding:2px 8px;">' + esc(r.metalType || 'Gold') + '</span>'
-          +   '</div>'
-          +   '<span class="rc-date">' + esc(r.date) + '</span>'
+          + '<div style="display:flex; align-items:center; gap:8px;">'
+          + (canDelete() ? '<input type="checkbox" class="cb-row" value="' + id + '" style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);" ' + checked + '>' : '')
+          + '<span class="rc-id">' + id + '</span>'
+          + '<span class="metal-badge ' + mCls + '" style="font-size:11px; padding:2px 8px;">' + esc(r.metalType || 'Gold') + '</span>'
+          + '</div>'
+          + '<span class="rc-date">' + esc(r.date) + '</span>'
           + '</div>'
           + '<div class="rc-body">'
-          +   '<div class="rc-val" style="grid-column:1/-1;"><span class="rc-lbl">Customer</span><span class="rc-txt" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(r.customerName) + '</span></div>'
-          +   '<div class="rc-val"><span class="rc-lbl">After Melt Wt</span><span class="rc-txt">' + (r.afterMeltWT ? fmtWt(r.afterMeltWT) + ' g' : '—') + '</span></div>'
-          +   '<div class="rc-val"><span class="rc-lbl">Final Price</span><span class="rc-txt" style="color:var(--primary); font-size:14px;">' + (r.finalPrice ? fmtINR(r.finalPrice) : '—') + '</span></div>'
-          +   (r.mobile ? '<div class="rc-val"><span class="rc-lbl">Mobile</span><span class="rc-txt">' + esc(r.mobile) + '</span></div>' : '')
-          +   (r.purity ? '<div class="rc-val"><span class="rc-lbl">Purity</span><span class="rc-txt">' + esc(r.purity) + '</span></div>' : '')
+          + '<div class="rc-val" style="grid-column:1/-1;"><span class="rc-lbl">Customer</span><span class="rc-txt" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(r.customerName) + '</span></div>'
+          + '<div class="rc-val"><span class="rc-lbl">After Melt Wt</span><span class="rc-txt">' + (r.afterMeltWT ? fmtWt(r.afterMeltWT) + ' g' : '—') + '</span></div>'
+          + '<div class="rc-val"><span class="rc-lbl">Final Price</span><span class="rc-txt" style="color:var(--primary); font-size:14px;">' + (r.finalPrice ? fmtINR(r.finalPrice) : '—') + '</span></div>'
+          + (r.mobile ? '<div class="rc-val"><span class="rc-lbl">Mobile</span><span class="rc-txt">' + esc(r.mobile) + '</span></div>' : '')
+          + (r.purity ? '<div class="rc-val"><span class="rc-lbl">Purity</span><span class="rc-txt">' + esc(r.purity) + '</span></div>' : '')
           + '</div>'
           + '<div class="rc-acts">' + actionBtns(r) + '</div>'
           + '</div>';
@@ -2195,7 +2846,7 @@
     /** Master render — updates record count, table, cards, and selection UI */
     function renderAll() {
       var list = getFilteredSorted();
-      var cnt  = list.length;
+      var cnt = list.length;
       $id('rmeta').textContent = cnt + ' record' + (cnt !== 1 ? 's' : '');
       renderTable(list);
       renderCards(list);
@@ -2226,8 +2877,8 @@
           if (cfgRes && cfgRes.ok) {
             S.config = cfgRes.data;
             var bizName = S.config['Business Name'] || 'Mahalaxmi Jewellers';
-            $id('biz-name').textContent      = bizName;
-            $id('login-biz-name').textContent = bizName;
+            if ($id('biz-name')) $id('biz-name').textContent = bizName;
+            if ($id('login-biz-name')) $id('login-biz-name').textContent = bizName;
           } else {
             showErr('Could not load config. Check your Apps Script deployment.');
           }
@@ -2256,7 +2907,7 @@
 
       if (!silent) {
         var loadMsg = '<div style="text-align:center; padding:32px; color:var(--text-muted); font-weight:600;">Loading records…</div>';
-        $id('tbl-wrap').innerHTML  = loadMsg;
+        $id('tbl-wrap').innerHTML = loadMsg;
         $id('card-wrap').innerHTML = loadMsg;
       }
 
@@ -2289,14 +2940,14 @@
 
     // ── Form: weight auto-calculation ──
     $id('f-gross').addEventListener('input', autoCalcBeforeMelt);
-    $id('f-ded').addEventListener('input',   autoCalcBeforeMelt);
+    $id('f-ded').addEventListener('input', autoCalcBeforeMelt);
 
     // Entering Before Melt WT manually triggers override mode
     $id('f-bef').addEventListener('input', function () {
       S.beforeMeltManual = true;
       var badge = $id('auto-badge');
       badge.textContent = '↺ Reset Auto';
-      badge.className   = 'auto-badge manual';
+      badge.className = 'auto-badge manual';
       updateSummary();
     });
 
@@ -2305,18 +2956,18 @@
       S.beforeMeltManual = false;
       var badge = $id('auto-badge');
       badge.textContent = 'Auto';
-      badge.className   = 'auto-badge';
+      badge.className = 'auto-badge';
       autoCalcBeforeMelt();
     });
 
     // ── Form: summary panel updates ──
-    $id('f-aft').addEventListener('input',    updateSummary);
-    $id('f-price').addEventListener('input',  updateSummary);
+    $id('f-aft').addEventListener('input', updateSummary);
+    $id('f-price').addEventListener('input', updateSummary);
     $id('f-purity').addEventListener('input', updateSummary);
     $id('f-metal').addEventListener('change', updateSummary);
 
     // ── Form: Enter key navigation between fields ──
-    var FORM_FIELDS = ['f-date','f-name','f-addr','f-mobile','f-metal','f-gross','f-ded','f-bef','f-aft','f-purity','f-price','f-remarks'];
+    var FORM_FIELDS = ['f-date', 'f-name', 'f-addr', 'f-mobile', 'f-metal', 'f-gross', 'f-ded', 'f-bef', 'f-aft', 'f-purity', 'f-price', 'f-remarks'];
     FORM_FIELDS.forEach(function (id, idx) {
       var el = $id(id);
       if (!el) return;
@@ -2338,10 +2989,10 @@
     });
 
     // ── Action bar ──
-    $id('b-save').addEventListener('click',   doSave);
+    $id('b-save').addEventListener('click', doSave);
     $id('b-update').addEventListener('click', doUpdate);
-    $id('b-reset').addEventListener('click',  resetForm);
-    $id('b-print').addEventListener('click',  function () { doPrint(S.printRec); });
+    $id('b-reset').addEventListener('click', resetForm);
+    $id('b-print').addEventListener('click', function () { doPrint(S.printRec); });
 
     // ── Refresh ──
     $id('b-refresh').addEventListener('click', function () { loadRecords(true); });
@@ -2371,8 +3022,8 @@
       if (th) {
         var col = th.dataset.col;
         if (S.sortField === col) { S.sortAsc = !S.sortAsc; }
-        else                     { S.sortField = col; S.sortAsc = true; }
-        $id('sf').value       = S.sortField;
+        else { S.sortField = col; S.sortAsc = true; }
+        $id('sf').value = S.sortField;
         $id('sd').textContent = S.sortAsc ? '↑' : '↓';
         renderAll();
         return;
@@ -2381,7 +3032,7 @@
       // Action button clicks (Edit / Print / Delete)
       var btn = e.target.closest('button[data-id]');
       if (btn) {
-        var id     = btn.dataset.id;
+        var id = btn.dataset.id;
         var action = btn.dataset.action || (btn.classList.contains('edit') ? 'edit' : btn.classList.contains('del') ? 'delete' : 'print');
 
         if (action === 'edit') {
@@ -2402,7 +3053,7 @@
       if (e.target.id === 'cb-all') {
         // Select/deselect all visible records
         var isChecked = e.target.checked;
-        var list      = getFilteredSorted();
+        var list = getFilteredSorted();
         S.selectedIds = isChecked ? list.map(function (r) { return String(r.recordId); }) : [];
         renderAll();
       } else if (e.target.classList.contains('cb-row')) {
@@ -2416,7 +3067,7 @@
       }
     });
 
-    $id('tbl-wrap').addEventListener('click',  onRecordsClick);
+    $id('tbl-wrap').addEventListener('click', onRecordsClick);
     $id('card-wrap').addEventListener('click', onRecordsClick);
 
     // ════════════════════════════════════════════════════════════
