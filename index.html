@@ -5,52 +5,67 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>Jewellery Calculator</title>
+  <title>Purchase Register — Mahalaxmi Jewellers</title>
   <meta name="description"
-    content="Professional jewellery cost calculator — track metal, labour, GST and generate records.">
+    content="Mahalaxmi Jewellers Purchase Register — Record old gold and silver purchases from customers.">
 
-  <!-- PWA / Installable Web App -->
-  <link rel="manifest" href="/Media/site.webmanifest">
+  <!-- ── PWA / Installable Web App ── -->
+  <link rel="manifest" href="Media/site.webmanifest">
   <meta name="theme-color" content="#033C3C">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Jewellery Calc">
-  <link rel="apple-touch-icon" href="/Media/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/Media/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/Media/favicon-16x16.png">
-  <link rel="shortcut icon" href="/Media/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="MJ Register">
+  <link rel="apple-touch-icon" href="Media/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="Media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="Media/favicon-16x16.png">
+  <link rel="shortcut icon" href="Media/favicon.ico">
 
+  <!-- ── Google Fonts ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cinzel:wght@600;700&display=swap"
     rel="stylesheet">
+
   <style>
-    /* ── Reset & Variables (Light Teal Theme) ──────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       DESIGN SYSTEM — Variables & Reset
+       (Reused & extended from reference project)
+    ══════════════════════════════════════════════════════════ */
     :root {
-      --font: 'Inter', system-ui, -apple-system, sans-serif;
-      --bg: #F4F5EC;
-      --surface: #FFFFFF;
-      --elevated: #FFFFFF;
-      --border: #EAEAEA;
-      --text-main: #033C3C;
-      --text-secondary: #556B72;
-      --text-muted: #8E9BA4;
-      --primary: #033C3C;
-      --primary-hover: #022a2a;
-      --primary-bg: #E6EFEF;
-      --gold: #D4AF37;
-      --danger: #EF4B4B;
-      --danger-hover: #D83A3A;
-      --danger-bg: #FEE5E5;
-      --success: #3FB568;
-      --success-bg: #DDF4E4;
+      --font:        'Inter', system-ui, -apple-system, sans-serif;
+      --font-serif:  'Cinzel', Georgia, serif;
 
-      --radius-lg: 12px;
-      --radius-md: 8px;
-      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.04);
+      /* Palette */
+      --bg:          #F4F5EC;
+      --surface:     #FFFFFF;
+      --border:      #EAEAEA;
+      --text-main:   #033C3C;
+      --text-sec:    #556B72;
+      --text-muted:  #8E9BA4;
+      --primary:     #033C3C;
+      --primary-hov: #022a2a;
+      --primary-bg:  #E6EFEF;
+      --gold:        #C9941E;
+      --gold-lt:     #FBF3E3;
+      --silver:      #6B7280;
+      --silver-lt:   #F3F4F6;
+      --danger:      #EF4B4B;
+      --danger-hov:  #D83A3A;
+      --danger-bg:   #FEE5E5;
+      --success:     #3FB568;
+      --success-bg:  #DDF4E4;
+      --warn:        #D97706;
+      --warn-bg:     #FEF3C7;
 
-      /* Spacing System */
+      /* Shape */
+      --r-lg:  12px;
+      --r-md:  8px;
+      --r-sm:  6px;
+      --sh-lg: 0 4px 20px rgba(0,0,0,0.07);
+      --sh-sm: 0 2px 8px  rgba(0,0,0,0.04);
+
+      /* Spacing */
       --sp-xs: 4px;
       --sp-sm: 8px;
       --sp-md: 16px;
@@ -58,19 +73,8 @@
       --sp-xl: 32px;
     }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      -webkit-tap-highlight-color: transparent;
-      scroll-behavior: smooth;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
     body {
       font-family: var(--font);
       background: var(--bg);
@@ -81,16 +85,118 @@
       padding-bottom: 120px;
     }
 
-    /* ── Typography ─────────────────────────────────────────────── */
-    h1,
-    h2 {
+    /* ══════════════════════════════════════════════════════════
+       LOGIN OVERLAY
+    ══════════════════════════════════════════════════════════ */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: linear-gradient(135deg, #033C3C 0%, #056060 50%, #022a2a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-lg);
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #login-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .login-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: var(--sp-xl) var(--sp-xl);
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+      animation: slideUp 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-logo {
+      display: block;
+      height: 76px;
+      width: auto;
+      margin: 0 auto var(--sp-md);
+      object-fit: contain;
+    }
+    .login-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
       font-weight: 700;
       color: var(--primary);
+      text-align: center;
+      letter-spacing: 0.03em;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .login-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: var(--sp-xl);
+    }
+    #login-err {
+      display: none;
+      background: var(--danger-bg);
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: var(--r-md);
+      margin-bottom: var(--sp-md);
+      text-align: center;
+      border: 1px solid rgba(239,75,75,0.25);
+    }
+    .lf { display: flex; flex-direction: column; gap: 5px; margin-bottom: var(--sp-md); }
+    .lf label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sec);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+    .lf input {
+      height: 48px;
+      padding: 0 16px;
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--border);
+      background: #F9FAFC;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .lf input:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px var(--primary-bg); }
+    .lf input::placeholder { color: var(--text-muted); font-weight: 400; }
 
-    /* ── Topbar (Navbar — Logo Only, Centered) ──────────────── */
+    #btn-login {
+      width: 100%;
+      height: 52px;
+      background: var(--primary);
+      color: #FFF;
+      border: none;
+      border-radius: var(--r-md);
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+      margin-top: var(--sp-sm);
+    }
+    #btn-login:hover:not(:disabled) { background: var(--primary-hov); }
+    #btn-login:active:not(:disabled) { transform: scale(0.98); }
+    #btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ══════════════════════════════════════════════════════════
+       TOPBAR
+    ══════════════════════════════════════════════════════════ */
     #topbar {
       position: sticky;
       top: 0;
@@ -98,40 +204,82 @@
       background: var(--primary);
       border-bottom: 3px solid var(--gold);
     }
-
     .tb-inner {
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: center;
-      height: 90px;
+      justify-content: space-between;
+      height: 76px;
       padding: 10px 20px;
     }
-
-    #navbar-logo {
-      height: 70px;
-      width: auto;
-      object-fit: contain;
-      display: block;
+    .tb-left { display: flex; align-items: center; gap: 12px; }
+    #navbar-logo { height: 52px; width: auto; object-fit: contain; display: block; flex-shrink: 0; }
+    .tb-biz { display: flex; flex-direction: column; line-height: 1.2; }
+    .tb-biz-name {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFF;
+      letter-spacing: 0.04em;
     }
+    .tb-biz-sub { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 500; }
 
-    /* ── Layout & Containers ────────────────────────────────────── */
+    .tb-right { display: flex; align-items: center; gap: var(--sp-sm); }
+    .tb-user-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 9999px;
+      padding: 5px 14px 5px 10px;
+    }
+    .tb-uname { font-size: 13px; font-weight: 700; color: #FFF; }
+    .role-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .role-badge.admin  { background: var(--gold);    color: #FFF; }
+    .role-badge.staff  { background: var(--success);  color: #FFF; }
+    .role-badge.viewer { background: var(--text-sec); color: #FFF; }
+
+    #btn-logout {
+      height: 36px;
+      padding: 0 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: var(--r-sm);
+      color: #FFF;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #btn-logout:hover { background: rgba(255,255,255,0.2); }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT & CONTAINERS
+    ══════════════════════════════════════════════════════════ */
     .wrap {
       margin: var(--sp-lg) auto;
       display: flex;
       flex-direction: column;
       gap: var(--sp-xl);
     }
-
-    .card-container {
+    .card {
       background: var(--surface);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-lg);
       border: 1px solid var(--border);
+      padding: var(--sp-xl);
     }
-
     .slabel {
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--primary);
       margin-bottom: var(--sp-lg);
@@ -141,13 +289,7 @@
       align-items: center;
       justify-content: space-between;
     }
-
-    .slabel-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--sp-sm);
-    }
-
+    .slabel-actions { display: flex; align-items: center; gap: var(--sp-sm); }
     #mode-pill {
       font-size: 12px;
       font-weight: 700;
@@ -159,43 +301,53 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
+    #mode-pill.edit { background: var(--gold); color: #FFF; border-color: var(--gold); }
 
-    #mode-pill.edit {
-      background: var(--gold);
-      color: #FFF;
-      border-color: var(--gold);
-    }
-
-    /* ── Forms ──────────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       FORM GRID & FIELDS
+    ══════════════════════════════════════════════════════════ */
     .grid2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: var(--sp-md);
     }
+    .full { grid-column: 1 / -1; }
 
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: var(--sp-sm);
-    }
-
-    .field label {
-      font-size: 13px;
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .fhdr  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1px; }
+    .field label, .flbl {
+      font-size: 12px;
       font-weight: 700;
-      color: var(--text-main);
+      color: var(--text-sec);
       text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Auto-badge for Before Melt WT */
+    .auto-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success);
+      cursor: default;
+      transition: all 0.2s;
+    }
+    .auto-badge.manual {
+      background: var(--warn-bg);
+      color: var(--warn);
+      border-color: var(--warn);
+      cursor: pointer;
     }
 
     .field input,
-    select {
-      height: 48px;
-      padding: 0 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+    .field select,
+    .field textarea {
+      padding: 0 14px;
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--border);
       background: #F9FAFC;
       font-family: var(--font);
       font-size: 15px;
@@ -205,213 +357,147 @@
       width: 100%;
       font-weight: 600;
     }
-
+    .field input,
+    .field select   { height: 46px; }
+    .field textarea { padding: 12px 14px; height: 72px; resize: vertical; line-height: 1.5; }
     .field input:focus,
-    select:focus {
+    .field select:focus,
+    .field textarea:focus {
       border-color: var(--primary);
       background: #FFF;
-      box-shadow: 0 0 0 2px var(--primary-bg);
+      box-shadow: 0 0 0 3px var(--primary-bg);
     }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--text-muted); font-weight: 400; }
 
-    .field input::placeholder {
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    /* iOS Safari date input fix — prevent overflow */
+    /* iOS Safari date input fix */
     input[type="date"] {
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-      box-sizing: border-box;
-      -webkit-appearance: none;
-      appearance: none;
+      width: 100%; max-width: 100%; min-width: 0;
+      -webkit-appearance: none; appearance: none;
     }
 
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: var(--sp-lg) 0;
-    }
-
-    .toggle-group {
-      display: flex;
-      background: #F3F4F6;
-      border-radius: var(--radius-md);
-      padding: 4px;
-      gap: 4px;
-    }
-
-    .t-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 0 12px;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 6px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: 0.2s;
-      height: 100%;
-    }
-
-    .t-btn.active {
-      background: #FFFFFF;
-      color: var(--primary);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    /* ── Summary ────────────────────────────────────────────────── */
-    .srow {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .srow:last-of-type {
-      border-bottom: none;
-    }
-
-    .sk {
-      font-size: 14px;
-      color: var(--text-secondary);
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .sv {
-      font-size: 16px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--text-main);
-    }
-
-    .srow.big {
-      margin-top: 8px;
-      padding-top: 16px;
-      border-top: 2px solid var(--border);
-      border-bottom: none;
-    }
-
-    .srow.big .sk {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .srow.big .sv {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--success);
-      background: var(--success-bg);
-      padding: 4px 12px;
-      border-radius: 6px;
-    }
-
-    .prow {
-      display: flex;
-      gap: var(--sp-md);
-      margin-top: var(--sp-lg);
-    }
-
-    .pbox {
-      flex: 1;
-      text-align: center;
-      background: #F9FAFC;
-      border-radius: var(--radius-md);
-      padding: var(--sp-md);
-      border: 1px solid var(--border);
-    }
-
-    .plbl {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .pval {
-      display: block;
-      font-size: 16px;
-      font-weight: 800;
-      margin-top: 6px;
-      color: var(--primary);
-    }
-
-    /* ── Error & Loader ─────────────────────────────────────────── */
     #err-banner {
       display: none;
       background: var(--danger-bg);
-      border: 1px solid rgba(239, 75, 75, 0.3);
+      border: 1px solid rgba(239,75,75,0.3);
       color: var(--danger);
-      font-size: 14px;
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-      margin-bottom: var(--sp-lg);
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: var(--r-md);
+      margin-bottom: var(--sp-md);
       font-weight: 600;
     }
+    .divider { height: 1px; background: var(--border); margin: var(--sp-lg) 0; }
 
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: rgba(244, 245, 236, 0.85);
-      backdrop-filter: blur(6px);
-      z-index: 100;
+    /* ── Metal select color coding ── */
+    #f-metal { transition: color 0.2s; }
+
+    /* ══════════════════════════════════════════════════════════
+       SUMMARY PANEL
+    ══════════════════════════════════════════════════════════ */
+    .sum-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .sum-top-lbl {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .metal-badge.gold   { background: var(--gold-lt);   color: var(--gold);   border: 1.5px solid var(--gold); }
+    .metal-badge.silver { background: var(--silver-lt); color: var(--silver); border: 1.5px solid var(--silver); }
+
+    .sum-grid {
       display: grid;
-      place-items: center;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-sm);
+      margin-bottom: var(--sp-md);
+    }
+    .sbox {
+      background: #F9FAFC;
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .sbox.primary-tint { background: var(--primary-bg); border-color: var(--primary); }
+    .sbox-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .sbox.primary-tint .sbox-lbl { color: var(--primary); }
+    .sbox-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+    .sbox.primary-tint .sbox-val { color: var(--primary); font-size: 13px; }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--sp-md);
+      background: var(--primary-bg);
+      border-radius: var(--r-md);
+      border: 2px solid var(--primary);
+    }
+    .price-lbl {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .price-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
     }
 
-    .spin {
-      width: 44px;
-      height: 44px;
-      border: 4px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: rot 0.8s linear infinite;
-    }
-
-    @keyframes rot {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* ── Records Toolbar ────────────────────────────────────────── */
-    #srch-wrap {
-      margin-top: 0;
-    }
+    /* ══════════════════════════════════════════════════════════
+       RECORDS TOOLBAR
+    ══════════════════════════════════════════════════════════ */
+    #rec-section { background: #F0F4F4; }
 
     .rbar {
       display: flex;
       flex-wrap: wrap;
       gap: var(--sp-md);
-      margin-bottom: var(--sp-lg);
+      margin-bottom: var(--sp-md);
     }
-
-    .sbox {
-      flex: 1;
-      min-width: 220px;
-      position: relative;
-    }
-
-    .sbox svg {
+    .sbox-search { flex: 1; min-width: 220px; position: relative; }
+    .sbox-search svg {
       position: absolute;
-      left: 14px;
-      top: 50%;
+      left: 14px; top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
+      pointer-events: none;
     }
-
     #q {
-      width: 100%;
-      height: 48px;
+      width: 100%; height: 46px;
       padding: 0 16px 0 42px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--border);
       background: #F9FAFC;
       font-family: var(--font);
       font-size: 15px;
@@ -420,36 +506,15 @@
       transition: 0.2s;
       font-weight: 600;
     }
+    #q:focus { border-color: var(--primary); background: #FFF; box-shadow: 0 0 0 3px var(--primary-bg); }
+    #q::placeholder { color: var(--text-muted); font-weight: 400; }
 
-    #q:focus {
-      border-color: var(--primary);
-      background: #FFF;
-      box-shadow: 0 0 0 2px var(--primary-bg);
-    }
-
-    #q::placeholder {
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    .sgrp {
-      display: flex;
-      align-items: center;
-      gap: var(--sp-sm);
-    }
-
-    .sgrp-lbl {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-    }
-
-    #sf,
-    #sd {
-      height: 48px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+    .sgrp { display: flex; align-items: center; gap: var(--sp-sm); }
+    .sgrp-lbl { font-size: 13px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; }
+    #sf, #sd {
+      height: 46px;
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--border);
       background: #F9FAFC;
       font-family: var(--font);
       font-size: 14px;
@@ -459,171 +524,100 @@
       padding: 0 14px;
       color: var(--primary);
     }
+    #sf:focus, #sd:focus { border-color: var(--primary); background: #FFF; }
+    #sd { width: 46px; padding: 0; text-align: center; font-size: 18px; }
 
-    #sf:focus,
-    #sd:focus {
-      border-color: var(--primary);
-      background: #FFF;
-    }
+    #rmeta { font-size: 13px; color: var(--text-muted); margin-bottom: var(--sp-md); font-weight: 600; }
 
-    #sd {
-      width: 48px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    #rmeta {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: var(--sp-md);
-      font-weight: 600;
-    }
-
-    /* ── Table (Desktop) ────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       TABLE (Desktop)
+    ══════════════════════════════════════════════════════════ */
     .tbl-outer {
-      border-radius: var(--radius-lg);
+      border-radius: var(--r-lg);
       border: 1px solid var(--border);
       overflow-x: auto;
       background: var(--surface);
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      min-width: 650px;
-    }
-
+    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
     thead th {
       background: var(--primary);
-      padding: 0 16px;
-      height: 52px;
-      font-size: 13px;
+      padding: 0 14px;
+      height: 48px;
+      font-size: 12px;
       font-weight: 700;
-      color: #FFFFFF;
+      color: #FFF;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       cursor: pointer;
       user-select: none;
       transition: background 0.2s;
-      border-bottom: none;
     }
+    thead th:hover { background: var(--primary-hov); }
+    .thi { display: flex; align-items: center; gap: 6px; }
+    .arr { opacity: 0.5; font-size: 14px; }
+    th.on .arr { opacity: 1; color: var(--gold); }
 
-    thead th:hover {
-      background: var(--primary-hover);
-    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; height: 50px; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F9FAFC; }
+    td { padding: 0 14px; font-size: 13px; font-weight: 600; vertical-align: middle; color: var(--text-main); }
 
-    .thi {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .arr {
-      opacity: 0.5;
-      font-size: 14px;
-    }
-
-    th.on .arr {
-      opacity: 1;
-      color: var(--gold);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.2s;
-      height: 52px;
-    }
-
-    tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background: #F9FAFC;
-    }
-
-    td {
-      padding: 0 14px;
-      font-size: 14px;
-      font-weight: 700;
-      vertical-align: middle;
-      color: var(--text-main);
-    }
-
-    /* ID pill is a SPAN inside the td, not the td itself */
     .cid-pill {
       display: inline-block;
       font-size: 11px;
       font-weight: 700;
-      background: #E6EFEF;
+      background: var(--primary-bg);
       color: var(--primary);
       padding: 3px 10px;
       border-radius: 999px;
       white-space: nowrap;
-      line-height: 1.5;
     }
-
-    .camt {
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .acts {
-      display: flex;
-      gap: 6px;
+    .tbl-metal {
+      display: inline-flex;
       align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
     }
+    .tbl-metal.gold   { background: var(--gold-lt);   color: var(--gold);   }
+    .tbl-metal.silver { background: var(--silver-lt); color: var(--silver); }
+    .camt { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--primary); }
+    .acts { display: flex; gap: 6px; align-items: center; }
 
-    /* Action Buttons (Table & Card) */
+    /* ── Action Buttons (table & cards) ── */
     .ab {
-      height: 36px;
-      padding: 0 14px;
-      border-radius: var(--radius-md);
-      font-size: 13px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: var(--r-sm);
+      font-size: 12px;
       font-weight: 700;
       font-family: var(--font);
       border: 1px solid var(--border);
-      background: #FFFFFF;
+      background: #FFF;
       color: var(--primary);
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
+    .ab:hover     { background: #F3F4F6; }
+    .ab.del       { color: var(--danger); border-color: var(--danger-bg); }
+    .ab.del:hover { background: var(--danger-bg); border-color: var(--danger); }
+    .ab.prn       { color: var(--text-sec); }
+    .ab.prn:hover { background: #F3F4F6; color: var(--text-main); }
 
-    .ab:hover {
-      background: #F3F4F6;
-    }
-
-    .ab.del {
-      color: var(--danger);
-      border-color: var(--danger-bg);
-    }
-
-    .ab.del:hover {
-      background: var(--danger-bg);
-      border-color: var(--danger);
-    }
-
-    /* ── Cards (Tablet & Mobile) ──────────────────────────────── */
-    .card-list {
-      display: none;
-    }
-
+    /* ══════════════════════════════════════════════════════════
+       CARDS (Mobile & Tablet)
+    ══════════════════════════════════════════════════════════ */
+    .card-list { display: none; }
     .record-card {
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 12px;
       background: var(--surface);
       transition: transform 0.15s;
     }
-
-    .record-card:active {
-      transform: scale(0.99);
-    }
-
+    .record-card:active { transform: scale(0.99); }
     .rc-header {
       display: flex;
       justify-content: space-between;
@@ -632,94 +626,57 @@
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
-
     .rc-id {
       display: inline-block;
       font-weight: 700;
       color: var(--primary);
       font-size: 11px;
-      background: #E6EFEF;
+      background: var(--primary-bg);
       padding: 3px 8px;
       border-radius: 999px;
-      white-space: nowrap;
     }
-
-    .rc-date {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
+    .rc-date { font-size: 12px; color: var(--text-muted); font-weight: 600; }
     .rc-body {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px 10px;
       margin-bottom: 8px;
     }
-
-    .rc-val {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .rc-lbl {
-      font-size: 10px;
-      color: var(--text-secondary);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .rc-txt {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
+    .rc-val { display: flex; flex-direction: column; gap: 1px; }
+    .rc-lbl { font-size: 10px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+    .rc-txt { font-size: 13px; font-weight: 700; color: var(--text-main); }
     .rc-acts {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       justify-content: flex-end;
       border-top: 1px solid var(--border);
       padding-top: 8px;
     }
+    .rc-acts .ab { height: 30px; padding: 0 10px; font-size: 11px; }
 
-    .rc-acts .ab {
-      height: 34px;
-      padding: 0 14px;
-      font-size: 12px;
-    }
-
-    /* ── Action Bar ─────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       ACTION BAR (bottom fixed)
+    ══════════════════════════════════════════════════════════ */
     #abar {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       z-index: 50;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255,255,255,0.96);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
       padding: var(--sp-md) var(--sp-lg);
       padding-bottom: max(var(--sp-md), env(safe-area-inset-bottom));
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
       display: flex;
       justify-content: center;
     }
-
-    .abar-inner {
-      max-width: 1280px;
-      width: 100%;
-      display: flex;
-      gap: var(--sp-md);
-    }
+    .abar-inner { max-width: 1280px; width: 100%; display: flex; gap: var(--sp-md); }
 
     .btn {
       flex: 1;
       height: 48px;
-      border-radius: var(--radius-md);
+      border-radius: var(--r-md);
       border: none;
       font-size: 15px;
       font-weight: 700;
@@ -729,59 +686,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 5px;
     }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
-
+    .btn:active:not(:disabled)  { transform: scale(0.97); }
     .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none !important;
-      border-color: var(--border);
-      background: #F3F4F6;
-      color: var(--text-muted);
+      opacity: 0.4; cursor: not-allowed; transform: none;
+      background: #F3F4F6 !important; color: var(--text-muted) !important;
+      border: 1px solid var(--border) !important;
     }
+    .bp { background: var(--primary);   color: #FFF; }
+    .bp:hover:not(:disabled) { background: var(--primary-hov); }
+    .bs { background: #FFF; border: 1.5px solid var(--primary); color: var(--primary); }
+    .bs:hover:not(:disabled) { background: var(--primary-bg); }
+    .bg { background: transparent; border: 1.5px solid var(--border); color: var(--text-sec); }
+    .bg:hover:not(:disabled) { background: #F9FAFC; color: var(--text-main); }
 
-    /* Primary Button (Dark Teal) */
-    .bp {
-      background: var(--primary);
-      color: #FFFFFF;
-    }
-
-    .bp:hover:not(:disabled) {
-      background: var(--primary-hover);
-    }
-
-    /* Secondary Button */
-    .bs {
-      background: #FFFFFF;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
-
-    .bs:hover:not(:disabled) {
-      background: var(--primary-bg);
-    }
-
-    /* Ghost Button */
-    .bg {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-    }
-
-    .bg:hover:not(:disabled) {
-      background: #F9FAFC;
-      color: var(--text-main);
-    }
-
-    /* ── Refresh / btn-icon ─────────────────────────────────────── */
+    /* ── Icon Button (refresh, bulk delete) ── */
     .btn-icon {
       background: none;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       color: var(--primary);
       font-family: var(--font);
       font-size: 13px;
@@ -791,494 +714,437 @@
       align-items: center;
       gap: 6px;
       transition: all 0.2s;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
     }
+    .btn-icon:hover { background: var(--primary-bg); border-color: var(--primary); }
+    .btn-icon:active { transform: scale(0.95); }
+    .btn-icon.spinning svg { animation: rot 1s linear infinite; }
+    @keyframes rot { to { transform: rotate(360deg); } }
 
-    .btn-icon svg {
-      flex-shrink: 0;
-      display: block;
+    /* ══════════════════════════════════════════════════════════
+       LOADER
+    ══════════════════════════════════════════════════════════ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(244,245,236,0.88);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: grid;
+      place-items: center;
+    }
+    .spin {
+      width: 44px; height: 44px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: rot 0.8s linear infinite;
     }
 
-    .btn-icon:hover {
-      background: var(--primary-bg);
-      border-color: var(--primary);
-    }
-
-    .btn-icon:active {
-      transform: scale(0.95);
-    }
-
-    .btn-icon.spinning svg {
-      animation: rot 1s linear infinite;
-    }
-
-    /* Records section tint */
-    #rec-section {
-      background: #F0F4F4;
-      /* very subtle teal tint to distinguish from form */
-    }
-
-    /* ── Toast ──────────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════════════════ */
     #toast {
       position: fixed;
-      bottom: 100px;
-      left: 50%;
+      bottom: 100px; left: 50%;
       transform: translate(-50%, 20px);
       z-index: 70;
       background: var(--text-main);
-      color: #FFFFFF;
-      padding: 14px 24px;
+      color: #FFF;
+      padding: 12px 24px;
       border-radius: 9999px;
       font-size: 14px;
       font-weight: 700;
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--sh-lg);
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+    #toast.ok   { background: var(--success); }
+    #toast.err  { background: var(--danger);  }
 
-    #toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
+    /* ══════════════════════════════════════════════════════════
+       DELETE CONFIRM MODAL
+    ══════════════════════════════════════════════════════════ */
+    #modal-overlay {
+      position: fixed;
+      inset: 0; z-index: 150;
+      background: rgba(0,0,0,0.52);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-lg);
+      opacity: 0; visibility: hidden;
+      transition: all 0.25s;
     }
-
-    #toast.ok {
-      background: var(--success);
+    #modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: var(--sp-xl);
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      transform: scale(0.94);
+      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
     }
-
-    #toast.err {
-      background: var(--danger);
+    #modal-overlay.show .modal-card { transform: scale(1); }
+    .modal-icon {
+      width: 48px; height: 48px;
+      background: var(--danger-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--sp-md);
     }
+    .modal-icon svg { color: var(--danger); }
+    .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 8px; }
+    .modal-body  { font-size: 14px; color: var(--text-sec); text-align: center; line-height: 1.5; margin-bottom: var(--sp-lg); }
+    .modal-acts  { display: flex; gap: var(--sp-md); }
+    .modal-acts .btn { height: 44px; font-size: 14px; }
+    .btn-danger  { background: var(--danger); color: #FFF; }
+    .btn-danger:hover:not(:disabled) { background: var(--danger-hov); }
 
-    /* ── Print (One-Page Compact) ───────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════
+       THERMAL RECEIPT (hidden in UI, shown only in print)
+    ══════════════════════════════════════════════════════════ */
+    #print-receipt { display: none; }
+
     @media print {
       @page {
-        size: A4 portrait;
-        margin: 10mm 12mm;
+        size: 80mm auto;
+        margin: 2mm 3mm;
       }
 
-      /* Hide everything except the calculator card */
-      #topbar,
-      #abar,
-      #srch-wrap,
-      .acts,
-      .rc-acts,
-      .card-container:nth-child(2),
-      .prow,
-      .divider,
-      #err-banner {
-        display: none !important;
-      }
+      /* Hide everything except the receipt */
+      body > *:not(#print-receipt) { display: none !important; }
+      body { background: #FFF !important; padding: 0 !important; margin: 0 !important; }
 
-      html,
-      body {
-        background: #FFF !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        font-size: 11px !important;
-      }
-
-      body {
-        padding-bottom: 0 !important;
-      }
-
-      .wrap {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        gap: 0 !important;
-      }
-
-      .card-container {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 8px 0 !important;
-        background: transparent !important;
-      }
-
-      /* Print header */
-      #ph {
+      #print-receipt {
         display: block !important;
-        margin-bottom: 10px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #000;
-      }
-
-      #ph h2 {
-        font-size: 16px !important;
-        font-family: 'Cinzel', Georgia, serif;
-      }
-
-      #ph p {
-        font-size: 10px !important;
-        color: #555;
-      }
-
-      /* Section label */
-      .slabel {
-        font-size: 11px !important;
-        margin-bottom: 8px !important;
-        letter-spacing: 0.05em;
+        width: 74mm;
+        max-width: 74mm;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 9.5pt;
         color: #000;
+        background: #FFF;
+        margin: 0 auto;
       }
 
-      /* Compact 2-col grid */
-      .grid2 {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 6px !important;
+      /* Logo */
+      .rcp-logo {
+        display: block;
+        max-height: 38px;
+        max-width: 56mm;
+        margin: 0 auto 3px;
+        object-fit: contain;
       }
 
-      .full {
-        grid-column: 1 / -1 !important;
-      }
-
-      .field {
-        gap: 2px !important;
-      }
-
-      .field label {
-        font-size: 9px !important;
-        color: #555;
-      }
-
-      .field input {
-        height: 26px !important;
-        font-size: 11px !important;
-        background: transparent !important;
-        border: 1px solid #CCC !important;
-        color: #000 !important;
-        padding: 0 6px !important;
-      }
-
-      /* Labour inline toggle hidden */
-      .toggle-group {
-        display: none !important;
-      }
-
-      /* Summary rows */
-      .srow {
-        padding: 4px 0 !important;
-        border-bottom: 1px solid #DDD !important;
-      }
-
-      .sk {
-        font-size: 10px !important;
-        color: #555;
-      }
-
-      .sv {
-        font-size: 11px !important;
-        color: #000 !important;
-        font-weight: 600;
-      }
-
-      .srow.big {
-        border-top: 2px solid #000 !important;
-        padding-top: 6px !important;
-      }
-
-      .srow.big .sk {
-        font-size: 12px !important;
+      /* Business header */
+      .rcp-biz-name {
+        font-family: 'Times New Roman', serif;
+        font-size: 13pt;
         font-weight: 700;
-        color: #000;
+        text-align: center;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+      }
+      .rcp-biz-sub {
+        font-size: 8pt;
+        text-align: center;
+        color: #444;
+        margin-bottom: 2.5mm;
+        line-height: 1.3;
       }
 
-      .srow.big .sv {
-        font-size: 14px !important;
-        font-weight: 800 !important;
-        color: #000 !important;
-        background: none !important;
-        padding: 0 !important;
-      }
-    }
+      /* Dividers */
+      .rcp-divider-thick { border: none; border-top: 2px solid #000; margin: 2mm 0; }
+      .rcp-divider       { border: none; border-top: 1px dashed #555; margin: 1.5mm 0; }
 
-    #ph {
-      display: none;
-    }
-
-    #ph h2 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    #ph p {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    /* ── Responsive Breakpoints ─────────────────────────────────── */
-
-    /* Desktop (>= 901px) */
-    @media (min-width: 901px) {
-      .tb-inner {
-        height: 100px;
-        max-width: 1280px;
+      /* Title */
+      .rcp-title {
+        font-size: 11pt;
+        font-weight: 700;
+        text-align: center;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 1mm 0;
       }
 
-      #navbar-logo {
-        height: 80px;
-      }
-
-      .wrap {
-        max-width: 1280px;
-        padding: 0 32px;
-        gap: var(--sp-lg);
-        margin-top: var(--sp-xl);
-      }
-
-      .card-container {
-        padding: 32px;
-      }
-    }
-
-    /* Tablets (769px - 900px) */
-    @media (min-width: 769px) and (max-width: 900px) {
-      .tb-inner {
-        height: 84px;
-      }
-
-      #navbar-logo {
-        height: 64px;
-      }
-
-      .wrap {
-        max-width: 100%;
-        padding: 0 24px;
-        gap: var(--sp-lg);
-      }
-
-      .card-container {
-        padding: 24px;
-      }
-
-      .tbl-outer {
-        display: none;
-      }
-
-      .card-list {
+      /* Detail rows */
+      .rcp-row {
         display: flex;
-        flex-direction: column;
-        gap: var(--sp-md);
-      }
-    }
-
-    /* Mobile Portrait (<= 768px) */
-    @media (max-width: 768px) {
-      .tb-inner {
-        height: 72px;
-        padding: 8px 16px;
-      }
-
-      #navbar-logo {
-        height: 56px;
-      }
-
-      /* Keep 2-column grid on mobile for tabular feel */
-      .grid2 {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--sp-sm);
-      }
-
-      .wrap {
-        max-width: 100%;
-        padding: 0 16px;
-        margin: var(--sp-md) auto;
-        gap: var(--sp-md);
-      }
-
-      .card-container {
-        padding: 16px;
-      }
-
-      .tbl-outer {
-        display: none;
-      }
-
-      .card-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      /* Even more compact cards at mobile */
-      .record-card {
-        padding: 8px 10px;
-        border-radius: 8px;
-      }
-
-      .rc-header {
-        margin-bottom: 6px;
-        padding-bottom: 6px;
-      }
-
-      .rc-body {
-        gap: 4px 8px;
-        margin-bottom: 6px;
-      }
-
-      .rc-lbl {
-        font-size: 9px;
-      }
-
-      .rc-txt {
-        font-size: 12px;
-      }
-
-      .rc-acts {
-        padding-top: 6px;
-        gap: 6px;
-      }
-
-      .rc-acts .ab {
-        height: 30px;
-        padding: 0 10px;
-        font-size: 11px;
-      }
-
-      .slabel {
-        margin-bottom: var(--sp-md);
-        font-size: 15px;
-      }
-
-      .srow.big .sk {
-        font-size: 16px;
-      }
-
-      .srow.big .sv {
-        font-size: 20px;
-      }
-
-      /* Stack Search & Sort */
-      .sgrp-lbl {
-        display: none;
-      }
-
-      .rbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--sp-sm);
-      }
-
-      .sbox {
-        min-width: 100%;
-      }
-
-      .sgrp {
         justify-content: space-between;
+        align-items: baseline;
+        padding: 0.4mm 0;
+        font-size: 9pt;
+        line-height: 1.35;
+      }
+      .rcp-lbl   { color: #333; font-weight: normal; flex-shrink: 0; margin-right: 2mm; white-space: nowrap; }
+      .rcp-val   { font-weight: bold; text-align: right; word-break: break-word; flex: 1; }
+
+      /* Section heading */
+      .rcp-section {
+        font-size: 8.5pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 1.5mm 0 0.5mm;
+        border-bottom: 1px solid #bbb;
+        padding-bottom: 0.4mm;
       }
 
-      #sf {
-        flex: 1;
+      /* Final price block */
+      .rcp-price-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 1.5mm 0;
+        padding: 1.5mm 2mm;
+        border: 1.5px solid #000;
       }
+      .rcp-price-lbl { font-size: 10pt; font-weight: bold; text-transform: uppercase; }
+      .rcp-price-val { font-size: 14pt; font-weight: bold; }
 
-      /* Card internals - keep 2-col */
-      .rc-body {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
+      /* Remarks */
+      .rcp-remarks-text { font-size: 8.5pt; color: #444; margin: 0.5mm 0 1mm; font-style: italic; }
 
-      /* Action Bar */
-      #abar {
-        padding: 12px 16px;
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
-      }
+      /* Signature area */
+      .rcp-sig-area { margin-top: 5mm; display: flex; justify-content: space-between; }
+      .rcp-sig      { width: 45%; text-align: center; }
+      .rcp-sig-line { border-bottom: 1px solid #000; margin-bottom: 1.5mm; height: 7mm; }
+      .rcp-sig-lbl  { font-size: 7.5pt; color: #444; }
 
-      .abar-inner {
-        gap: 8px;
+      /* Footer */
+      .rcp-footer {
+        margin-top: 3mm;
+        font-size: 7.5pt;
+        text-align: center;
+        color: #555;
+        border-top: 1px solid #ccc;
+        padding-top: 1.5mm;
       }
+    }
 
-      .btn {
-        height: 44px;
-        font-size: 13px;
-        padding: 0 6px;
-      }
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════════════════════════════ */
 
-      /* Compact form fields on mobile — fit on screen */
-      .field input {
-        height: 40px;
-        font-size: 14px;
-        padding: 0 10px;
-      }
+    /* Desktop (≥ 901px) */
+    @media (min-width: 901px) {
+      .tb-inner { height: 88px; max-width: 1280px; }
+      #navbar-logo { height: 60px; }
+      .tb-biz-name { font-size: 17px; }
+      .wrap { max-width: 1280px; padding: 0 32px; gap: var(--sp-lg); margin-top: var(--sp-xl); }
+      .card { padding: var(--sp-xl); }
+    }
 
-      .field label {
-        font-size: 10px;
-        margin-bottom: 0;
-      }
+    /* Tablet (769–900px) */
+    @media (min-width: 769px) and (max-width: 900px) {
+      .tb-inner { height: 76px; }
+      #navbar-logo { height: 50px; }
+      .wrap { padding: 0 24px; gap: var(--sp-lg); }
+      .card { padding: 24px; }
+      .tbl-outer { display: none; }
+      .card-list { display: flex; flex-direction: column; gap: var(--sp-md); }
+    }
 
-      .field {
-        gap: 3px;
-      }
+    /* Mobile (≤ 768px) */
+    @media (max-width: 768px) {
+      .tb-inner { height: 62px; padding: 8px 14px; }
+      #navbar-logo { height: 42px; }
+      .tb-biz-name { font-size: 13px; }
+      .tb-biz-sub  { display: none; }
+      .tb-user-pill { display: none; } /* hidden — shown on desktop */
 
-      .grid2 {
-        gap: 8px;
-      }
+      .grid2 { grid-template-columns: repeat(2, 1fr); gap: var(--sp-sm); }
+      .wrap  { padding: 0 14px; margin: 10px auto; gap: var(--sp-md); }
+      .card  { padding: 14px; }
+      .tbl-outer { display: none; }
+      .card-list { display: flex; flex-direction: column; gap: 6px; }
 
-      .slabel {
-        font-size: 14px;
-        margin-bottom: 10px;
-      }
+      .record-card { padding: 10px 12px; }
+      .rc-header   { margin-bottom: 6px; padding-bottom: 6px; }
+      .rc-body     { gap: 4px 8px; margin-bottom: 6px; }
+      .rc-lbl      { font-size: 9px; }
+      .rc-txt      { font-size: 12px; }
+      .rc-acts     { padding-top: 6px; gap: 6px; }
+      .rc-acts .ab { height: 28px; padding: 0 8px; font-size: 11px; }
 
-      .divider {
-        margin: 10px 0;
-      }
+      .slabel      { font-size: 13px; margin-bottom: 12px; }
+      .rbar        { flex-direction: column; align-items: stretch; gap: var(--sp-sm); }
+      .sbox-search { min-width: 100%; }
+      .sgrp        { justify-content: space-between; }
+      .sgrp-lbl    { display: none; }
+      #sf          { flex: 1; }
 
-      .srow {
-        padding: 7px 0;
-      }
+      #abar        { padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+      .abar-inner  { gap: 6px; }
+      .btn         { height: 44px; font-size: 13px; padding: 0 4px; }
 
-      .srow.big .sv {
-        font-size: 18px;
-      }
+      .field input,
+      .field select { height: 42px; font-size: 14px; padding: 0 12px; }
+      .field label,
+      .flbl         { font-size: 11px; }
+      .field         { gap: 3px; }
+      .grid2         { gap: 8px; }
+      .divider       { margin: 10px 0; }
 
-      .prow {
-        margin-top: 10px;
-        gap: 8px;
-      }
+      .sum-grid  { grid-template-columns: repeat(2, 1fr); }
+      .price-val { font-size: 22px; }
+    }
 
-      .pbox {
-        padding: 10px 6px;
-      }
-
-      .pval {
-        font-size: 14px;
-      }
-
-      .card-container {
-        padding: 14px;
-      }
+    /* Very small phones */
+    @media (max-width: 380px) {
+      .tb-biz  { display: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <div id="loader">
-    <div class="spin"></div>
-  </div>
-  <div id="toast"></div>
-
-  <!-- Print header -->
-  <div id="ph">
-    <h2 id="ph-name"></h2>
-    <p id="ph-dt"></p>
-  </div>
-
-  <!-- Top bar: Logo centered only -->
-  <div id="topbar">
-    <div class="tb-inner">
-      <img id="navbar-logo" src="/Media/Main.png" alt="Jewellery Calculator">
+  <!-- ══════════════════════════════════════════════════════════
+       LOGIN OVERLAY
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="login-overlay">
+    <div class="login-card">
+      <img class="login-logo" id="login-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo"
+        onerror="this.style.display='none'">
+      <div class="login-title" id="login-biz-name">Purchase Register</div>
+      <div class="login-sub">Sign in to continue</div>
+      <div id="login-err"></div>
+      <div class="lf">
+        <label for="l-user">Username</label>
+        <input id="l-user" type="text" placeholder="Enter username"
+          autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="lf">
+        <label for="l-pass">Password</label>
+        <input id="l-pass" type="password" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button id="btn-login">Sign In</button>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════
+       LOADER
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="loader" style="display:none;"><div class="spin"></div></div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOAST
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="toast"></div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       DELETE CONFIRM MODAL
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-el">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </div>
+      <div class="modal-title" id="modal-title-el">Delete Record?</div>
+      <div class="modal-body"  id="modal-body-el">This action cannot be undone.</div>
+      <div class="modal-acts">
+        <button id="modal-cancel"  class="btn bg">Cancel</button>
+        <button id="modal-confirm" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       THERMAL PRINT RECEIPT (hidden in UI, visible in @media print)
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="print-receipt" aria-hidden="true">
+    <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt=""
+      onerror="this.style.display='none'">
+    <div class="rcp-biz-name" id="rcp-biz-name">Mahalaxmi Jewellers</div>
+    <div class="rcp-biz-sub"  id="rcp-biz-sub"></div>
+    <hr class="rcp-divider-thick">
+    <div class="rcp-title">Purchase Receipt</div>
+    <hr class="rcp-divider">
+    <div class="rcp-row"><span class="rcp-lbl">Receipt No. :</span><span class="rcp-val" id="rcp-id">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Date        :</span><span class="rcp-val" id="rcp-date">—</span></div>
+    <hr class="rcp-divider">
+    <div class="rcp-section">Customer Details</div>
+    <div class="rcp-row"><span class="rcp-lbl">Name    :</span><span class="rcp-val" id="rcp-name">—</span></div>
+    <div class="rcp-row" id="rcp-mob-row" ><span class="rcp-lbl">Mobile  :</span><span class="rcp-val" id="rcp-mob">—</span></div>
+    <div class="rcp-row" id="rcp-addr-row"><span class="rcp-lbl">Address :</span><span class="rcp-val" id="rcp-addr">—</span></div>
+    <hr class="rcp-divider">
+    <div class="rcp-section">Jewellery Details</div>
+    <div class="rcp-row"><span class="rcp-lbl">Metal       :</span><span class="rcp-val" id="rcp-metal">—</span></div>
+    <div class="rcp-row"><span class="rcp-lbl">Gross Wt    :</span><span class="rcp-val" id="rcp-gross">—</span></div>
+    <div class="rcp-row" id="rcp-ded-row"><span class="rcp-lbl">Deduction   :</span><span class="rcp-val" id="rcp-ded">—</span></div>
+    <div class="rcp-row" id="rcp-bef-row"><span class="rcp-lbl">Before Melt :</span><span class="rcp-val" id="rcp-bef">—</span></div>
+    <div class="rcp-row" id="rcp-aft-row"><span class="rcp-lbl">After Melt  :</span><span class="rcp-val" id="rcp-aft">—</span></div>
+    <div class="rcp-row" id="rcp-pur-row"><span class="rcp-lbl">Purity      :</span><span class="rcp-val" id="rcp-pur">—</span></div>
+    <hr class="rcp-divider">
+    <div class="rcp-price-block">
+      <span class="rcp-price-lbl">Final Price</span>
+      <span class="rcp-price-val" id="rcp-price">₹ 0.00</span>
+    </div>
+    <div id="rcp-remarks-wrap">
+      <hr class="rcp-divider">
+      <div class="rcp-section">Remarks</div>
+      <div class="rcp-remarks-text" id="rcp-remarks"></div>
+    </div>
+    <div class="rcp-sig-area">
+      <div class="rcp-sig">
+        <div class="rcp-sig-line"></div>
+        <div class="rcp-sig-lbl">Customer Signature</div>
+      </div>
+      <div class="rcp-sig">
+        <div class="rcp-sig-line"></div>
+        <div class="rcp-sig-lbl">Authorised Signature</div>
+      </div>
+    </div>
+    <div class="rcp-footer" id="rcp-footer">Thank you for your business.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOPBAR
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="tb-left">
+        <img id="navbar-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo"
+          onerror="this.style.display='none'">
+        <div class="tb-biz">
+          <div class="tb-biz-name" id="biz-name">Mahalaxmi Jewellers</div>
+          <div class="tb-biz-sub">Purchase Register</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="tb-user-pill">
+          <span class="tb-uname" id="tb-username">—</span>
+          <span class="role-badge" id="tb-role">—</span>
+        </div>
+        <button id="btn-logout" title="Sign out">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN CONTENT WRAP
+  ═══════════════════════════════════════════════════════════ -->
   <div class="wrap">
-    <!-- Form Container -->
-    <div class="card-container">
+
+    <!-- ── Purchase Entry Form ─────────────────────────────── -->
+    <div class="card" id="form-section">
       <div class="slabel">
-        <span>Calculator Details</span>
+        <span>Purchase Entry</span>
         <div class="slabel-actions">
           <span id="mode-pill">New Record</span>
         </div>
@@ -1286,80 +1152,160 @@
       <div id="err-banner"></div>
 
       <div class="grid2">
-        <div class="field full">
-          <label>Customer Name</label>
-          <input id="f-name" type="text" placeholder="Enter full name" autocomplete="off" spellcheck="false">
-        </div>
-        <div class="field full">
-          <label>Date</label>
+
+        <!-- Date -->
+        <div class="field">
+          <label for="f-date">Date</label>
           <input id="f-date" type="date">
         </div>
+
+        <!-- Customer Name -->
         <div class="field">
-          <label>Weight (g)</label>
-          <input id="f-w" type="number" placeholder="0.000" step="0.001" min="0" inputmode="decimal">
+          <label for="f-name">Customer Name *</label>
+          <input id="f-name" type="text" placeholder="Full name"
+            autocomplete="off" spellcheck="false">
         </div>
-        <div class="field">
-          <label>Rate / g (₹)</label>
-          <input id="f-r" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+
+        <!-- Address (full row) -->
+        <div class="field full">
+          <label for="f-addr">Address</label>
+          <input id="f-addr" type="text" placeholder="Customer address (optional)"
+            autocomplete="off">
         </div>
+
+        <!-- Mobile -->
         <div class="field">
-          <label>Labour</label>
-          <div style="display: flex; gap: var(--sp-sm); align-items: center;">
-            <input id="f-l" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal" style="flex: 1;">
-            <div class="toggle-group" id="f-l-type" style="height: 48px; flex-shrink: 0;">
-              <button type="button" class="t-btn active" data-val="perG">Per g</button>
-              <button type="button" class="t-btn" data-val="percent">%</button>
-            </div>
+          <label for="f-mobile">Mobile No.</label>
+          <input id="f-mobile" type="tel" placeholder="Mobile number"
+            inputmode="numeric" maxlength="15">
+        </div>
+
+        <!-- Metal Type -->
+        <div class="field">
+          <label for="f-metal">Metal Type *</label>
+          <select id="f-metal">
+            <option value="Gold">Gold</option>
+            <option value="Silver">Silver</option>
+          </select>
+        </div>
+
+        <!-- ── Weight section divider ── -->
+        <div class="full divider" style="margin:4px 0;"></div>
+
+        <!-- Gross Weight -->
+        <div class="field">
+          <label for="f-gross">Gross Weight (g) *</label>
+          <input id="f-gross" type="number" placeholder="0.000"
+            step="0.001" min="0" inputmode="decimal">
+        </div>
+
+        <!-- Deduction Weight -->
+        <div class="field">
+          <label for="f-ded">Deduction Wt (g)</label>
+          <input id="f-ded" type="number" placeholder="0.000"
+            step="0.001" min="0" inputmode="decimal">
+        </div>
+
+        <!-- Before Melt Weight (auto-calculated) -->
+        <div class="field">
+          <div class="fhdr">
+            <span class="flbl">Before Melt Wt (g)</span>
+            <span id="auto-badge" class="auto-badge"
+              title="Auto-calculated. Click to toggle manual edit.">Auto</span>
+          </div>
+          <input id="f-bef" type="number" placeholder="0.000"
+            step="0.001" min="0" inputmode="decimal">
+        </div>
+
+        <!-- After Melt Weight -->
+        <div class="field">
+          <label for="f-aft">After Melt Wt (g)</label>
+          <input id="f-aft" type="number" placeholder="0.000"
+            step="0.001" min="0" inputmode="decimal">
+        </div>
+
+        <!-- Purity -->
+        <div class="field">
+          <label for="f-purity">Purity</label>
+          <input id="f-purity" type="text" placeholder="e.g. 22K, 18K, 999"
+            autocomplete="off" autocapitalize="characters">
+        </div>
+
+        <!-- Final Price -->
+        <div class="field">
+          <label for="f-price">Final Price (₹) *</label>
+          <input id="f-price" type="number" placeholder="0.00"
+            step="0.01" min="0" inputmode="decimal">
+        </div>
+
+        <!-- Remarks (full row) -->
+        <div class="field full">
+          <label for="f-remarks">Remarks</label>
+          <textarea id="f-remarks" placeholder="Optional notes about this purchase…"></textarea>
+        </div>
+
+      </div><!-- /.grid2 -->
+
+      <!-- ── Live Summary Panel ── -->
+      <div class="divider"></div>
+      <div id="summary-panel">
+        <div class="sum-top">
+          <span class="sum-top-lbl">Summary</span>
+          <span id="s-metal-badge" class="metal-badge gold">● Gold</span>
+        </div>
+        <div class="sum-grid">
+          <div class="sbox">
+            <div class="sbox-lbl">Gross Wt</div>
+            <div class="sbox-val" id="s-gross">— g</div>
+          </div>
+          <div class="sbox">
+            <div class="sbox-lbl">Deduction</div>
+            <div class="sbox-val" id="s-ded">— g</div>
+          </div>
+          <div class="sbox">
+            <div class="sbox-lbl">Before Melt</div>
+            <div class="sbox-val" id="s-bef">— g</div>
+          </div>
+          <div class="sbox">
+            <div class="sbox-lbl">After Melt</div>
+            <div class="sbox-val" id="s-aft">— g</div>
+          </div>
+          <div class="sbox">
+            <div class="sbox-lbl">Purity</div>
+            <div class="sbox-val" id="s-pur">—</div>
+          </div>
+          <div class="sbox primary-tint">
+            <div class="sbox-lbl">Record ID</div>
+            <div class="sbox-val" id="s-id">New</div>
           </div>
         </div>
-        <div class="field">
-          <label>Other (₹)</label>
-          <input id="f-o" type="number" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
-        </div>
-        <div class="field full">
-          <label>GST (%)</label>
-          <input id="f-g" type="number" placeholder="3" step="0.01" min="0" max="100" inputmode="decimal">
+        <div class="price-row">
+          <span class="price-lbl">Final Price</span>
+          <span class="price-val" id="s-price">₹ —</span>
         </div>
       </div>
+    </div><!-- /#form-section -->
 
-      <!-- Calculated summary -->
-      <div class="divider"></div>
-      <div class="srow"><span class="sk">Metal Amount</span> <span class="sv" id="s-m">₹0.00</span></div>
-      <div class="srow"><span class="sk">Labour Amount</span><span class="sv" id="s-l">₹0.00</span></div>
-      <div class="srow"><span class="sk">Other Charges</span><span class="sv" id="s-o">₹0.00</span></div>
-      <div class="srow"><span class="sk">GST Amount</span> <span class="sv" id="s-g">₹0.00</span></div>
-      <div class="srow big"><span class="sk">Total Amount</span><span class="sv" id="s-t">₹0.00</span></div>
-
-      <div class="prow">
-        <div class="pbox">
-          <div class="plbl">Metal</div> <span class="pval" id="p-m">—</span>
-        </div>
-        <div class="pbox">
-          <div class="plbl">Labour</div><span class="pval" id="p-l">—</span>
-        </div>
-        <div class="pbox">
-          <div class="plbl">Other</div> <span class="pval" id="p-o">—</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Records Container -->
-    <div class="card-container" id="rec-section">
+    <!-- ── Records Section ──────────────────────────────────── -->
+    <div class="card" id="rec-section">
       <div id="srch-wrap">
-        <div class="slabel" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>Recent Records</span>
-          <div style="display:flex; gap:8px;">
-            <button id="b-del-sel" class="btn-icon" style="display:none; color:var(--danger);" title="Delete Selected">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 6h18"></path>
+        <div class="slabel">
+          <span>Purchase Records</span>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <!-- Bulk delete button (Admin only) -->
+            <button id="b-del-sel" class="btn-icon" style="display:none; color:var(--danger);"
+              title="Delete selected records">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
               Delete (<span id="del-cnt">0</span>)
             </button>
-            <button id="b-refresh" class="btn-icon" title="Refresh Records">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
+            <!-- Refresh button -->
+            <button id="b-refresh" class="btn-icon" title="Refresh records">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 2v6h-6"></path>
                 <path d="M3 12a9 9 0 1 0 2.63-6.37L21 8"></path>
               </svg>
@@ -1367,63 +1313,78 @@
             </button>
           </div>
         </div>
+        <!-- Search + Sort toolbar -->
         <div class="rbar">
-          <div class="sbox">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <div class="sbox-search">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input id="q" type="search" placeholder="Search name, ID, date…" autocomplete="off">
+            <input id="q" type="search" placeholder="Search name, ID, mobile, purity…"
+              autocomplete="off">
           </div>
           <div class="sgrp">
             <span class="sgrp-lbl">Sort by</span>
             <select id="sf">
               <option value="date">Date</option>
               <option value="customerName">Name</option>
-              <option value="totalAmount">Total</option>
-              <option value="weight">Weight</option>
-              <option value="calcId">ID</option>
+              <option value="finalPrice">Price</option>
+              <option value="afterMeltWT">Wt (After)</option>
+              <option value="recordId">ID</option>
             </select>
-            <button id="sd">↓</button>
+            <button id="sd" title="Toggle sort direction">↓</button>
           </div>
         </div>
         <div id="rmeta"></div>
       </div>
 
+      <!-- Table (desktop) & Cards (mobile/tablet) -->
       <div class="tbl-outer" id="tbl-wrap"></div>
-      <div class="card-list" id="card-wrap"></div>
-    </div>
-  </div>
+      <div class="card-list"  id="card-wrap"></div>
+    </div><!-- /#rec-section -->
 
-  <!-- Bottom action bar -->
+  </div><!-- /.wrap -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       BOTTOM ACTION BAR
+  ═══════════════════════════════════════════════════════════ -->
   <div id="abar">
     <div class="abar-inner">
-      <button id="b-save" class="btn bp">Save Record</button>
-      <button id="b-update" class="btn bs" disabled>Update</button>
-      <button id="b-reset" class="btn bg">Reset</button>
-      <button id="b-print" class="btn bg">Print</button>
+      <button id="b-save"   class="btn bp">💾 Save</button>
+      <button id="b-update" class="btn bs" disabled>✏️ Update</button>
+      <button id="b-print"  class="btn bg">🖨️ Print</button>
+      <button id="b-reset"  class="btn bg">✕ Reset</button>
     </div>
   </div>
 
+
   <script>
-    // ╔══════════════════════════════════════════════════════════════╗
-    // ║  CONFIG — paste your Apps Script /exec URL here             ║
-    // ╚══════════════════════════════════════════════════════════════╝
-    var GAS_URL = 'https://script.google.com/macros/s/AKfycbxJ1owMb1RpzFQ7aW7PdtmQDKngoqP_WuwRt8OHdzQQ0t6M45SZZ9lIrypCaHTCP7o/exec';
+    // ============================================================
+    //  CONFIG — paste your deployed Apps Script /exec URL below
+    //  After deploying Code.gs as a Web App, copy the /exec URL
+    //  and replace the placeholder string below.
+    // ============================================================
+    var GAS_URL = 'PASTE_YOUR_GAS_EXEC_URL_HERE';
 
-    // ── GAS API Helper ────────────────────────────────────────────
-    var GAS_TIMEOUT_MS = 15000; // 15 second timeout — never hang forever
+    // ── API timeout (ms) ─────────────────────────────────────────
+    var GAS_TIMEOUT_MS = 20000; // 20 seconds
 
+    // ════════════════════════════════════════════════════════════
+    //  GAS API HELPER  (reused from reference project)
+    //  Wraps fetch() with timeout and consistent error handling.
+    // ════════════════════════════════════════════════════════════
     function gasCall(action, data) {
       var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      var timer = controller ? setTimeout(function () { controller.abort(); }, GAS_TIMEOUT_MS) : null;
+      var timer = controller
+        ? setTimeout(function () { controller.abort(); }, GAS_TIMEOUT_MS)
+        : null;
 
       return fetch(GAS_URL, {
-        method: 'POST',
+        method:  'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: action, data: data || null }),
-        signal: controller ? controller.signal : undefined
+        body:    JSON.stringify({ action: action, data: data || null }),
+        signal:  controller ? controller.signal : undefined
       })
         .then(function (res) {
           if (timer) clearTimeout(timer);
@@ -1437,439 +1398,882 @@
         });
     }
 
-    // ── State ────────────────────────────────────────────────────
+    // ════════════════════════════════════════════════════════════
+    //  APPLICATION STATE
+    // ════════════════════════════════════════════════════════════
     var S = {
-      records: [],
-      config: {},
-      editId: null,
-      sortField: 'date',
-      sortAsc: false,
-      selectedIds: [],
-      labourType: 'perG'
+      records:          [],     // all loaded purchase records
+      config:           {},     // loaded from Config sheet
+      editId:           null,   // recordId being edited (null = new)
+      printRec:         null,   // record queued for printing
+      sortField:        'date',
+      sortAsc:          false,
+      selectedIds:      [],     // for bulk delete
+      beforeMeltManual: false,  // true when user manually overrides auto-calc
+      user:             null    // { username, role }
     };
 
+    // ════════════════════════════════════════════════════════════
+    //  UTILITY FUNCTIONS  (reused from reference project)
+    // ════════════════════════════════════════════════════════════
+
+    /** Shorthand for getElementById */
     function $id(id) { return document.getElementById(id); }
 
+    /** HTML-escape a value for safe insertion into innerHTML */
     function esc(s) {
       return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    /** Format a number as Indian Rupees */
     function fmtINR(n) {
-      return '₹' + (+(n) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-    function fmtWt(n) {
-      return (+(+(n) || 0).toFixed(3)).toLocaleString('en-IN');
-    }
-    function fmtPct(n) {
-      return (+(+(n) || 0).toFixed(1)) + '%';
-    }
-    function todayISO() {
-      return new Date().toISOString().slice(0, 10);
+      var sym = (S.config && S.config['Currency Symbol']) ? S.config['Currency Symbol'] : '₹';
+      return sym + (+(n) || 0).toLocaleString('en-IN', {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      });
     }
 
+    /** Format a weight value to 3 decimal places */
+    function fmtWt(n) {
+      return (+(+(n) || 0).toFixed(3)).toLocaleString('en-IN', {
+        minimumFractionDigits: 3, maximumFractionDigits: 3
+      });
+    }
+
+    /** Returns today's date in YYYY-MM-DD format */
+    function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+    /** Show a toast notification (type: 'ok' | 'err' | '') */
     function toast(msg, type) {
       var t = $id('toast');
       t.textContent = msg;
-      t.className = 'show ' + (type || '');
+      t.className   = 'show ' + (type || '');
       clearTimeout(t._timer);
-      t._timer = setTimeout(function () { t.className = ''; }, 2800);
+      t._timer = setTimeout(function () { t.className = ''; }, 3000);
     }
 
+    /** Show or hide the error banner above the form */
     function showErr(msg) {
       var b = $id('err-banner');
-      b.textContent = msg || '';
+      b.textContent  = msg || '';
       b.style.display = msg ? 'block' : 'none';
       if (msg) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function hideLoader() { $id('loader').style.display = 'none'; }
-
-    var SKIP_IDS = ['calc id', 'id', 'calculation id', 'calcid'];
+    /** IDs that look like column headers rather than real record IDs */
+    var SKIP_IDS = ['record id', 'id', 'recordid'];
     function isValidId(val) {
       if (val == null) return false;
       var s = String(val).trim();
       return s !== '' && SKIP_IDS.indexOf(s.toLowerCase()) === -1 && /\d/.test(s);
     }
 
-    function calcAmounts(w, r, lVal, lType, o, g) {
-      w = +w || 0; r = +r || 0; lVal = +lVal || 0; o = +o || 0; g = +g || 0;
-      var metal = w * r;
-      var labourAmount = (lType === 'percent') ? (metal * lVal / 100) : (w * lVal);
-      var labourPerG = (w > 0) ? (labourAmount / w) : 0;
-      var other = o;
-      var sub = metal + labourAmount + other;
-      var gstAmt = sub * g / 100;
-      var total = sub + gstAmt;
+    // ════════════════════════════════════════════════════════════
+    //  PERMISSION HELPERS
+    // ════════════════════════════════════════════════════════════
+
+    function canCreate() { return S.user && (S.user.role === 'Admin' || S.user.role === 'Staff'); }
+    function canEdit()   { return S.user && (S.user.role === 'Admin' || S.user.role === 'Staff'); }
+    function canDelete() { return S.user && S.user.role === 'Admin'; }
+
+    /**
+     * Applies role-based UI restrictions after login.
+     * Hides or shows UI sections based on the current user's role.
+     */
+    function applyPermissions() {
+      var formSection = $id('form-section');
+      var abar        = $id('abar');
+
+      if (!S.user || S.user.role === 'Viewer') {
+        // Viewers can only see records — no form, no action bar
+        formSection.style.display = 'none';
+        abar.style.display        = 'none';
+      } else {
+        formSection.style.display = 'block';
+        abar.style.display        = 'flex';
+      }
+
+      // Bulk delete button only visible to Admins (and only when items selected)
+      // Actual show/hide based on selection is handled by updateSelectionUI()
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  SESSION MANAGEMENT
+    //  Uses sessionStorage so the session clears when the tab closes.
+    // ════════════════════════════════════════════════════════════
+    var SESSION_KEY         = 'mj_purchase_session';
+    var DEFAULT_TIMEOUT_MIN = 480; // 8 hours
+
+    function saveSession(user) {
+      try {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+          user:      user,
+          loginTime: Date.now()
+        }));
+      } catch (e) {}
+    }
+
+    function loadSession() {
+      try {
+        var raw = sessionStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        var data       = JSON.parse(raw);
+        var timeoutMs  = (parseInt(S.config && S.config['Session Timeout']) || DEFAULT_TIMEOUT_MIN) * 60000;
+        if (Date.now() - data.loginTime > timeoutMs) {
+          sessionStorage.removeItem(SESSION_KEY);
+          return null;
+        }
+        return data.user;
+      } catch (e) { return null; }
+    }
+
+    function clearSession() {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  LOGIN / LOGOUT
+    // ════════════════════════════════════════════════════════════
+
+    function showLogin(errMsg) {
+      $id('login-overlay').classList.remove('hidden');
+      var errEl = $id('login-err');
+      if (errMsg) { errEl.textContent = errMsg; errEl.style.display = 'block'; }
+      else          { errEl.style.display = 'none'; }
+    }
+
+    function hideLogin() { $id('login-overlay').classList.add('hidden'); }
+
+    /** Handles the login button click — validates via GAS backend */
+    function doLogin() {
+      var username = $id('l-user').value.trim();
+      var password = $id('l-pass').value;
+
+      if (!username || !password) {
+        var e = $id('login-err');
+        e.textContent   = 'Please enter your username and password.';
+        e.style.display = 'block';
+        return;
+      }
+
+      $id('btn-login').disabled    = true;
+      $id('btn-login').textContent = 'Signing in…';
+      $id('login-err').style.display = 'none';
+
+      gasCall('login', { username: username, password: password })
+        .then(function (res) {
+          $id('btn-login').disabled    = false;
+          $id('btn-login').textContent = 'Sign In';
+
+          if (!res || !res.ok) {
+            var e = $id('login-err');
+            e.textContent   = res ? res.error : 'Login failed. Try again.';
+            e.style.display = 'block';
+            return;
+          }
+
+          // ── Login successful ──
+          S.user = res.user;
+          saveSession(res.user);
+          onLoginSuccess();
+        })
+        .catch(function (err) {
+          $id('btn-login').disabled    = false;
+          $id('btn-login').textContent = 'Sign In';
+          var e = $id('login-err');
+          e.textContent   = 'Connection error: ' + (err.message || 'Please check your GAS URL.');
+          e.style.display = 'block';
+        });
+    }
+
+    /** Called after a successful login — sets up the main UI */
+    function onLoginSuccess() {
+      hideLogin();
+
+      // Update topbar with user info
+      $id('tb-username').textContent = S.user.username;
+      var badge = $id('tb-role');
+      badge.textContent = S.user.role;
+      badge.className   = 'role-badge ' + S.user.role.toLowerCase();
+
+      applyPermissions();
+      loadAllData();
+    }
+
+    /** Signs out the current user */
+    function doLogout() {
+      if (!confirm('Sign out of the Purchase Register?')) return;
+      clearSession();
+      S.user       = null;
+      S.records    = [];
+      S.editId     = null;
+      S.printRec   = null;
+      S.selectedIds = [];
+      resetForm();
+      renderAll();
+      showLogin();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  WEIGHT AUTO-CALCULATION
+    //  Before Melt WT = Gross WT − Deduction WT
+    //  Overridable by the user (supports Workflow 2 from brief).
+    // ════════════════════════════════════════════════════════════
+
+    /**
+     * Recalculates Before Melt WT unless the user has manually overridden it.
+     * Called whenever Gross WT or Deduction WT changes.
+     */
+    function autoCalcBeforeMelt() {
+      if (S.beforeMeltManual) return; // respect manual override
+      var gross = +($id('f-gross').value) || 0;
+      var ded   = +($id('f-ded').value)   || 0;
+      var bef   = Math.max(0, +(gross - ded).toFixed(3));
+      $id('f-bef').value = bef > 0 ? bef.toFixed(3) : '';
+      updateSummary();
+    }
+
+    /** Updates the live summary panel below the form */
+    function updateSummary() {
+      var gross  = +($id('f-gross').value)  || 0;
+      var ded    = +($id('f-ded').value)    || 0;
+      var bef    = +($id('f-bef').value)    || 0;
+      var aft    = +($id('f-aft').value)    || 0;
+      var price  = +($id('f-price').value)  || 0;
+      var purity = $id('f-purity').value.trim();
+      var metal  = $id('f-metal').value || 'Gold';
+
+      // Weight boxes
+      $id('s-gross').textContent = gross > 0 ? fmtWt(gross) + ' g' : '— g';
+      $id('s-ded').textContent   = ded   > 0 ? fmtWt(ded)   + ' g' : '— g';
+      $id('s-bef').textContent   = bef   > 0 ? fmtWt(bef)   + ' g' : '— g';
+      $id('s-aft').textContent   = aft   > 0 ? fmtWt(aft)   + ' g' : '— g';
+      $id('s-pur').textContent   = purity || '—';
+      $id('s-id').textContent    = S.editId || 'New';
+
+      // Final price
+      $id('s-price').textContent = price > 0 ? fmtINR(price) : '₹ —';
+
+      // Metal badge
+      var badge = $id('s-metal-badge');
+      if (metal === 'Silver') {
+        badge.textContent = '● Silver';
+        badge.className   = 'metal-badge silver';
+      } else {
+        badge.textContent = '● Gold';
+        badge.className   = 'metal-badge gold';
+      }
+
+      // Metal select color
+      $id('f-metal').style.color = (metal === 'Silver') ? 'var(--silver)' : 'var(--gold)';
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  FORM MANAGEMENT
+    // ════════════════════════════════════════════════════════════
+
+    /** Resets the form to its initial new-record state */
+    function resetForm() {
+      $id('f-date').value    = todayISO();
+      $id('f-name').value    = '';
+      $id('f-addr').value    = '';
+      $id('f-mobile').value  = '';
+      $id('f-metal').value   = 'Gold';
+      $id('f-gross').value   = '';
+      $id('f-ded').value     = '';
+      $id('f-bef').value     = '';
+      $id('f-aft').value     = '';
+      $id('f-price').value   = '';
+      $id('f-purity').value  = '';
+      $id('f-remarks').value = '';
+
+      S.editId           = null;
+      S.printRec         = null;
+      S.beforeMeltManual = false;
+
+      // Reset auto-badge
+      var badge = $id('auto-badge');
+      badge.textContent = 'Auto';
+      badge.className   = 'auto-badge';
+
+      // Reset buttons
+      $id('b-update').disabled    = true;
+      $id('b-save').disabled      = false;
+      $id('mode-pill').textContent = 'New Record';
+      $id('mode-pill').className   = '';
+
+      showErr(null);
+      updateSummary();
+    }
+
+    /**
+     * Fills the form with data from an existing record.
+     * Used for both Edit and Reprint workflows.
+     */
+    function fillForm(rec) {
+      $id('f-date').value    = rec.date ? rec.date.split('/').reverse().join('-') : todayISO();
+      $id('f-name').value    = rec.customerName  || '';
+      $id('f-addr').value    = rec.address       || '';
+      $id('f-mobile').value  = rec.mobile        || '';
+      $id('f-metal').value   = rec.metalType     || 'Gold';
+      $id('f-gross').value   = rec.grossWT       || '';
+      $id('f-ded').value     = rec.deductionWT   || '';
+      $id('f-bef').value     = rec.beforeMeltWT  || '';
+      $id('f-aft').value     = rec.afterMeltWT   || '';
+      $id('f-price').value   = rec.finalPrice    || '';
+      $id('f-purity').value  = rec.purity        || '';
+      $id('f-remarks').value = rec.remarks       || '';
+
+      // Determine if Before Melt WT was manually set (vs auto-calculated)
+      var autoBef = (+rec.grossWT || 0) - (+rec.deductionWT || 0);
+      S.beforeMeltManual = Math.abs((+rec.beforeMeltWT || 0) - autoBef) > 0.0005;
+
+      var badge = $id('auto-badge');
+      if (S.beforeMeltManual) {
+        badge.textContent = '↺ Reset Auto';
+        badge.className   = 'auto-badge manual';
+      } else {
+        badge.textContent = 'Auto';
+        badge.className   = 'auto-badge';
+      }
+
+      S.editId   = rec.recordId;
+      S.printRec = rec;
+
+      $id('b-update').disabled    = !canEdit();
+      $id('b-save').disabled      = true;
+      $id('mode-pill').textContent = 'Editing ' + rec.recordId;
+      $id('mode-pill').className   = 'edit';
+
+      showErr(null);
+      updateSummary();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /** Collects all form field values into a data object */
+    function collectFormData() {
       return {
-        metal: metal,
-        labour: labourAmount,
-        labourPerG: labourPerG,
-        other: other,
-        gstAmt: gstAmt,
-        total: total,
-        mPct: sub > 0 ? metal / sub * 100 : 0,
-        lPct: sub > 0 ? labourAmount / sub * 100 : 0,
-        oPct: sub > 0 ? other / sub * 100 : 0
+        date:         $id('f-date').value   || todayISO(),
+        customerName: $id('f-name').value.trim(),
+        address:      $id('f-addr').value.trim(),
+        mobile:       $id('f-mobile').value.trim(),
+        metalType:    $id('f-metal').value  || 'Gold',
+        grossWT:      +($id('f-gross').value)  || 0,
+        deductionWT:  +($id('f-ded').value)    || 0,
+        beforeMeltWT: +($id('f-bef').value)    || 0,
+        afterMeltWT:  +($id('f-aft').value)    || 0,
+        finalPrice:   +($id('f-price').value)  || 0,
+        purity:       $id('f-purity').value.trim(),
+        remarks:      $id('f-remarks').value.trim(),
+        createdBy:    S.user ? S.user.username : ''
       };
     }
 
-    function updateSummary() {
-      var c = calcAmounts(
-        $id('f-w').value, $id('f-r').value,
-        $id('f-l').value, S.labourType, $id('f-o').value, $id('f-g').value
-      );
-      $id('s-m').textContent = fmtINR(c.metal);
-      $id('s-l').textContent = fmtINR(c.labour);
-      $id('s-o').textContent = fmtINR(c.other);
-      $id('s-g').textContent = fmtINR(c.gstAmt);
-      $id('s-t').textContent = fmtINR(c.total);
-      $id('p-m').textContent = fmtPct(c.mPct);
-
-      if (S.labourType === 'perG') {
-        $id('p-l').textContent = fmtPct(c.lPct);
-      } else {
-        $id('p-l').textContent = '₹' + c.labourPerG.toFixed(2) + '/g';
+    /** Validates form data; shows error and returns false if invalid */
+    function validateForm(data) {
+      if (!data.customerName) { showErr('Customer name is required.'); return false; }
+      if (!data.metalType)    { showErr('Metal type is required.'); return false; }
+      if (!data.grossWT && data.grossWT !== 0) {
+        showErr('Gross weight is required.');
+        return false;
       }
-
-      $id('p-o').textContent = fmtPct(c.oPct);
+      if (data.finalPrice <= 0) {
+        showErr('Final price must be greater than zero.');
+        return false;
+      }
+      return true;
     }
 
+    /** Disables a button and sets a loading label */
+    function setBusy(id, txt) { var b = $id(id); if (b) { b.disabled = true; b.textContent = txt; } }
+    /** Re-enables a button and restores its label */
+    function setFree(id, txt) { var b = $id(id); if (b) { b.disabled = false; b.textContent = txt; } }
+
+    // ════════════════════════════════════════════════════════════
+    //  LOCAL RECORD STATE HELPERS
+    //  Optimistically updates S.records so the UI refreshes
+    //  immediately without waiting for a re-fetch.
+    // ════════════════════════════════════════════════════════════
+
+    /** Builds a local record object from form data and a generated ID */
+    function buildLocalRecord(id, data) {
+      return {
+        recordId:     id,
+        date:         data.date ? data.date.split('-').reverse().join('/') : '',
+        customerName: data.customerName,
+        address:      data.address,
+        mobile:       data.mobile,
+        metalType:    data.metalType,
+        grossWT:      data.grossWT,
+        deductionWT:  data.deductionWT,
+        beforeMeltWT: data.beforeMeltWT,
+        afterMeltWT:  data.afterMeltWT,
+        finalPrice:   data.finalPrice,
+        purity:       data.purity,
+        remarks:      data.remarks
+      };
+    }
+
+    function localAddRecord(id, data) {
+      var rec = buildLocalRecord(id, data);
+      rec.createdBy   = data.createdBy;
+      rec.createdTime = new Date().toLocaleString('en-IN');
+      S.records.push(rec);
+    }
+
+    function localUpdateRecord(id, data) {
+      var idx = S.records.findIndex(function (r) { return r.recordId === id; });
+      if (idx > -1) {
+        S.records[idx] = Object.assign({}, S.records[idx], buildLocalRecord(id, data));
+      }
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  API OPERATIONS — Save / Update / Delete
+    // ════════════════════════════════════════════════════════════
+
+    /** Saves a new purchase record */
+    function doSave() {
+      if (!canCreate()) { toast('Permission denied: you cannot create records.', 'err'); return; }
+      var data = collectFormData();
+      if (!validateForm(data)) return;
+      showErr(null);
+      setBusy('b-save', 'Saving…');
+
+      gasCall('saveRecord', data)
+        .then(function (res) {
+          setFree('b-save', '💾 Save');
+          if (!res || !res.ok) { showErr('Save failed: ' + (res ? res.error : 'No response')); return; }
+
+          localAddRecord(res.recordId, data);
+          S.printRec = Object.assign({ recordId: res.recordId }, buildLocalRecord(res.recordId, data));
+          renderAll();
+          resetForm();
+          toast('Saved: ' + res.recordId, 'ok');
+        })
+        .catch(function (e) {
+          setFree('b-save', '💾 Save');
+          showErr('Save failed: ' + (e.message || e));
+        });
+    }
+
+    /** Updates an existing record */
+    function doUpdate() {
+      if (!canEdit()) { toast('Permission denied: you cannot edit records.', 'err'); return; }
+      if (!S.editId) return;
+      var data = collectFormData();
+      data.recordId = S.editId;
+      if (!validateForm(data)) return;
+      showErr(null);
+      setBusy('b-update', 'Updating…');
+
+      gasCall('updateRecord', data)
+        .then(function (res) {
+          setFree('b-update', '✏️ Update');
+          if (!res || !res.ok) { showErr('Update failed: ' + (res ? res.error : 'No response')); return; }
+
+          localUpdateRecord(S.editId, data);
+          S.printRec = Object.assign({ recordId: S.editId }, buildLocalRecord(S.editId, data));
+          renderAll();
+          resetForm();
+          toast('Updated: ' + S.editId, 'ok');
+        })
+        .catch(function (e) {
+          setFree('b-update', '✏️ Update');
+          showErr('Update failed: ' + (e.message || e));
+        });
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  DELETE MODAL
+    // ════════════════════════════════════════════════════════════
+
+    var _deleteCallback = null; // holds the confirm action
+
+    function showDeleteModal(title, body, onConfirm) {
+      $id('modal-title-el').textContent = title;
+      $id('modal-body-el').textContent  = body;
+      $id('modal-overlay').classList.add('show');
+      _deleteCallback = onConfirm;
+    }
+
+    function hideDeleteModal() {
+      $id('modal-overlay').classList.remove('show');
+      _deleteCallback = null;
+    }
+
+    /** Initiates deletion of a single record (Admin only) */
+    function doDelete(id) {
+      if (!canDelete()) { toast('Only Admins can delete records.', 'err'); return; }
+      if (!isValidId(id)) { showErr('Cannot delete: "' + id + '" is not a valid ID.'); return; }
+
+      showDeleteModal(
+        'Delete Record?',
+        'Delete record ' + id + '? This action cannot be undone.',
+        function () {
+          gasCall('deleteRecord', { id: id })
+            .then(function (res) {
+              if (!res || !res.ok) { toast('Delete failed: ' + (res ? res.error : 'No response'), 'err'); return; }
+              S.records = S.records.filter(function (r) { return r.recordId !== id; });
+              if (S.editId === id) resetForm();
+              $id('q').value = '';
+              renderAll();
+              toast('Deleted: ' + id, 'ok');
+            })
+            .catch(function (e) { toast('Delete failed: ' + (e.message || e), 'err'); });
+        }
+      );
+    }
+
+    /** Initiates bulk deletion of selected records (Admin only) */
+    function doBulkDelete() {
+      if (!canDelete()) { toast('Only Admins can delete records.', 'err'); return; }
+      if (S.selectedIds.length === 0) return;
+
+      showDeleteModal(
+        'Delete ' + S.selectedIds.length + ' Records?',
+        'Permanently delete ' + S.selectedIds.length + ' selected record(s)? This cannot be undone.',
+        function () {
+          var bDelSel = $id('b-del-sel');
+          if (bDelSel) { bDelSel.disabled = true; bDelSel.classList.add('spinning'); }
+
+          gasCall('deleteRecords', { ids: S.selectedIds })
+            .then(function (res) {
+              if (bDelSel) { bDelSel.disabled = false; bDelSel.classList.remove('spinning'); }
+              if (!res || !res.ok) { toast('Bulk delete failed: ' + (res ? res.error : 'No response'), 'err'); return; }
+
+              var deleted = S.selectedIds.slice();
+              S.records = S.records.filter(function (r) { return deleted.indexOf(r.recordId) === -1; });
+              if (deleted.indexOf(S.editId) > -1) resetForm();
+              S.selectedIds = [];
+              $id('q').value = '';
+              renderAll();
+              toast('Deleted ' + (res.deleted || deleted.length) + ' record(s)', 'ok');
+            })
+            .catch(function (e) {
+              if (bDelSel) { bDelSel.disabled = false; bDelSel.classList.remove('spinning'); }
+              toast('Bulk delete failed: ' + (e.message || e), 'err');
+            });
+        }
+      );
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  PRINT RECEIPT
+    // ════════════════════════════════════════════════════════════
+
+    /**
+     * Populates the hidden #print-receipt element with record data.
+     * Hides optional rows when their values are empty.
+     */
+    function populateReceipt(rec) {
+      var cfg      = S.config || {};
+      var bizName  = cfg['Business Name']  || 'Mahalaxmi Jewellers';
+      var bizAddr  = cfg['Business Address'] || '';
+      var bizPhone = cfg['Business Phone']   || '';
+      var sym      = cfg['Currency Symbol']  || '₹';
+
+      $id('rcp-biz-name').textContent = bizName;
+      $id('rcp-biz-sub').textContent  = [bizAddr, bizPhone].filter(Boolean).join('  |  ');
+      $id('rcp-id').textContent       = rec.recordId || '—';
+      $id('rcp-date').textContent     = rec.date     || todayISO().split('-').reverse().join('/');
+      $id('rcp-name').textContent     = rec.customerName || '—';
+
+      // Optional rows — hide if empty
+      function setRow(rowId, valId, val) {
+        $id(rowId).style.display = val ? 'flex' : 'none';
+        $id(valId).textContent   = val || '';
+      }
+      setRow('rcp-mob-row',  'rcp-mob',   rec.mobile);
+      setRow('rcp-addr-row', 'rcp-addr',  rec.address);
+      setRow('rcp-ded-row',  'rcp-ded',   rec.deductionWT  ? fmtWt(rec.deductionWT)  + ' g' : '');
+      setRow('rcp-bef-row',  'rcp-bef',   rec.beforeMeltWT ? fmtWt(rec.beforeMeltWT) + ' g' : '');
+      setRow('rcp-aft-row',  'rcp-aft',   rec.afterMeltWT  ? fmtWt(rec.afterMeltWT)  + ' g' : '');
+      setRow('rcp-pur-row',  'rcp-pur',   rec.purity);
+
+      $id('rcp-metal').textContent = rec.metalType || 'Gold';
+      $id('rcp-gross').textContent = fmtWt(rec.grossWT || 0) + ' g';
+
+      // Final price
+      $id('rcp-price').textContent = sym + (+(rec.finalPrice) || 0).toLocaleString('en-IN', {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      });
+
+      // Remarks
+      if (rec.remarks) {
+        $id('rcp-remarks').textContent = rec.remarks;
+        $id('rcp-remarks-wrap').style.display = 'block';
+      } else {
+        $id('rcp-remarks-wrap').style.display = 'none';
+      }
+
+      $id('rcp-footer').textContent = 'Thank you for your business.  —  ' + bizName;
+    }
+
+    /**
+     * Triggers printing for a given record.
+     * Populates the receipt, then calls window.print().
+     */
+    function doPrint(rec) {
+      if (!rec) { toast('Nothing to print. Please save a record first.', 'err'); return; }
+      populateReceipt(rec);
+      setTimeout(function () { window.print(); }, 80);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  RECORDS — Filtering & Sorting  (reused from reference)
+    // ════════════════════════════════════════════════════════════
+
+    /** Converts a dd/MM/yyyy date string to a sortable integer */
     function dmyToNum(s) {
       if (!s) return 0;
       var p = s.split('/');
       return p.length === 3 ? +(p[2] + p[1] + p[0]) : 0;
     }
 
+    /** Returns the filtered and sorted records array based on current UI state */
     function getFilteredSorted() {
-      var q = ($id('q').value || '').trim().toLowerCase();
-      var list = S.records.filter(function (r) { return isValidId(r.calcId); });
+      var q    = ($id('q').value || '').trim().toLowerCase();
+      var list = S.records.filter(function (r) { return isValidId(r.recordId); });
 
       if (q) {
         list = list.filter(function (r) {
-          return (r.calcId + '').toLowerCase().includes(q)
-            || (r.customerName + '').toLowerCase().includes(q)
-            || (r.date + '').toLowerCase().includes(q);
+          return (r.recordId      + '').toLowerCase().indexOf(q) > -1
+            ||   (r.customerName  + '').toLowerCase().indexOf(q) > -1
+            ||   (r.mobile        + '').toLowerCase().indexOf(q) > -1
+            ||   (r.date          + '').toLowerCase().indexOf(q) > -1
+            ||   (r.metalType     + '').toLowerCase().indexOf(q) > -1
+            ||   (r.purity        + '').toLowerCase().indexOf(q) > -1
+            ||   (r.address       + '').toLowerCase().indexOf(q) > -1;
         });
       }
 
       var f = S.sortField, asc = S.sortAsc;
       list.sort(function (a, b) {
         var va = a[f], vb = b[f];
-        if (f === 'date') { va = dmyToNum(va); vb = dmyToNum(vb); }
-        else if (f === 'totalAmount' || f === 'weight') { va = +va || 0; vb = +vb || 0; }
-        else { va = (va + '').toLowerCase(); vb = (vb + '').toLowerCase(); }
-        if (va < vb) return asc ? -1 : 1;
-        if (va > vb) return asc ? 1 : -1;
+        if (f === 'date') {
+          va = dmyToNum(va); vb = dmyToNum(vb);
+        } else if (f === 'finalPrice' || f === 'afterMeltWT' || f === 'grossWT') {
+          va = +va || 0;  vb = +vb || 0;
+        } else {
+          va = (va + '').toLowerCase(); vb = (vb + '').toLowerCase();
+        }
+        if (va < vb) return asc ? -1 :  1;
+        if (va > vb) return asc ?  1 : -1;
         return 0;
       });
+
       return list;
     }
 
+    // ════════════════════════════════════════════════════════════
+    //  RECORDS — Rendering
+    // ════════════════════════════════════════════════════════════
+
+    /** Table column definitions */
     var TABLE_COLS = [
-      { k: 'calcId', l: 'ID' },
-      { k: 'date', l: 'Date' },
-      { k: 'customerName', l: 'Customer' },
-      { k: 'weight', l: 'Weight' },
-      { k: 'totalAmount', l: 'Total' }
+      { k: 'recordId',    l: 'ID'         },
+      { k: 'date',        l: 'Date'       },
+      { k: 'customerName',l: 'Customer'   },
+      { k: 'metalType',   l: 'Metal'      },
+      { k: 'afterMeltWT', l: 'After Melt' },
+      { k: 'finalPrice',  l: 'Price'      }
     ];
 
-    function actionBtns(id) {
-      var eid = esc(id);
-      return '<button class="ab edit" data-id="' + eid + '">Edit</button>'
-        + '<button class="ab del"  data-id="' + eid + '">Delete</button>';
+    /** Returns a colored metal type pill span */
+    function metalPill(type) {
+      var cls = (type === 'Silver') ? 'silver' : 'gold';
+      return '<span class="tbl-metal ' + cls + '">' + esc(type || 'Gold') + '</span>';
     }
 
+    /** Returns the action buttons HTML for a record */
+    function actionBtns(rec) {
+      var id   = esc(rec.recordId);
+      var html = '';
+      if (canEdit()) {
+        html += '<button class="ab edit" data-id="' + id + '" data-action="edit">Edit</button>';
+      }
+      html += '<button class="ab prn" data-id="' + id + '" data-action="print">Print</button>';
+      if (canDelete()) {
+        html += '<button class="ab del" data-id="' + id + '" data-action="delete">Del</button>';
+      }
+      return html;
+    }
+
+    /** Renders the desktop table */
     function renderTable(list) {
       var box = $id('tbl-wrap');
+
       if (!list.length) {
-        var isSearching = ($id('q').value || '').trim() !== '';
-        var msg = isSearching ? 'No records match your search.' : 'No records found';
-        box.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">' + msg + '</div>';
+        var msg = ($id('q').value || '').trim()
+          ? 'No records match your search.'
+          : 'No records yet. Create the first purchase entry above.';
+        box.innerHTML = '<div style="text-align:center; padding:48px 20px; color:var(--text-muted); font-weight:500;">' + esc(msg) + '</div>';
         return;
       }
-      var ths = '<th style="width:40px; padding-right:0;"><input type="checkbox" id="cb-all" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);"></th>' + TABLE_COLS.map(function (c) {
-        var on = S.sortField === c.k;
+
+      // Header row
+      var ths = '';
+      if (canDelete()) {
+        ths += '<th style="width:40px; padding-right:0;"><input type="checkbox" id="cb-all" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);"></th>';
+      }
+      ths += TABLE_COLS.map(function (c) {
+        var on  = S.sortField === c.k;
         var arr = on ? (S.sortAsc ? '↑' : '↓') : '↕';
         return '<th' + (on ? ' class="on"' : '') + ' data-col="' + c.k + '">'
           + '<div class="thi">' + c.l + '<span class="arr">' + arr + '</span></div></th>';
       }).join('') + '<th></th>';
 
+      // Data rows
       var trs = list.map(function (r) {
-        var checked = S.selectedIds.indexOf(r.calcId) > -1 ? 'checked' : '';
-        return '<tr data-id="' + esc(r.calcId) + '">'
-          + '<td style="width:40px; padding-right:0;"><input type="checkbox" class="cb-row" value="' + esc(r.calcId) + '" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);" ' + checked + '></td>'
-          + '<td><span class="cid-pill">' + esc(r.calcId) + '</span></td>'
-          + '<td>' + esc(r.date) + '</td>'
-          + '<td style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">' + esc(r.customerName) + '</td>'
-          + '<td>' + fmtWt(r.weight) + 'g</td>'
-          + '<td class="camt">' + fmtINR(r.totalAmount) + '</td>'
-          + '<td class="acts">' + actionBtns(r.calcId) + '</td>'
-          + '</tr>';
+        var id      = esc(r.recordId);
+        var checked = S.selectedIds.indexOf(r.recordId) > -1 ? 'checked' : '';
+        var row = '<tr data-id="' + id + '">';
+        if (canDelete()) {
+          row += '<td style="width:40px; padding-right:0;"><input type="checkbox" class="cb-row" value="' + id + '" style="cursor:pointer; width:16px; height:16px; accent-color:var(--primary);" ' + checked + '></td>';
+        }
+        row += '<td><span class="cid-pill">' + id + '</span></td>';
+        row += '<td>' + esc(r.date) + '</td>';
+        row += '<td style="max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(r.customerName) + '</td>';
+        row += '<td>' + metalPill(r.metalType) + '</td>';
+        row += '<td>' + (r.afterMeltWT ? fmtWt(r.afterMeltWT) + ' g' : '—') + '</td>';
+        row += '<td class="camt">' + (r.finalPrice ? fmtINR(r.finalPrice) : '—') + '</td>';
+        row += '<td class="acts">' + actionBtns(r) + '</td>';
+        row += '</tr>';
+        return row;
       }).join('');
 
       box.innerHTML = '<table><thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table>';
     }
 
+    /** Renders the mobile/tablet cards */
     function renderCards(list) {
       var box = $id('card-wrap');
+
       if (!list.length) {
-        var isSearching = ($id('q').value || '').trim() !== '';
-        var msg = isSearching ? 'No records match your search.' : 'No records found';
-        box.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">' + msg + '</div>';
+        var msg = ($id('q').value || '').trim()
+          ? 'No records match your search.'
+          : 'No records yet.';
+        box.innerHTML = '<div style="text-align:center; padding:48px 20px; color:var(--text-muted); font-weight:500;">' + esc(msg) + '</div>';
         return;
       }
+
       box.innerHTML = list.map(function (r) {
-        var checked = S.selectedIds.indexOf(r.calcId) > -1 ? 'checked' : '';
-        return '<div class="record-card" data-id="' + esc(r.calcId) + '">'
+        var id      = esc(r.recordId);
+        var checked = S.selectedIds.indexOf(r.recordId) > -1 ? 'checked' : '';
+        var mCls    = (r.metalType === 'Silver') ? 'silver' : 'gold';
+
+        return '<div class="record-card" data-id="' + id + '">'
           + '<div class="rc-header">'
-          + '<div style="display:flex; align-items:center; gap:12px;">'
-          + '<input type="checkbox" class="cb-row" value="' + esc(r.calcId) + '" style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);" ' + checked + '>'
-          + '<span class="rc-id">' + esc(r.calcId) + '</span>'
-          + '</div>'
-          + '<span class="rc-date">' + esc(r.date) + '</span>'
+          +   '<div style="display:flex; align-items:center; gap:8px;">'
+          +     (canDelete() ? '<input type="checkbox" class="cb-row" value="' + id + '" style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);" ' + checked + '>' : '')
+          +     '<span class="rc-id">' + id + '</span>'
+          +     '<span class="metal-badge ' + mCls + '" style="font-size:11px; padding:2px 8px;">' + esc(r.metalType || 'Gold') + '</span>'
+          +   '</div>'
+          +   '<span class="rc-date">' + esc(r.date) + '</span>'
           + '</div>'
           + '<div class="rc-body">'
-          + '<div class="rc-val" style="grid-column: 1 / -1;"><span class="rc-lbl">Customer Name</span><span class="rc-txt" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + esc(r.customerName) + '</span></div>'
-          + '<div class="rc-val"><span class="rc-lbl">Weight</span><span class="rc-txt">' + fmtWt(r.weight) + 'g</span></div>'
-          + '<div class="rc-val"><span class="rc-lbl">Total Amount</span><span class="rc-txt" style="color: var(--primary); font-size: 16px;">' + fmtINR(r.totalAmount) + '</span></div>'
+          +   '<div class="rc-val" style="grid-column:1/-1;"><span class="rc-lbl">Customer</span><span class="rc-txt" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(r.customerName) + '</span></div>'
+          +   '<div class="rc-val"><span class="rc-lbl">After Melt Wt</span><span class="rc-txt">' + (r.afterMeltWT ? fmtWt(r.afterMeltWT) + ' g' : '—') + '</span></div>'
+          +   '<div class="rc-val"><span class="rc-lbl">Final Price</span><span class="rc-txt" style="color:var(--primary); font-size:14px;">' + (r.finalPrice ? fmtINR(r.finalPrice) : '—') + '</span></div>'
+          +   (r.mobile ? '<div class="rc-val"><span class="rc-lbl">Mobile</span><span class="rc-txt">' + esc(r.mobile) + '</span></div>' : '')
+          +   (r.purity ? '<div class="rc-val"><span class="rc-lbl">Purity</span><span class="rc-txt">' + esc(r.purity) + '</span></div>' : '')
           + '</div>'
-          + '<div class="rc-acts">' + actionBtns(r.calcId) + '</div>'
+          + '<div class="rc-acts">' + actionBtns(r) + '</div>'
           + '</div>';
       }).join('');
     }
 
+    /** Updates selection state indicators (select-all checkbox, bulk delete button) */
     function updateSelectionUI() {
-      var bDel = $id('b-del-sel');
-      var cbAll = $id('cb-all');
-      if (bDel) {
-        bDel.style.display = S.selectedIds.length > 0 ? 'flex' : 'none';
+      var bDelSel = $id('b-del-sel');
+      if (bDelSel && canDelete()) {
+        bDelSel.style.display = S.selectedIds.length > 0 ? 'inline-flex' : 'none';
         $id('del-cnt').textContent = S.selectedIds.length;
       }
+      var cbAll = $id('cb-all');
       if (cbAll) {
-        var totalVisible = getFilteredSorted().length;
-        cbAll.checked = (totalVisible > 0 && S.selectedIds.length === totalVisible);
+        var visible = getFilteredSorted().length;
+        cbAll.checked = (visible > 0 && S.selectedIds.length === visible);
       }
     }
 
+    /** Master render — updates record count, table, cards, and selection UI */
     function renderAll() {
       var list = getFilteredSorted();
-      $id('rmeta').textContent = list.length + ' record' + (list.length !== 1 ? 's' : '');
+      var cnt  = list.length;
+      $id('rmeta').textContent = cnt + ' record' + (cnt !== 1 ? 's' : '');
       renderTable(list);
       renderCards(list);
       updateSelectionUI();
     }
 
-    function resetForm() {
-      $id('f-name').value = '';
-      $id('f-w').value = '';
-      $id('f-r').value = '';
-      S.labourType = 'perG';
-      var tgroup = $id('f-l-type');
-      if (tgroup && tgroup.children) {
-        Array.prototype.forEach.call(tgroup.children, function (b) {
-          b.className = (b.dataset.val === 'perG') ? 't-btn active' : 't-btn';
-        });
-      }
-      $id('f-l').value = '';
-      $id('f-o').value = '';
-      $id('f-g').value = S.config.defaultGST || 3;
-      $id('f-date').value = todayISO();
-      S.editId = null;
-      $id('b-update').disabled = true;
-      $id('b-save').disabled = false;
-      $id('mode-pill').textContent = 'New Record';
-      $id('mode-pill').className = '';
-      showErr(null);
-      updateSummary();
-    }
+    // ════════════════════════════════════════════════════════════
+    //  DATA LOADING
+    // ════════════════════════════════════════════════════════════
 
-    function fillForm(rec) {
-      $id('f-name').value = rec.customerName;
-      $id('f-date').value = rec.date ? rec.date.split('/').reverse().join('-') : todayISO();
-      $id('f-w').value = rec.weight;
-      $id('f-r').value = rec.ratePerG;
-      S.labourType = 'perG';
-      var tgroup = $id('f-l-type');
-      if (tgroup && tgroup.children) {
-        Array.prototype.forEach.call(tgroup.children, function (b) {
-          b.className = (b.dataset.val === 'perG') ? 't-btn active' : 't-btn';
-        });
-      }
-      $id('f-l').value = rec.labourPerG;
-      $id('f-o').value = rec.otherCharge;
-      $id('f-g').value = rec.gstPercent;
-      S.editId = rec.calcId;
-      $id('b-update').disabled = false;
-      $id('b-save').disabled = true;
-      $id('mode-pill').textContent = 'Editing ' + rec.calcId;
-      $id('mode-pill').className = 'edit';
-      showErr(null);
-      updateSummary();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    /**
+     * Loads config and records in parallel.
+     * Called after a successful login.
+     */
+    function loadAllData() {
+      $id('loader').style.display = 'grid';
 
-    function collectFormData() {
-      var w = +$id('f-w').value || 0;
-      var r = +$id('f-r').value || 0;
-      var lVal = +$id('f-l').value || 0;
-      var lType = S.labourType;
-      var o = +$id('f-o').value || 0;
-      var g = +$id('f-g').value || 0;
-      var c = calcAmounts(w, r, lVal, lType, o, g);
-      return {
-        date: $id('f-date').value || todayISO(),
-        customerName: $id('f-name').value.trim(),
-        weight: w,
-        ratePerG: r,
-        labourPerG: +c.labourPerG.toFixed(4),
-        otherCharge: o,
-        gstPercent: g,
-        metalAmount: +c.metal.toFixed(4),
-        labourAmount: +c.labour.toFixed(4),
-        otherAmount: +c.other.toFixed(4),
-        gstAmount: +c.gstAmt.toFixed(4),
-        totalAmount: +c.total.toFixed(4),
-        metalPercent: +c.mPct.toFixed(4),
-        labourPercent: +c.lPct.toFixed(4),
-        otherPercent: +c.oPct.toFixed(4)
-      };
-    }
+      Promise.all([
+        gasCall('getConfig'),
+        gasCall('getRecords')
+      ])
+        .then(function (results) {
+          $id('loader').style.display = 'none';
+          var cfgRes = results[0];
+          var recRes = results[1];
 
-    function setBusy(id, txt) { var b = $id(id); b.disabled = true; b.textContent = txt; }
-    function setFree(id, txt) { var b = $id(id); b.disabled = false; b.textContent = txt; }
+          // Apply config
+          if (cfgRes && cfgRes.ok) {
+            S.config = cfgRes.data;
+            var bizName = S.config['Business Name'] || 'Mahalaxmi Jewellers';
+            $id('biz-name').textContent      = bizName;
+            $id('login-biz-name').textContent = bizName;
+          } else {
+            showErr('Could not load config. Check your Apps Script deployment.');
+          }
 
-    function localAddRecord(calcId, data) {
-      S.records.push({
-        calcId: calcId,
-        date: data.date.split('-').reverse().join('/'),
-        customerName: data.customerName,
-        weight: data.weight,
-        ratePerG: data.ratePerG,
-        labourPerG: data.labourPerG,
-        otherCharge: data.otherCharge,
-        gstPercent: data.gstPercent,
-        metalAmount: data.metalAmount,
-        labourAmount: data.labourAmount,
-        otherAmount: data.otherAmount,
-        gstAmount: data.gstAmount,
-        totalAmount: data.totalAmount,
-        metalPercent: data.metalPercent,
-        labourPercent: data.labourPercent,
-        otherPercent: data.otherPercent
-      });
-    }
-
-    function localUpdateRecord(calcId, data) {
-      var idx = S.records.findIndex(function (r) { return r.calcId === calcId; });
-      if (idx > -1) {
-        S.records[idx] = Object.assign({}, S.records[idx], {
-          date: data.date.split('-').reverse().join('/'),
-          customerName: data.customerName,
-          weight: data.weight,
-          ratePerG: data.ratePerG,
-          labourPerG: data.labourPerG,
-          otherCharge: data.otherCharge,
-          gstPercent: data.gstPercent,
-          metalAmount: data.metalAmount,
-          labourAmount: data.labourAmount,
-          otherAmount: data.otherAmount,
-          gstAmount: data.gstAmount,
-          totalAmount: data.totalAmount,
-          metalPercent: data.metalPercent,
-          labourPercent: data.labourPercent,
-          otherPercent: data.otherPercent
-        });
-      }
-    }
-
-    // ── API Calls (replaces google.script.run) ────────────────────
-
-    function doSave() {
-      var data = collectFormData();
-      if (!data.customerName) { showErr('Please enter a customer name.'); return; }
-      showErr(null);
-      setBusy('b-save', 'Saving...');
-
-      gasCall('saveCalculation', data)
-        .then(function (res) {
-          setFree('b-save', 'Save Record');
-          if (!res || !res.ok) { showErr('Save failed: ' + (res ? res.error : 'No response')); return; }
-          localAddRecord(res.calcId, data);
-          renderAll();
-          resetForm();
-          toast('Saved successfully: ' + res.calcId, 'ok');
+          // Apply records
+          if (recRes && recRes.ok) {
+            S.records = (recRes.data || []).filter(function (r) { return isValidId(r.recordId); });
+            renderAll();
+          } else {
+            showErr('Could not load records. Tap Refresh to retry.');
+          }
         })
         .catch(function (e) {
-          setFree('b-save', 'Save Record');
-          showErr('Save failed: ' + (e.message || e));
+          $id('loader').style.display = 'none';
+          showErr((e.message || 'Network error') + ' — Tap Refresh to retry.');
         });
     }
 
-    function doUpdate() {
-      if (!S.editId) return;
-      var data = collectFormData();
-      data.calcId = S.editId;
-      if (!data.customerName) { showErr('Please enter a customer name.'); return; }
-      showErr(null);
-      setBusy('b-update', 'Updating...');
-
-      gasCall('updateCalculation', data)
-        .then(function (res) {
-          setFree('b-update', 'Update');
-          if (!res || !res.ok) { showErr('Update failed: ' + (res ? res.error : 'No response')); return; }
-          localUpdateRecord(S.editId, data);
-          renderAll();
-          resetForm();
-          toast('Updated successfully: ' + S.editId, 'ok');
-        })
-        .catch(function (e) {
-          setFree('b-update', 'Update');
-          showErr('Update failed: ' + (e.message || e));
-        });
-    }
-
-    function doDelete(id) {
-      if (!isValidId(id)) { showErr('Cannot delete: "' + id + '" is not a valid record ID.'); return; }
-      if (!confirm('Are you sure you want to delete record ' + id + '?')) return;
-
-      gasCall('deleteCalculation', { id: id })
-        .then(function (res) {
-          if (!res || !res.ok) { showErr('Delete failed: ' + (res ? res.error : 'No response')); return; }
-          S.records = S.records.filter(function (r) { return r.calcId !== id; });
-          if (S.editId === id) resetForm();
-          $id('q').value = '';
-          renderAll();
-          toast('Deleted record ' + id, 'ok');
-        })
-        .catch(function (e) {
-          showErr('Delete failed: ' + (e.message || e));
-        });
-    }
-
+    /**
+     * Silently refreshes the records list.
+     * Shows a spinner on the Refresh button.
+     */
     function loadRecords(silent) {
       var rBtn = $id('b-refresh');
       if (rBtn) rBtn.classList.add('spinning');
+
       if (!silent) {
-        // Show inline skeleton instead of full-screen overlay
-        var box = $id('tbl-wrap');
-        if (box) box.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted); font-weight: 600;">Loading records…</div>';
-        var cbox = $id('card-wrap');
-        if (cbox) cbox.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted); font-weight: 600;">Loading records…</div>';
+        var loadMsg = '<div style="text-align:center; padding:32px; color:var(--text-muted); font-weight:600;">Loading records…</div>';
+        $id('tbl-wrap').innerHTML  = loadMsg;
+        $id('card-wrap').innerHTML = loadMsg;
       }
 
-      gasCall('getCalculations')
-        .then(function (recRes) {
+      gasCall('getRecords')
+        .then(function (res) {
           if (rBtn) rBtn.classList.remove('spinning');
-          if (!recRes || !recRes.ok) {
-            showErr('Records error: ' + (recRes ? recRes.error : 'No response from server'));
-            renderAll();
-            return;
-          }
-          S.records = (recRes.data || []).filter(function (r) { return isValidId(r.calcId); });
+          if (!res || !res.ok) { showErr('Records error: ' + (res ? res.error : 'No response')); renderAll(); return; }
+          S.records = (res.data || []).filter(function (r) { return isValidId(r.recordId); });
           renderAll();
-          updateSummary();
           if (silent) toast('Records refreshed', 'ok');
         })
         .catch(function (e) {
@@ -1879,144 +2283,135 @@
         });
     }
 
-    function init() {
-      $id('f-date').value = todayISO();
-      $id('f-g').value = 3;
+    // ════════════════════════════════════════════════════════════
+    //  EVENT LISTENERS
+    // ════════════════════════════════════════════════════════════
 
-      // ─── Show the UI instantly, never block on a spinner ───────────
-      hideLoader();
-      renderAll();
+    // ── Login ──
+    $id('btn-login').addEventListener('click', doLogin);
+    $id('l-user').addEventListener('keydown', function (e) { if (e.key === 'Enter') $id('l-pass').focus(); });
+    $id('l-pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+
+    // ── Logout ──
+    $id('btn-logout').addEventListener('click', doLogout);
+
+    // ── Form: weight auto-calculation ──
+    $id('f-gross').addEventListener('input', autoCalcBeforeMelt);
+    $id('f-ded').addEventListener('input',   autoCalcBeforeMelt);
+
+    // Entering Before Melt WT manually triggers override mode
+    $id('f-bef').addEventListener('input', function () {
+      S.beforeMeltManual = true;
+      var badge = $id('auto-badge');
+      badge.textContent = '↺ Reset Auto';
+      badge.className   = 'auto-badge manual';
       updateSummary();
-
-      // ─── Load config + records in parallel in the background ───────
-      Promise.all([
-        gasCall('getConfig'),
-        gasCall('getCalculations')
-      ])
-        .then(function (results) {
-          var cfgRes = results[0];
-          var recRes = results[1];
-
-          // Apply config
-          if (cfgRes && cfgRes.ok) {
-            S.config = cfgRes.data;
-            var bizEl = $id('biz-name');
-            if (bizEl) bizEl.textContent = S.config.businessName || 'Jewellery Calculator';
-            $id('ph-name').textContent = S.config.businessName || 'Jewellery Calculator';
-            $id('f-g').value = S.config.defaultGST || 3;
-            updateSummary();
-          } else {
-            showErr('Could not load config. Check your Apps Script deployment.');
-          }
-
-          // Apply records
-          if (recRes && recRes.ok) {
-            S.records = (recRes.data || []).filter(function (r) { return isValidId(r.calcId); });
-            renderAll();
-          } else {
-            showErr('Could not load records. Tap Refresh to try again.');
-          }
-        })
-        .catch(function (e) {
-          showErr((e.message || 'Network error') + ' — tap Refresh to retry.');
-        });
-    }
-
-    // ── Event listeners ───────────────────────────────────────────
-    $id('f-l-type').addEventListener('click', function (e) {
-      if (e.target.classList.contains('t-btn')) {
-        var tgroup = $id('f-l-type');
-        Array.prototype.forEach.call(tgroup.children, function (b) { b.className = 't-btn'; });
-        e.target.className = 't-btn active';
-        S.labourType = e.target.dataset.val;
-        updateSummary();
-      }
     });
 
-    ['f-w', 'f-r', 'f-l', 'f-o', 'f-g'].forEach(function (id) {
-      $id(id).addEventListener('input', updateSummary);
+    // Auto-badge click resets to auto-calculation
+    $id('auto-badge').addEventListener('click', function () {
+      S.beforeMeltManual = false;
+      var badge = $id('auto-badge');
+      badge.textContent = 'Auto';
+      badge.className   = 'auto-badge';
+      autoCalcBeforeMelt();
     });
 
-    // ── Enter key navigation between form fields ──────────────────
-    var FORM_FIELDS = ['f-name', 'f-date', 'f-w', 'f-r', 'f-l', 'f-o', 'f-g'];
+    // ── Form: summary panel updates ──
+    $id('f-aft').addEventListener('input',    updateSummary);
+    $id('f-price').addEventListener('input',  updateSummary);
+    $id('f-purity').addEventListener('input', updateSummary);
+    $id('f-metal').addEventListener('change', updateSummary);
+
+    // ── Form: Enter key navigation between fields ──
+    var FORM_FIELDS = ['f-date','f-name','f-addr','f-mobile','f-metal','f-gross','f-ded','f-bef','f-aft','f-purity','f-price','f-remarks'];
     FORM_FIELDS.forEach(function (id, idx) {
       var el = $id(id);
       if (!el) return;
       el.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter') return;
         e.preventDefault();
-        var nextIdx = idx + 1;
-        if (nextIdx < FORM_FIELDS.length) {
-          var next = $id(FORM_FIELDS[nextIdx]);
-          if (next) next.focus();
-        } else {
-          // Last field — blur to close mobile keyboard
-          el.blur();
-        }
+        var next = $id(FORM_FIELDS[idx + 1]);
+        if (next) { next.focus(); } else { el.blur(); }
       });
     });
 
+    // ── Search & Sort ──
     $id('q').addEventListener('input', renderAll);
-
-    $id('sf').addEventListener('change', function () {
-      S.sortField = this.value;
-      renderAll();
-    });
-
+    $id('sf').addEventListener('change', function () { S.sortField = this.value; renderAll(); });
     $id('sd').addEventListener('click', function () {
       S.sortAsc = !S.sortAsc;
       this.textContent = S.sortAsc ? '↑' : '↓';
       renderAll();
     });
 
-    $id('b-save').addEventListener('click', doSave);
+    // ── Action bar ──
+    $id('b-save').addEventListener('click',   doSave);
     $id('b-update').addEventListener('click', doUpdate);
-    $id('b-reset').addEventListener('click', resetForm);
-    if ($id('b-refresh')) $id('b-refresh').addEventListener('click', function () { loadRecords(true); });
+    $id('b-reset').addEventListener('click',  resetForm);
+    $id('b-print').addEventListener('click',  function () { doPrint(S.printRec); });
 
-    $id('b-print').addEventListener('click', function () {
-      $id('ph-dt').textContent = 'Printed on ' + new Date().toLocaleDateString('en-IN');
-      window.print();
+    // ── Refresh ──
+    $id('b-refresh').addEventListener('click', function () { loadRecords(true); });
+
+    // ── Bulk delete button ──
+    $id('b-del-sel').addEventListener('click', doBulkDelete);
+
+    // ── Delete modal ──
+    $id('modal-cancel').addEventListener('click', hideDeleteModal);
+    $id('modal-confirm').addEventListener('click', function () {
+      hideDeleteModal();
+      if (_deleteCallback) _deleteCallback();
+    });
+    // Click outside modal card to dismiss
+    $id('modal-overlay').addEventListener('click', function (e) {
+      if (e.target === this) hideDeleteModal();
+    });
+    // Escape key to dismiss modal
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') hideDeleteModal();
     });
 
+    // ── Records: click delegation for table and cards ──
     function onRecordsClick(e) {
+      // Sort by column header click
       var th = e.target.closest('th[data-col]');
       if (th) {
         var col = th.dataset.col;
-        if (S.sortField === col) {
-          S.sortAsc = !S.sortAsc;
-        } else {
-          S.sortField = col;
-          S.sortAsc = true;
-        }
-        $id('sf').value = S.sortField;
+        if (S.sortField === col) { S.sortAsc = !S.sortAsc; }
+        else                     { S.sortField = col; S.sortAsc = true; }
+        $id('sf').value       = S.sortField;
         $id('sd').textContent = S.sortAsc ? '↑' : '↓';
         renderAll();
         return;
       }
 
+      // Action button clicks (Edit / Print / Delete)
       var btn = e.target.closest('button[data-id]');
       if (btn) {
-        var id = btn.dataset.id;
-        if (btn.classList.contains('edit')) {
-          var rec = S.records.find(function (r) { return r.calcId === id; });
+        var id     = btn.dataset.id;
+        var action = btn.dataset.action || (btn.classList.contains('edit') ? 'edit' : btn.classList.contains('del') ? 'delete' : 'print');
+
+        if (action === 'edit') {
+          var rec = S.records.find(function (r) { return r.recordId === id; });
           if (rec) fillForm(rec);
-        } else if (btn.classList.contains('del')) {
+        } else if (action === 'delete') {
           doDelete(id);
+        } else if (action === 'print') {
+          var prec = S.records.find(function (r) { return r.recordId === id; });
+          if (prec) doPrint(prec);
         }
         return;
       }
     }
 
+    // ── Records: checkbox selection ──
     $id('rec-section').addEventListener('change', function (e) {
       if (e.target.id === 'cb-all') {
-        var checked = e.target.checked;
-        var list = getFilteredSorted();
-        if (checked) {
-          S.selectedIds = list.map(function (r) { return String(r.calcId); });
-        } else {
-          S.selectedIds = [];
-        }
+        // Select/deselect all visible records
+        var isChecked = e.target.checked;
+        var list      = getFilteredSorted();
+        S.selectedIds = isChecked ? list.map(function (r) { return String(r.recordId); }) : [];
         renderAll();
       } else if (e.target.classList.contains('cb-row')) {
         var cid = String(e.target.value);
@@ -2029,42 +2424,43 @@
       }
     });
 
-    var bDelSel = $id('b-del-sel');
-    if (bDelSel) {
-      bDelSel.addEventListener('click', function () {
-        if (S.selectedIds.length === 0) return;
-        if (!confirm('Are you sure you want to delete ' + S.selectedIds.length + ' selected record(s)?')) return;
-
-        bDelSel.disabled = true;
-        bDelSel.classList.add('spinning');
-
-        gasCall('deleteCalculations', { ids: S.selectedIds })
-          .then(function (res) {
-            bDelSel.disabled = false;
-            bDelSel.classList.remove('spinning');
-            if (!res || !res.ok) { showErr('Bulk delete failed: ' + (res ? res.error : 'No response')); return; }
-
-            var deletedCount = res.deleted || S.selectedIds.length;
-            S.records = S.records.filter(function (r) { return S.selectedIds.indexOf(r.calcId) === -1; });
-            if (S.selectedIds.indexOf(S.editId) > -1) resetForm();
-
-            S.selectedIds = [];
-            $id('q').value = '';
-            renderAll();
-            toast('Deleted ' + deletedCount + ' record(s)', 'ok');
-          })
-          .catch(function (e) {
-            bDelSel.disabled = false;
-            bDelSel.classList.remove('spinning');
-            showErr('Bulk delete failed: ' + (e.message || e));
-          });
-      });
-    }
-
-    $id('tbl-wrap').addEventListener('click', onRecordsClick);
+    $id('tbl-wrap').addEventListener('click',  onRecordsClick);
     $id('card-wrap').addEventListener('click', onRecordsClick);
 
+    // ════════════════════════════════════════════════════════════
+    //  INITIALISATION
+    // ════════════════════════════════════════════════════════════
+
+    function init() {
+      // Set form defaults
+      $id('f-date').value = todayISO();
+      updateSummary();
+      renderAll();
+
+      // Check for an existing valid session (skips login screen)
+      var savedUser = loadSession();
+      if (savedUser) {
+        S.user = savedUser;
+        onLoginSuccess();
+      } else {
+        // Show login overlay first
+        showLogin();
+
+        // Load config in background to populate business name on login card
+        gasCall('getConfig')
+          .then(function (res) {
+            if (res && res.ok) {
+              S.config = res.data;
+              var bizName = res.data['Business Name'] || 'Purchase Register';
+              $id('login-biz-name').textContent = bizName;
+            }
+          })
+          .catch(function () { /* non-critical — ignore */ });
+      }
+    }
+
     init();
+
   </script>
 </body>
 
