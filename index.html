@@ -819,7 +819,7 @@
 
     @media print {
       @page {
-        size: 80mm auto;
+        size: 3in auto;
         margin: 2mm 3mm;
       }
 
@@ -829,8 +829,8 @@
 
       #print-receipt {
         display: block !important;
-        width: 74mm;
-        max-width: 74mm;
+        width: 3in;
+        max-width: 3in;
         font-family: 'Courier New', Courier, monospace;
         font-size: 9.5pt;
         color: #000;
@@ -845,6 +845,7 @@
         max-width: 56mm;
         margin: 0 auto 3px;
         object-fit: contain;
+        filter: grayscale(100%) contrast(150%);
       }
 
       /* Business header */
@@ -1070,10 +1071,9 @@
   <div id="print-receipt" aria-hidden="true">
     <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt=""
       onerror="this.style.display='none'">
-    <div class="rcp-biz-name" id="rcp-biz-name">Mahalaxmi Jewellers</div>
-    <div class="rcp-biz-sub"  id="rcp-biz-sub"></div>
+    <div class="rcp-biz-name">|| શ્રી ૧! ||</div>
     <hr class="rcp-divider-thick">
-    <div class="rcp-title">Purchase Receipt</div>
+    <div class="rcp-title">Purchase Voucher</div>
     <hr class="rcp-divider">
     <div class="rcp-row"><span class="rcp-lbl">Receipt No. :</span><span class="rcp-val" id="rcp-id">—</span></div>
     <div class="rcp-row"><span class="rcp-lbl">Date        :</span><span class="rcp-val" id="rcp-date">—</span></div>
@@ -1977,8 +1977,6 @@
       var bizPhone = cfg['Business Phone']   || '';
       var sym      = cfg['Currency Symbol']  || '₹';
 
-      $id('rcp-biz-name').textContent = bizName;
-      $id('rcp-biz-sub').textContent  = [bizAddr, bizPhone].filter(Boolean).join('  |  ');
       $id('rcp-id').textContent       = rec.recordId || '—';
       $id('rcp-date').textContent     = rec.date     || todayISO().split('-').reverse().join('/');
       $id('rcp-name').textContent     = rec.customerName || '—';
