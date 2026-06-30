@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>Purchase Register — Mahalaxmi Jewellers</title>
+  <title>Purchase Register — Mahakali Jewellers</title>
   <meta name="description"
-    content="Mahalaxmi Jewellers Purchase Register — Record old gold and silver purchases from customers.">
+    content="Mahakali Jewellers Purchase Register — Record old gold and silver purchases from customers.">
 
   <!-- ── PWA / Installable Web App ── -->
   <link rel="manifest" href="Media/site.webmanifest">
@@ -1725,9 +1725,9 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="print-receipt" aria-hidden="true">
     <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt="" onerror="this.style.display='none'">
-    <div class="rcp-biz-name">|| શ્રી ૧! ||</div>
+    <div class="rcp-biz-name">|| શ્રી ૧l ||</div>
     <hr class="rcp-divider-thick">
-    <div class="rcp-title">Purchase Voucher</div>
+    <div class="rcp-title">Voucher</div>
     <hr class="rcp-divider">
     <div class="rcp-row"><span class="rcp-lbl">Receipt No. :</span><span class="rcp-val" id="rcp-id">—</span></div>
     <div class="rcp-row"><span class="rcp-lbl">Date :</span><span class="rcp-val" id="rcp-date">—</span></div>
@@ -2074,7 +2074,8 @@
 
     /** Format a number as Indian Rupees */
     function fmtINR(n) {
-      var sym = (S.config && S.config['Currency Symbol']) ? S.config['Currency Symbol'] : '₹';
+      var sym = (S.config && S.config['Currency Symbol']) ? S.config['Currency Symbol'] : '\u20B9';
+      if (sym === 'â‚¹' || sym === '?') sym = '\u20B9';
       return sym + (+(n) || 0).toLocaleString('en-IN', {
         minimumFractionDigits: 2, maximumFractionDigits: 2
       });
@@ -2615,10 +2616,11 @@
      */
     function populateReceipt(rec) {
       var cfg = S.config || {};
-      var bizName = cfg['Business Name'] || 'Mahalaxmi Jewellers';
+      var bizName = cfg['Business Name'] || 'Mahakali Jewellers';
       var bizAddr = cfg['Business Address'] || '';
       var bizPhone = cfg['Business Phone'] || '';
-      var sym = cfg['Currency Symbol'] || '₹';
+      var sym = cfg['Currency Symbol'] || '\u20B9';
+      if (sym === 'â‚¹' || sym === '?') sym = '\u20B9';
 
       $id('rcp-id').textContent = rec.recordId || '—';
       $id('rcp-date').textContent = rec.date || todayISO().split('-').reverse().join('/');
@@ -2876,7 +2878,7 @@
           // Apply config
           if (cfgRes && cfgRes.ok) {
             S.config = cfgRes.data;
-            var bizName = S.config['Business Name'] || 'Mahalaxmi Jewellers';
+            var bizName = S.config['Business Name'] || 'Mahakali Jewellers';
             if ($id('biz-name')) $id('biz-name').textContent = bizName;
             if ($id('login-biz-name')) $id('login-biz-name').textContent = bizName;
           } else {
