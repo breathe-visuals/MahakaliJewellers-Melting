@@ -204,7 +204,7 @@
       font-weight: 600;
       color: var(--text-main);
       outline: none;
-      transition: all 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
       width: 100%;
     }
 
@@ -230,7 +230,7 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.15s, transform 0.1s;
       letter-spacing: 0.02em;
       margin-top: var(--sp-sm);
     }
@@ -389,7 +389,7 @@
       background: var(--primary-bg);
       color: var(--primary);
       border: 1px solid var(--primary);
-      transition: all 0.2s;
+      transition: background-color 0.15s, color 0.15s;
       white-space: nowrap;
     }
 
@@ -444,7 +444,7 @@
       color: var(--success);
       border: 1px solid var(--success);
       cursor: default;
-      transition: all 0.2s;
+      transition: background-color 0.15s, color 0.15s;
     }
 
     .auto-badge.manual {
@@ -464,7 +464,7 @@
       font-family: var(--font);
       font-size: 15px;
       color: var(--text-main);
-      transition: all 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
       outline: none;
       width: 100%;
       font-weight: 600;
@@ -868,7 +868,7 @@
       background: #FFF;
       color: var(--primary);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.12s, color 0.12s, border-color 0.12s;
       white-space: nowrap;
     }
 
@@ -1016,7 +1016,7 @@
       font-weight: 700;
       font-family: var(--font);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.12s, transform 0.1s, opacity 0.12s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1078,7 +1078,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: background-color 0.12s, border-color 0.12s, transform 0.1s;
       padding: 7px 12px;
       border-radius: 8px;
     }
@@ -1103,7 +1103,7 @@
     }
 
     /* ══════════════════════════════════════════════════════════
-       LOADER
+       LOADER (legacy — no longer used for main page, kept for safety)
     ══════════════════════════════════════════════════════════ */
     #loader {
       position: fixed;
@@ -1122,6 +1122,29 @@
       border-top-color: var(--primary);
       border-radius: 50%;
       animation: rot 0.8s linear infinite;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SKELETON LOADER (records area)
+    ══════════════════════════════════════════════════════════ */
+    .skel-wrap {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .skel-row {
+      height: 46px;
+      border-radius: var(--r-md);
+      background: linear-gradient(90deg, #e8eeee 25%, #d4e0e0 50%, #e8eeee 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+    }
+    .skel-row:nth-child(odd)  { width: 100%; }
+    .skel-row:nth-child(even) { width: 85%; }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -2013,7 +2036,30 @@
 
 
     // ── API timeout (ms) ─────────────────────────────────────────
-    var GAS_TIMEOUT_MS = 20000; // 20 seconds
+    var GAS_TIMEOUT_MS = 30000; // 30 seconds (GAS can be slow to cold-start)
+
+    // ── Config localStorage cache ─────────────────────────────────
+    var CFG_CACHE_KEY = 'mj_cfg_v2';
+    var CFG_CACHE_TTL = 3600000; // 1 hour
+
+    function saveConfigCache(cfg) {
+      try { localStorage.setItem(CFG_CACHE_KEY, JSON.stringify({ cfg: cfg, ts: Date.now() })); } catch(e){}
+    }
+    function loadConfigCache() {
+      try {
+        var raw = localStorage.getItem(CFG_CACHE_KEY);
+        if (!raw) return null;
+        var obj = JSON.parse(raw);
+        if (Date.now() - obj.ts > CFG_CACHE_TTL) { localStorage.removeItem(CFG_CACHE_KEY); return null; }
+        return obj.cfg;
+      } catch(e){ return null; }
+    }
+
+    // ── Simple debounce helper ────────────────────────────────────
+    function debounce(fn, ms) {
+      var t;
+      return function() { var a = arguments, c = this; clearTimeout(t); t = setTimeout(function(){ fn.apply(c,a); }, ms); };
+    }
 
     // ════════════════════════════════════════════════════════════
     //  GAS API HELPER  (reused from reference project)
@@ -2192,7 +2238,7 @@
 
     function hideLogin() { $id('login-overlay').classList.add('hidden'); }
 
-    /** Handles the login button click — validates via GAS backend */
+    /** Handles the login button click — uses loginAndLoad for a single round-trip */
     function doLogin() {
       var username = $id('l-user').value.trim();
       var password = $id('l-pass').value;
@@ -2208,7 +2254,8 @@
       $id('btn-login').textContent = 'Signing in…';
       $id('login-err').style.display = 'none';
 
-      gasCall('login', { username: username, password: password })
+      // Single combined call: login + config + records in one GAS round-trip
+      gasCall('loginAndLoad', { username: username, password: password })
         .then(function (res) {
           $id('btn-login').disabled = false;
           $id('btn-login').textContent = 'Sign In';
@@ -2220,10 +2267,23 @@
             return;
           }
 
-          // ── Login successful ──
+          // ── Login successful ── seed all data from the single response
           S.user = res.user;
           saveSession(res.user);
-          onLoginSuccess();
+
+          // Apply config
+          if (res.config && Object.keys(res.config).length) {
+            S.config = res.config;
+            saveConfigCache(res.config);
+            var biz = res.config['Business Name'] || 'Mahakali Jewellers';
+            if ($id('biz-name')) $id('biz-name').textContent = biz;
+            if ($id('login-biz-name')) $id('login-biz-name').textContent = biz;
+          }
+
+          // Apply records directly — no extra call needed
+          S.records = (res.records || []).filter(function(r){ return isValidId(r.recordId); });
+
+          onLoginSuccess(true); // true = data already loaded
         })
         .catch(function (err) {
           $id('btn-login').disabled = false;
@@ -2235,7 +2295,7 @@
     }
 
     /** Called after a successful login — sets up the main UI */
-    function onLoginSuccess() {
+    function onLoginSuccess(dataAlreadyLoaded) {
       hideLogin();
 
       // Update topbar with user info
@@ -2245,7 +2305,16 @@
       badge.className = 'role-badge ' + S.user.role.toLowerCase();
 
       applyPermissions();
-      loadAllData();
+
+      if (dataAlreadyLoaded) {
+        // Data came in the login response — just render, no extra GAS call
+        renderAll();
+        var bizName = (S.config && S.config['Business Name']) || 'Mahakali Jewellers';
+        if ($id('biz-name')) $id('biz-name').textContent = bizName;
+      } else {
+        // Fallback (e.g. session restore) — load data normally
+        loadAllData();
+      }
     }
 
     /** Signs out the current user */
@@ -2480,32 +2549,52 @@
     //  API OPERATIONS — Save / Update / Delete
     // ════════════════════════════════════════════════════════════
 
-    /** Saves a new purchase record */
+    /** Saves a new purchase record — OPTIMISTIC: UI updates instantly */
     function doSave() {
       if (!canCreate()) { toast('Permission denied: you cannot create records.', 'err'); return; }
       var data = collectFormData();
       if (!validateForm(data)) return;
       showErr(null);
-      setBusy('b-save', 'Saving…');
 
+      // --- Optimistic update: show result immediately ---
+      var tempId = 'SAVING…';
+      var tempRec = buildLocalRecord(tempId, data);
+      tempRec.createdBy = data.createdBy;
+      tempRec.createdTime = new Date().toLocaleString('en-IN');
+      tempRec._pending = true;
+      S.records.push(tempRec);
+      S.printRec = Object.assign({}, tempRec);
+      renderAll();
+      resetForm();
+      toast('Saving record…', '');
+
+      // --- Sync with GAS in background ---
       gasCall('saveRecord', data)
         .then(function (res) {
-          setFree('b-save', '💾 Save');
-          if (!res || !res.ok) { showErr('Save failed: ' + (res ? res.error : 'No response')); return; }
-
-          localAddRecord(res.recordId, data);
+          // Replace temp record with real one
+          var idx = S.records.findIndex(function(r){ return r.recordId === tempId && r._pending; });
+          if (!res || !res.ok) {
+            if (idx > -1) S.records.splice(idx, 1);
+            renderAll();
+            showErr('Save failed: ' + (res ? res.error : 'No response'));
+            return;
+          }
+          if (idx > -1) {
+            S.records[idx] = Object.assign({}, tempRec, { recordId: res.recordId, _pending: false });
+          }
           S.printRec = Object.assign({ recordId: res.recordId }, buildLocalRecord(res.recordId, data));
           renderAll();
-          resetForm();
           toast('Saved: ' + res.recordId, 'ok');
         })
         .catch(function (e) {
-          setFree('b-save', '💾 Save');
+          var idx = S.records.findIndex(function(r){ return r.recordId === tempId && r._pending; });
+          if (idx > -1) S.records.splice(idx, 1);
+          renderAll();
           showErr('Save failed: ' + (e.message || e));
         });
     }
 
-    /** Updates an existing record */
+    /** Updates an existing record — OPTIMISTIC: UI updates instantly */
     function doUpdate() {
       if (!canEdit()) { toast('Permission denied: you cannot edit records.', 'err'); return; }
       if (!S.editId) return;
@@ -2513,22 +2602,32 @@
       data.recordId = S.editId;
       if (!validateForm(data)) return;
       showErr(null);
-      setBusy('b-update', 'Updating…');
 
+      // --- Optimistic update: capture old state for rollback ---
+      var editId = S.editId;
+      var idx = S.records.findIndex(function(r){ return r.recordId === editId; });
+      var oldRec = idx > -1 ? Object.assign({}, S.records[idx]) : null;
+
+      localUpdateRecord(editId, data);
+      S.printRec = Object.assign({ recordId: editId }, buildLocalRecord(editId, data));
+      renderAll();
+      resetForm();
+      toast('Updated: ' + editId, 'ok');
+
+      // --- Sync with GAS in background ---
       gasCall('updateRecord', data)
-        .then(function (res) {
-          setFree('b-update', '✏️ Update');
-          if (!res || !res.ok) { showErr('Update failed: ' + (res ? res.error : 'No response')); return; }
-
-          localUpdateRecord(S.editId, data);
-          S.printRec = Object.assign({ recordId: S.editId }, buildLocalRecord(S.editId, data));
-          renderAll();
-          resetForm();
-          toast('Updated: ' + S.editId, 'ok');
-        })
         .catch(function (e) {
-          setFree('b-update', '✏️ Update');
-          showErr('Update failed: ' + (e.message || e));
+          // Rollback on network failure
+          if (oldRec && idx > -1) S.records[idx] = oldRec;
+          renderAll();
+          showErr('Update failed (reverted): ' + (e.message || e));
+        })
+        .then(function(res) {
+          if (res && !res.ok) {
+            if (oldRec && idx > -1) S.records[idx] = oldRec;
+            renderAll();
+            showErr('Update failed (reverted): ' + res.error);
+          }
         });
     }
 
@@ -2550,7 +2649,7 @@
       _deleteCallback = null;
     }
 
-    /** Initiates deletion of a single record (Admin only) */
+    /** Initiates deletion of a single record (Admin only) — OPTIMISTIC */
     function doDelete(id) {
       if (!canDelete()) { toast('Only Admins can delete records.', 'err'); return; }
       if (!isValidId(id)) { showErr('Cannot delete: "' + id + '" is not a valid ID.'); return; }
@@ -2559,21 +2658,34 @@
         'Delete Record?',
         'Delete record ' + id + '? This action cannot be undone.',
         function () {
+          // --- Optimistic: remove immediately, restore on failure ---
+          var removedRec = S.records.find(function(r){ return r.recordId === id; });
+          var removedIdx = S.records.findIndex(function(r){ return r.recordId === id; });
+          S.records = S.records.filter(function(r){ return r.recordId !== id; });
+          if (S.editId === id) resetForm();
+          $id('q').value = '';
+          renderAll();
+          toast('Deleted: ' + id, 'ok');
+
+          // --- Sync GAS in background ---
           gasCall('deleteRecord', { id: id })
-            .then(function (res) {
-              if (!res || !res.ok) { toast('Delete failed: ' + (res ? res.error : 'No response'), 'err'); return; }
-              S.records = S.records.filter(function (r) { return r.recordId !== id; });
-              if (S.editId === id) resetForm();
-              $id('q').value = '';
-              renderAll();
-              toast('Deleted: ' + id, 'ok');
+            .then(function(res) {
+              if (!res || !res.ok) {
+                if (removedRec && removedIdx > -1) S.records.splice(removedIdx, 0, removedRec);
+                renderAll();
+                toast('Delete failed (restored): ' + (res ? res.error : 'No response'), 'err');
+              }
             })
-            .catch(function (e) { toast('Delete failed: ' + (e.message || e), 'err'); });
+            .catch(function(e) {
+              if (removedRec && removedIdx > -1) S.records.splice(removedIdx, 0, removedRec);
+              renderAll();
+              toast('Delete failed (restored): ' + (e.message || e), 'err');
+            });
         }
       );
     }
 
-    /** Initiates bulk deletion of selected records (Admin only) */
+    /** Initiates bulk deletion of selected records (Admin only) — OPTIMISTIC */
     function doBulkDelete() {
       if (!canDelete()) { toast('Only Admins can delete records.', 'err'); return; }
       if (S.selectedIds.length === 0) return;
@@ -2582,25 +2694,32 @@
         'Delete ' + S.selectedIds.length + ' Records?',
         'Permanently delete ' + S.selectedIds.length + ' selected record(s)? This cannot be undone.',
         function () {
-          var bDelSel = $id('b-del-sel');
-          if (bDelSel) { bDelSel.disabled = true; bDelSel.classList.add('spinning'); }
+          var toDelete = S.selectedIds.slice();
+          var count = toDelete.length;
 
-          gasCall('deleteRecords', { ids: S.selectedIds })
-            .then(function (res) {
-              if (bDelSel) { bDelSel.disabled = false; bDelSel.classList.remove('spinning'); }
-              if (!res || !res.ok) { toast('Bulk delete failed: ' + (res ? res.error : 'No response'), 'err'); return; }
+          // --- Optimistic: remove all selected immediately ---
+          var removedRecs = S.records.filter(function(r){ return toDelete.indexOf(r.recordId) > -1; });
+          S.records = S.records.filter(function(r){ return toDelete.indexOf(r.recordId) === -1; });
+          if (toDelete.indexOf(S.editId) > -1) resetForm();
+          S.selectedIds = [];
+          $id('q').value = '';
+          renderAll();
+          toast('Deleted ' + count + ' record(s)', 'ok');
 
-              var deleted = S.selectedIds.slice();
-              S.records = S.records.filter(function (r) { return deleted.indexOf(r.recordId) === -1; });
-              if (deleted.indexOf(S.editId) > -1) resetForm();
-              S.selectedIds = [];
-              $id('q').value = '';
-              renderAll();
-              toast('Deleted ' + (res.deleted || deleted.length) + ' record(s)', 'ok');
+          // --- Sync GAS in background ---
+          gasCall('deleteRecords', { ids: toDelete })
+            .then(function(res) {
+              if (!res || !res.ok) {
+                // Restore all removed records on failure
+                S.records = S.records.concat(removedRecs);
+                renderAll();
+                toast('Bulk delete failed (restored): ' + (res ? res.error : 'No response'), 'err');
+              }
             })
-            .catch(function (e) {
-              if (bDelSel) { bDelSel.disabled = false; bDelSel.classList.remove('spinning'); }
-              toast('Bulk delete failed: ' + (e.message || e), 'err');
+            .catch(function(e) {
+              S.records = S.records.concat(removedRecs);
+              renderAll();
+              toast('Bulk delete failed (restored): ' + (e.message || e), 'err');
             });
         }
       );
@@ -2860,24 +2979,31 @@
     // ════════════════════════════════════════════════════════════
 
     /**
-     * Loads config and records in parallel.
-     * Called after a successful login.
+     * Loads config and records in parallel (fallback for session-restored logins).
+     * Shows a skeleton in the records area instead of blocking the full page.
      */
     function loadAllData() {
-      $id('loader').style.display = 'grid';
+      // Show skeleton in the records table area (non-blocking)
+      var skelHtml = '<div class="skel-wrap">' +
+        '<div class="skel-row"></div><div class="skel-row"></div>' +
+        '<div class="skel-row"></div><div class="skel-row"></div>' +
+        '<div class="skel-row"></div>' +
+        '</div>';
+      $id('tbl-wrap').innerHTML = skelHtml;
+      $id('card-wrap').innerHTML = skelHtml;
 
       Promise.all([
         gasCall('getConfig'),
         gasCall('getRecords')
       ])
         .then(function (results) {
-          $id('loader').style.display = 'none';
           var cfgRes = results[0];
           var recRes = results[1];
 
           // Apply config
           if (cfgRes && cfgRes.ok) {
             S.config = cfgRes.data;
+            saveConfigCache(cfgRes.data);
             var bizName = S.config['Business Name'] || 'Mahakali Jewellers';
             if ($id('biz-name')) $id('biz-name').textContent = bizName;
             if ($id('login-biz-name')) $id('login-biz-name').textContent = bizName;
@@ -2888,13 +3014,14 @@
           // Apply records
           if (recRes && recRes.ok) {
             S.records = (recRes.data || []).filter(function (r) { return isValidId(r.recordId); });
-            renderAll();
           } else {
             showErr('Could not load records. Tap Refresh to retry.');
           }
+          renderAll();
         })
         .catch(function (e) {
-          $id('loader').style.display = 'none';
+          $id('tbl-wrap').innerHTML = '';
+          $id('card-wrap').innerHTML = '';
           showErr((e.message || 'Network error') + ' — Tap Refresh to retry.');
         });
     }
@@ -2982,7 +3109,7 @@
     });
 
     // ── Search & Sort ──
-    $id('q').addEventListener('input', renderAll);
+    $id('q').addEventListener('input', debounce(renderAll, 150));
     $id('sf').addEventListener('change', function () { S.sortField = this.value; renderAll(); });
     $id('sd').addEventListener('click', function () {
       S.sortAsc = !S.sortAsc;
@@ -3086,21 +3213,26 @@
       var savedUser = loadSession();
       if (savedUser) {
         S.user = savedUser;
-        onLoginSuccess();
-      } else {
-        // Show login overlay first
-        showLogin();
 
-        // Load config in background to populate business name on login card
-        gasCall('getConfig')
-          .then(function (res) {
-            if (res && res.ok) {
-              S.config = res.data;
-              var bizName = res.data['Business Name'] || 'Purchase Register';
-              $id('login-biz-name').textContent = bizName;
-            }
-          })
-          .catch(function () { /* non-critical — ignore */ });
+        // Try to use cached config so the topbar name appears immediately
+        var cachedCfg = loadConfigCache();
+        if (cachedCfg) {
+          S.config = cachedCfg;
+          var biz = cachedCfg['Business Name'] || 'Mahakali Jewellers';
+          if ($id('biz-name')) $id('biz-name').textContent = biz;
+        }
+
+        onLoginSuccess(false); // will call loadAllData() which uses skeleton
+      } else {
+        // Show login overlay — use cached config for business name instantly
+        showLogin();
+        var cachedCfg2 = loadConfigCache();
+        if (cachedCfg2) {
+          S.config = cachedCfg2;
+          var bizName2 = cachedCfg2['Business Name'] || 'Purchase Register';
+          $id('login-biz-name').textContent = bizName2;
+        }
+        // No background GAS call before user has pressed Sign In
       }
     }
 
