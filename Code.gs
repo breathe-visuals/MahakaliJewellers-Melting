@@ -1,6 +1,6 @@
 // ============================================================
 // Code.gs  —  Jewellery Purchase Register
-// Mahalaxmi Jewellers | v1.0.0
+// Mahakali Jewellers | v1.0.0
 //
 // Architecture (inherited & extended from reference project):
 //   doGet()  → JSON status page
@@ -21,7 +21,7 @@
 // ── Config Defaults ──────────────────────────────────────────
 // Values used when a key is absent from the Config sheet.
 var CFG_DEFAULTS = {
-  'Business Name':       'Mahalaxmi Jewellers',
+  'Business Name':       'Mahakali Jewellers',
   'Business Address':    '',
   'Business Phone':      '',
   'Record Prefix':       'MJ',

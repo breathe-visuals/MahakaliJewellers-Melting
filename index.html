@@ -1133,6 +1133,7 @@
       flex-direction: column;
       gap: 10px;
     }
+
     .skel-row {
       height: 46px;
       border-radius: var(--r-md);
@@ -1140,11 +1141,23 @@
       background-size: 200% 100%;
       animation: shimmer 1.4s ease-in-out infinite;
     }
-    .skel-row:nth-child(odd)  { width: 100%; }
-    .skel-row:nth-child(even) { width: 85%; }
+
+    .skel-row:nth-child(odd) {
+      width: 100%;
+    }
+
+    .skel-row:nth-child(even) {
+      width: 85%;
+    }
+
     @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -1692,7 +1705,7 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="login-overlay">
     <div class="login-card">
-      <img class="login-logo" id="login-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo"
+      <img class="login-logo" id="login-logo" src="Media/mahakali_Logo.png" alt="Logo"
         onerror="this.style.display='none'">
       <div class="login-title" id="login-biz-name">Purchase Register</div>
       <div class="login-sub">Sign in to continue</div>
@@ -1747,7 +1760,7 @@
        THERMAL PRINT RECEIPT (hidden in UI, visible in @media print)
   ═══════════════════════════════════════════════════════════ -->
   <div id="print-receipt" aria-hidden="true">
-    <img class="rcp-logo" id="rcp-logo" src="Media/Mahalaxmi_Logo.png" alt="" onerror="this.style.display='none'">
+    <img class="rcp-logo" id="rcp-logo" src="Media/mahakali_Logo.png" alt="" onerror="this.style.display='none'">
     <div class="rcp-biz-name">|| શ્રી ૧l ||</div>
     <hr class="rcp-divider-thick">
     <div class="rcp-title">Voucher</div>
@@ -1801,7 +1814,7 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="topbar">
     <div class="tb-inner">
-      <img id="navbar-logo" src="Media/Mahalaxmi_Logo.png" alt="Logo" onerror="this.style.display='none'">
+      <img id="navbar-logo" src="Media/mahakali_Logo.png" alt="Logo" onerror="this.style.display='none'">
       <div class="tb-right">
         <div class="tb-user-pill">
           <span class="tb-uname" id="tb-username">—</span>
@@ -2043,7 +2056,7 @@
     var CFG_CACHE_TTL = 3600000; // 1 hour
 
     function saveConfigCache(cfg) {
-      try { localStorage.setItem(CFG_CACHE_KEY, JSON.stringify({ cfg: cfg, ts: Date.now() })); } catch(e){}
+      try { localStorage.setItem(CFG_CACHE_KEY, JSON.stringify({ cfg: cfg, ts: Date.now() })); } catch (e) { }
     }
     function loadConfigCache() {
       try {
@@ -2052,13 +2065,13 @@
         var obj = JSON.parse(raw);
         if (Date.now() - obj.ts > CFG_CACHE_TTL) { localStorage.removeItem(CFG_CACHE_KEY); return null; }
         return obj.cfg;
-      } catch(e){ return null; }
+      } catch (e) { return null; }
     }
 
     // ── Simple debounce helper ────────────────────────────────────
     function debounce(fn, ms) {
       var t;
-      return function() { var a = arguments, c = this; clearTimeout(t); t = setTimeout(function(){ fn.apply(c,a); }, ms); };
+      return function () { var a = arguments, c = this; clearTimeout(t); t = setTimeout(function () { fn.apply(c, a); }, ms); };
     }
 
     // ════════════════════════════════════════════════════════════
@@ -2282,7 +2295,7 @@
             if ($id('biz-name')) $id('biz-name').textContent = biz;
             if ($id('login-biz-name')) $id('login-biz-name').textContent = biz;
           }
-          S.records = (res.records || []).filter(function(r){ return isValidId(r.recordId); });
+          S.records = (res.records || []).filter(function (r) { return isValidId(r.recordId); });
           onLoginSuccess(true);
         })
         .catch(function (err) {
@@ -2599,7 +2612,7 @@
       gasCall('saveRecord', data)
         .then(function (res) {
           // Replace temp record with real one
-          var idx = S.records.findIndex(function(r){ return r.recordId === tempId && r._pending; });
+          var idx = S.records.findIndex(function (r) { return r.recordId === tempId && r._pending; });
           if (!res || !res.ok) {
             if (idx > -1) S.records.splice(idx, 1);
             renderAll();
@@ -2614,7 +2627,7 @@
           toast('Saved: ' + res.recordId, 'ok');
         })
         .catch(function (e) {
-          var idx = S.records.findIndex(function(r){ return r.recordId === tempId && r._pending; });
+          var idx = S.records.findIndex(function (r) { return r.recordId === tempId && r._pending; });
           if (idx > -1) S.records.splice(idx, 1);
           renderAll();
           showErr('Save failed: ' + (e.message || e));
@@ -2632,7 +2645,7 @@
 
       // --- Optimistic update: capture old state for rollback ---
       var editId = S.editId;
-      var idx = S.records.findIndex(function(r){ return r.recordId === editId; });
+      var idx = S.records.findIndex(function (r) { return r.recordId === editId; });
       var oldRec = idx > -1 ? Object.assign({}, S.records[idx]) : null;
 
       localUpdateRecord(editId, data);
@@ -2649,7 +2662,7 @@
           renderAll();
           showErr('Update failed (reverted): ' + (e.message || e));
         })
-        .then(function(res) {
+        .then(function (res) {
           if (res && !res.ok) {
             if (oldRec && idx > -1) S.records[idx] = oldRec;
             renderAll();
@@ -2686,9 +2699,9 @@
         'Delete record ' + id + '? This action cannot be undone.',
         function () {
           // --- Optimistic: remove immediately, restore on failure ---
-          var removedRec = S.records.find(function(r){ return r.recordId === id; });
-          var removedIdx = S.records.findIndex(function(r){ return r.recordId === id; });
-          S.records = S.records.filter(function(r){ return r.recordId !== id; });
+          var removedRec = S.records.find(function (r) { return r.recordId === id; });
+          var removedIdx = S.records.findIndex(function (r) { return r.recordId === id; });
+          S.records = S.records.filter(function (r) { return r.recordId !== id; });
           if (S.editId === id) resetForm();
           $id('q').value = '';
           renderAll();
@@ -2696,14 +2709,14 @@
 
           // --- Sync GAS in background ---
           gasCall('deleteRecord', { id: id })
-            .then(function(res) {
+            .then(function (res) {
               if (!res || !res.ok) {
                 if (removedRec && removedIdx > -1) S.records.splice(removedIdx, 0, removedRec);
                 renderAll();
                 toast('Delete failed (restored): ' + (res ? res.error : 'No response'), 'err');
               }
             })
-            .catch(function(e) {
+            .catch(function (e) {
               if (removedRec && removedIdx > -1) S.records.splice(removedIdx, 0, removedRec);
               renderAll();
               toast('Delete failed (restored): ' + (e.message || e), 'err');
@@ -2725,8 +2738,8 @@
           var count = toDelete.length;
 
           // --- Optimistic: remove all selected immediately ---
-          var removedRecs = S.records.filter(function(r){ return toDelete.indexOf(r.recordId) > -1; });
-          S.records = S.records.filter(function(r){ return toDelete.indexOf(r.recordId) === -1; });
+          var removedRecs = S.records.filter(function (r) { return toDelete.indexOf(r.recordId) > -1; });
+          S.records = S.records.filter(function (r) { return toDelete.indexOf(r.recordId) === -1; });
           if (toDelete.indexOf(S.editId) > -1) resetForm();
           S.selectedIds = [];
           $id('q').value = '';
@@ -2735,7 +2748,7 @@
 
           // --- Sync GAS in background ---
           gasCall('deleteRecords', { ids: toDelete })
-            .then(function(res) {
+            .then(function (res) {
               if (!res || !res.ok) {
                 // Restore all removed records on failure
                 S.records = S.records.concat(removedRecs);
@@ -2743,7 +2756,7 @@
                 toast('Bulk delete failed (restored): ' + (res ? res.error : 'No response'), 'err');
               }
             })
-            .catch(function(e) {
+            .catch(function (e) {
               S.records = S.records.concat(removedRecs);
               renderAll();
               toast('Bulk delete failed (restored): ' + (e.message || e), 'err');
