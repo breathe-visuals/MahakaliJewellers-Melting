@@ -2238,7 +2238,7 @@
 
     function hideLogin() { $id('login-overlay').classList.add('hidden'); }
 
-    /** Handles the login button click — uses loginAndLoad for a single round-trip */
+    /** Handles the login button click — tries loginAndLoad, falls back to legacy if not deployed */
     function doLogin() {
       var username = $id('l-user').value.trim();
       var password = $id('l-pass').value;
@@ -2254,11 +2254,16 @@
       $id('btn-login').textContent = 'Signing in…';
       $id('login-err').style.display = 'none';
 
-      // Single combined call: login + config + records in one GAS round-trip
+      // Try combined call first; fall back to legacy login if GAS not yet redeployed
       gasCall('loginAndLoad', { username: username, password: password })
         .then(function (res) {
           $id('btn-login').disabled = false;
           $id('btn-login').textContent = 'Sign In';
+
+          // GAS not yet redeployed — fall back to legacy separate calls
+          if (res && !res.ok && res.error && res.error.indexOf('Unknown action') > -1) {
+            return legacyLogin(username, password);
+          }
 
           if (!res || !res.ok) {
             var e = $id('login-err');
@@ -2267,11 +2272,9 @@
             return;
           }
 
-          // ── Login successful ── seed all data from the single response
+          // loginAndLoad succeeded — seed all data from the single response
           S.user = res.user;
           saveSession(res.user);
-
-          // Apply config
           if (res.config && Object.keys(res.config).length) {
             S.config = res.config;
             saveConfigCache(res.config);
@@ -2279,17 +2282,41 @@
             if ($id('biz-name')) $id('biz-name').textContent = biz;
             if ($id('login-biz-name')) $id('login-biz-name').textContent = biz;
           }
-
-          // Apply records directly — no extra call needed
           S.records = (res.records || []).filter(function(r){ return isValidId(r.recordId); });
-
-          onLoginSuccess(true); // true = data already loaded
+          onLoginSuccess(true);
         })
         .catch(function (err) {
           $id('btn-login').disabled = false;
           $id('btn-login').textContent = 'Sign In';
           var e = $id('login-err');
           e.textContent = 'Connection error: ' + (err.message || 'Please check your GAS URL.');
+          e.style.display = 'block';
+        });
+    }
+
+    /** Legacy login path used when loginAndLoad action is not yet deployed */
+    function legacyLogin(username, password) {
+      $id('btn-login').disabled = true;
+      $id('btn-login').textContent = 'Signing in…';
+      gasCall('login', { username: username, password: password })
+        .then(function (res) {
+          $id('btn-login').disabled = false;
+          $id('btn-login').textContent = 'Sign In';
+          if (!res || !res.ok) {
+            var e = $id('login-err');
+            e.textContent = res ? res.error : 'Login failed. Try again.';
+            e.style.display = 'block';
+            return;
+          }
+          S.user = res.user;
+          saveSession(res.user);
+          onLoginSuccess(false);
+        })
+        .catch(function (err) {
+          $id('btn-login').disabled = false;
+          $id('btn-login').textContent = 'Sign In';
+          var e = $id('login-err');
+          e.textContent = 'Connection error: ' + (err.message || err);
           e.style.display = 'block';
         });
     }
